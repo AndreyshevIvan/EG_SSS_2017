@@ -18,8 +18,8 @@ namespace MyGame
 		private ushort m_level = 16;
 		private ushort m_prestige = 0;
 
-		List<string> m_ships;
-		List<string> m_allowedShips;
-		List<string> m_achievements;
+		List<ShipType> m_ships;
+		List<ShipType> m_allowedShips;
+		List<AchievementType> m_achievements;
 	}
 }
