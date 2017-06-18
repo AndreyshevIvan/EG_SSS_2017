@@ -5,9 +5,9 @@ namespace MyGame
 {
 	public class ScenesController : MonoBehaviour
 	{
-		public void SetMain()
+		public void SetScene(string sceneName)
 		{
-			SceneManager.LoadScene("Scenes/Main");
+			SceneManager.LoadScene("Scenes/" + sceneName);
 		}
 	}
 

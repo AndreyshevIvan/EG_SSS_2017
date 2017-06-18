@@ -12,8 +12,8 @@ namespace MyGame
 
 		private void Awake()
 		{
-			m_gameName.text = String.Get(1);
-			m_helper.text = String.Get(2);
+			m_gameName.text = StrManager.Get(1);
+			m_helper.text = StrManager.Get(2);
 		}
 	}
 

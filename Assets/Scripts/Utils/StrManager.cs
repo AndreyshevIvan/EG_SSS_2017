@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace MyGame
 {
-	public static class String
+	public static class StrManager
 	{
 		public static string Get(uint stringId)
 		{
@@ -19,7 +19,7 @@ namespace MyGame
 
 		private static XmlDocument m_document;
 
-		private const char NODE_KEY = 's';
+		private const char LOCALE_STRING_KEY = 's';
 
 		private static void LoadStrings()
 		{
@@ -29,7 +29,7 @@ namespace MyGame
 		}
 		private static string Key(uint stringId)
 		{
-			return NODE_KEY + stringId.ToString();
+			return LOCALE_STRING_KEY + stringId.ToString();
 		}
 	}
 }
