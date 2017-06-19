@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MyGame
 {
-	public class IntroController : MonoBehaviour
+	public class IntroUI : MonoBehaviour
 	{
 		public Text m_helper;
 		public Text m_gameName;

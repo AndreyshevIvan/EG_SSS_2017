@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class ShipsModelsManager : MonoBehaviour
+	public class ShipModelsManager : MonoBehaviour
 	{
 		public GameObject m_modelFirst;
 		public GameObject m_modelSecond;

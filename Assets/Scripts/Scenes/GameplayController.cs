@@ -7,7 +7,8 @@ namespace MyGame
 	public class GameplayController : MonoBehaviour
 	{
 		public ShipModel m_shipModel;
-		public ShipsModelsManager m_modelsManager;
+		public ShipModelsManager m_modelsManager;
+		public ShipController m_controller;
 
 		public void Pause(bool isPause)
 		{
@@ -18,6 +19,10 @@ namespace MyGame
 		private void Start()
 		{	
 			InitUser();
+		}
+		private void FixedUpdate()
+		{
+
 		}
 		private void InitUser()
 		{
