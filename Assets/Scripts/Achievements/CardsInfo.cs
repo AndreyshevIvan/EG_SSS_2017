@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	enum AchievementType
+	enum CardType
 	{
 		NONE,
 	}

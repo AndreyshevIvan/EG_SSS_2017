@@ -4,9 +4,11 @@ using UnityEngine;
 
 namespace MyGame
 {
-	enum ShipType
+	public enum ShipType
 	{
-		NONE,
+		FIRST,
+		SECOND,
+		THIRD,
 	}
 
 	public class ShipInfo : MonoBehaviour

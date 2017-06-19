@@ -4,12 +4,17 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class User : MonoBehaviour
+	[System.Serializable]
+	public class User
 	{
 		public string userName
 		{
 			get { return m_name; }
 			set { m_name = value; }
+		}
+		public ShipType ship
+		{
+			get { return m_ship; }
 		}
 
 		private string m_name = "IvanAndreyshev";
@@ -18,8 +23,9 @@ namespace MyGame
 		private ushort m_level = 16;
 		private ushort m_prestige = 0;
 
-		List<ShipType> m_ships;
-		List<ShipType> m_allowedShips;
-		List<AchievementType> m_achievements;
+		private ShipType m_ship;
+		private List<ShipType> m_ships;
+		private List<ShipType> m_allowedShips;
+		private List<CardType> m_achievements;
 	}
 }
