@@ -16,12 +16,30 @@ namespace MyGame
 		{
 			get { return m_ship; }
 		}
+		public uint stars
+		{
+			get { return m_stars; }
+		}
+		public uint diamonds
+		{
+			get { return m_diamonds; }
+		}
+		public uint experience
+		{
+			get { return m_experience; }
+		}
+		public ushort level
+		{
+			get { return m_level; }
+		}
 
 		private string m_name = "IvanAndreyshev";
 
 		private uint m_experience = 300;
 		private ushort m_level = 16;
-		private ushort m_prestige = 0;
+
+		private uint m_stars = 1500;
+		private uint m_diamonds = 130;
 
 		private ShipType m_ship;
 		private List<ShipType> m_ships;

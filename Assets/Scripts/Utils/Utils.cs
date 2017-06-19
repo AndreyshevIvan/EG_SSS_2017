@@ -4,15 +4,6 @@ using UnityEngine;
 
 namespace MyGame
 {
-	[System.Serializable]
-	public struct Boundary
-	{
-		public float xMin;
-		public float xMax;
-		public float yMin;
-		public float yMax;
-	}
-
 	public static class Utils
 	{
 		public static void SetWidth(RectTransform rect, float width)
@@ -27,6 +18,18 @@ namespace MyGame
 		{
 			SetWidth(rect, size);
 			SetHeight(rect, size);
+		}
+
+		public static string ToMoney(uint value)
+		{
+			if (value < 1000)
+			{
+				return value.ToString();
+			}
+
+			uint kCount = value / 1000;
+			uint mod = value % 1000;
+			return kCount.ToString() + '.' + mod.ToString()[0] + " k";
 		}
 	}
 }

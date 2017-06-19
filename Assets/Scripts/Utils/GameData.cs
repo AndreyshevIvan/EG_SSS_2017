@@ -40,6 +40,10 @@ namespace MyGame
 
 			return user;
 		}
+		public static uint GetNeededExp(ushort level)
+		{
+			return 1000;
+		}
 
 		static string LOCALE_FILE_NAME = "_locale";
 		static string LOCALE_PATH = "locales/";
