@@ -37,22 +37,44 @@ namespace MyGame
 			FileStream stream = new FileStream(USER_FILE, FileMode.Open);
 			User user = formatter.Deserialize(stream) as User;
 			stream.Close();
-
 			return user;
 		}
 		public static uint GetNeededExp(ushort level)
 		{
 			return 1000;
 		}
+		public static void SaveShip(ShipProperties properties)
+		{
+			BinaryFormatter formatter = new BinaryFormatter();
+			string fileName = SHIPS_PATH + properties.shipName + FTYPE;
+			FileStream stream = new FileStream(fileName, FileMode.Create);
+			formatter.Serialize(stream, properties);
+			stream.Close();
+		}
+		public static ShipProperties LoadShip(ShipType type)
+		{
+			string file = SHIPS_PATH + ShipProperties.ToName(type) + FTYPE;
+
+			if (!File.Exists(file))
+			{
+				ShipProperties newShip = new ShipProperties(type);
+				SaveShip(newShip);
+			}
+
+			BinaryFormatter formatter = new BinaryFormatter();
+			FileStream stream = new FileStream(file, FileMode.Open);
+			ShipProperties ship = formatter.Deserialize(stream) as ShipProperties;
+			stream.Close();
+			return ship;
+		}
 
 		static string LOCALE_FILE_NAME = "_locale";
 		static string LOCALE_PATH = "locales/";
 		static string LOCALE_KEY = "locale";
 		static string RESOURCES_PATH = Application.dataPath + "/Resources/";
-		static string FILE_TYPE = ".txt";
-		static string USER_FILE_NAME = "user" + FILE_TYPE;
+		static string FTYPE = ".txt";
+		static string USER_FILE_NAME = "user" + FTYPE;
 		static string USER_FILE = RESOURCES_PATH + USER_FILE_NAME;
-
+		static string SHIPS_PATH = RESOURCES_PATH + "ships/";
 	}
-
 }

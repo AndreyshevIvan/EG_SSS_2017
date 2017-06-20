@@ -14,11 +14,11 @@ namespace MyGame
 		{
 			switch (type)
 			{
-				case ShipType.FIRST:
+				case ShipType.VOYAGER:
 					return m_modelFirst;
-				case ShipType.SECOND:
+				case ShipType.DESTENY:
 					return m_modelSecond;
-				case ShipType.THIRD:
+				case ShipType.SPLASH:
 					return m_modelThird;
 			}
 
