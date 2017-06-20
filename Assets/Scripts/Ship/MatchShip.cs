@@ -14,13 +14,14 @@ namespace MyGame
 		public float healthPart { get { return m_health / m_maxhealth; } }
 		public float touchDemage { get { return m_touchDemage; } }
 
-		public Weapon m_simpleBullet;
+		public Gun m_simpleGun;
+
 		public Transform m_leftGun;
 		public Transform m_rightGun;
 
 		public void Init(IGunProperties properties)
 		{
-			m_simpleBullet.Init(properties.gunLevel);
+			m_simpleGun.Init(properties.gunLevel);
 		}
 
 		private float m_health;
@@ -33,17 +34,7 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
-			UpdateWeapons();
-			UpdateFire();
+
 		}
-		private void UpdateWeapons()
-		{
-			m_simpleBullet.UpdateWeapon();
-		}
-		private void UpdateFire()
-		{
-			m_simpleBullet.Fire(m_leftGun);
-			m_simpleBullet.Fire(m_rightGun);
-		} 
 	}
 }

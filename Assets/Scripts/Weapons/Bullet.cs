@@ -5,32 +5,30 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class Bullet : Weapon
+	public class Bullet : Ammo
 	{
 		public override void Init(byte level)
 		{
 
-		}
-		public override void Fire(Transform spawn)
-		{
-			if (!isReady)
-			{
-				return;
-			}
-
-			Bullet newBullet = Instantiate(this, spawn);
-			newBullet.velocity = new Vector3(0, 0, m_speed);
-			newBullet.transform.position = spawn.transform.position;
-			
 		}
 
 		protected Vector3 velocity
 		{
 			set { m_body.velocity = value; }
 		}
-
 		protected override void Update()
 		{
+
+		}
+		protected override bool IsWeaponReady()
+		{
+			return true;
+		}
+		protected override void Fire(Transform spawn)
+		{
+			Bullet newBullet = Instantiate(this, spawn);
+			newBullet.velocity = new Vector3(0, 0, m_speed);
+			newBullet.transform.position = spawn.transform.position;
 
 		}
 

@@ -4,12 +4,21 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Weapon : MonoBehaviour, IDemageBody
+	public abstract class Ammo : MonoBehaviour, IDemageBody
 	{
 		public float demage { get { return m_demage; } }
 
 		public abstract void Init(byte level);
-		public abstract void Fire(Transform spawn);
+		public void DoShoot(Transform spawn)
+		{
+			if (!isReady || !IsWeaponReady())
+			{
+				return;
+			}
+
+			Fire(spawn);
+			m_timer = 0;
+		}
 		public virtual void UpdateWeapon()
 		{
 			Utils.UpdateTimer(ref m_timer, m_coldown);
@@ -20,7 +29,9 @@ namespace MyGame
 
 		protected bool isReady { get { return Utils.IsColdownReady(m_timer, m_coldown); } }
 
+		protected abstract void Fire(Transform spawn);
 		protected abstract void Update();
+		protected abstract bool IsWeaponReady();
 
 		private float m_timer = 0;
 

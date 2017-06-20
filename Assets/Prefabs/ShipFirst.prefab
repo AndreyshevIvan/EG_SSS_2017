@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4588114398729680}
   - component: {fileID: 114553015599572318}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ShipFirst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4504117842763810}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 4636035386525320}
   - component: {fileID: 33267095286653262}
   - component: {fileID: 23066121746050284}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 4501127555722298}
   - component: {fileID: 198374502041875510}
   - component: {fileID: 199107993220961204}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Engine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4925426768024442}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4219242269474698}
   - component: {fileID: 33544914385642944}
   - component: {fileID: 23125750077088654}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 4442224998257752}
   - component: {fileID: 33988941889382226}
   - component: {fileID: 23832407502923378}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Glasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 4457137958860242}
   - component: {fileID: 33449118016029058}
   - component: {fileID: 23438713442057764}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Engines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,8 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120870df97355724c8bd6db7c3c39314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_simpleWeapon: {fileID: 114913540811696196, guid: 8cdab1d20f3211e40a0280182141389a,
-    type: 2}
+  m_simpleGun: {fileID: 0}
   m_leftGun: {fileID: 4504117842763810}
   m_rightGun: {fileID: 4925426768024442}
 --- !u!198 &198374502041875510
