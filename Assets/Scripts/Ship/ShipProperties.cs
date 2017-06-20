@@ -13,7 +13,7 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public class ShipProperties
+	public class ShipProperties : IGunProperties
 	{
 		public ShipProperties(ShipType type)
 		{
@@ -28,25 +28,25 @@ namespace MyGame
 		{
 			get { return ToName(m_type); }
 		}
-		public byte firstGunLevel
+		public byte gunLevel
 		{
-			get { return m_firstGunLevel; }
-			set { SetLevel(ref m_firstGunLevel, value); }
+			get { return m_gunLevel; }
+			set { SetLevel(ref m_gunLevel, value); }
 		}
-		public byte secondGunLevel
+		public byte specialGunLevel
 		{
-			get { return m_secondGunLevel; }
-			set { SetLevel(ref m_secondGunLevel, value); }
+			get { return m_rocketLevel; }
+			set { SetLevel(ref m_rocketLevel, value); }
 		}
-		public byte activeLevel
+		public byte spellLevel
 		{
-			get { return m_activeSpellLevel; }
-			set { SetLevel(ref m_activeSpellLevel, value); }
+			get { return m_spellLevel; }
+			set { SetLevel(ref m_spellLevel, value); }
 		}
 		public byte passiveLevel
 		{
-			get { return m_passiveSpellLevel; }
-			set { SetLevel(ref m_passiveSpellLevel, value); }
+			get { return m_passiveLevel; }
+			set { SetLevel(ref m_passiveLevel, value); }
 		}
 
 		public const byte MIN_LEVEL = 1;
@@ -61,10 +61,10 @@ namespace MyGame
 
 		private ShipType m_type;
 		private string m_name;
-		private byte m_firstGunLevel = 1;
-		private byte m_secondGunLevel = 1;
-		private byte m_activeSpellLevel = 1;
-		private byte m_passiveSpellLevel = 1;
+		private byte m_gunLevel = 1;
+		private byte m_rocketLevel = 1;
+		private byte m_spellLevel = 1;
+		private byte m_passiveLevel = 1;
 
 		private void SetLevel(ref byte property, byte level)
 		{
@@ -75,5 +75,13 @@ namespace MyGame
 
 			property = level;
 		}
+	}
+
+	public interface IGunProperties
+	{
+		byte gunLevel { get; }
+		byte specialGunLevel { get; }
+		byte spellLevel { get; }
+		byte passiveLevel { get; }
 	}
 }

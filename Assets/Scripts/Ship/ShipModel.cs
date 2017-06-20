@@ -6,17 +6,15 @@ namespace MyGame
 {
 	public class ShipModel : MonoBehaviour
 	{
-		public Transform m_leftGun;
-		public Transform m_rightGun;
 		public Boundary m_boundary;
 
-		public Vector3 worldPosition
+		public Vector3 origin
 		{
 			get { return transform.position; }
 		}
 		public Vector3 canvasPosition
 		{
-			get { return Camera.main.WorldToScreenPoint(worldPosition); }
+			get { return Camera.main.WorldToScreenPoint(origin); }
 		}
 
 		public void SetBody(GameObject newBody)
@@ -24,23 +22,21 @@ namespace MyGame
 			ClearBody();
 			m_body = Instantiate(newBody, transform);
 		}
-		public void SetPosition(Vector3 newPosition)
+		public void MoveTo(Vector3 newPosition)
 		{
-			Vector3 origin = worldPosition;
-			Vector2 currentPosition = new Vector3(newPosition.x, newPosition.z);
 			Vector3 direction = (newPosition - origin).normalized;
-			m_smoothDirection = Vector3.MoveTowards(m_smoothDirection, direction, SMOOTHING);
-			direction = m_smoothDirection;
+			m_smoothDir = Vector3.MoveTowards(m_smoothDir, direction, SMOOTHING);
+			direction = m_smoothDir;
 			Vector3 movement = new Vector3(direction.x, 0, direction.z);
 			m_rigidBody.velocity = movement * SPEED;
 		}
 
 		private GameObject m_body;
 		private Rigidbody m_rigidBody;
-		private Vector3 m_smoothDirection;
+		private Vector3 m_smoothDir;
 
 		private const float SPEED = 15;
-		private const float SMOOTHING = 5;
+		private const float SMOOTHING = 15;
 		private const float TILT = 2;
 		private const float HEIGHT = 1;
 
@@ -52,12 +48,12 @@ namespace MyGame
 		private void FixedUpdate()
 		{
 			transform.position = new Vector3 (
-				Mathf.Clamp(worldPosition.x, m_boundary.xMin, m_boundary.xMax),
+				Mathf.Clamp(origin.x, m_boundary.xMin, m_boundary.xMax),
 				HEIGHT,
-				Mathf.Clamp(worldPosition.z, m_boundary.yMin, m_boundary.yMax)
+				Mathf.Clamp(origin.z, m_boundary.yMin, m_boundary.yMax)
 			);
 
-			float eulerZ = m_rigidBody.velocity.x * -HEIGHT;
+			float eulerZ = m_rigidBody.velocity.x * -TILT;
 			m_rigidBody.rotation = Quaternion.Euler(0, 0, eulerZ);
 			m_rigidBody.velocity = Vector3.zero;
 		}

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace MyGame
 {
-	public class ShipController : MonoBehaviour
+	public class ShipController : MonoBehaviour, IDragHandler
 	{
 		public ShipModel m_ship;
 		public GameplayUI m_gameplayUI;
@@ -22,6 +22,9 @@ namespace MyGame
 		{
 			HandleMouse();
 			HandleTouch();
+		}
+		public void OnDrag(PointerEventData data)
+		{
 		}
 		private void HandleMouse()
 		{
@@ -43,14 +46,14 @@ namespace MyGame
 		}
 		private void SetPosition(Vector3 screenPosition)
 		{
-			screenPosition.z = Camera.main.transform.position.y + 1;
+			screenPosition.z = Camera.main.transform.position.y;
 			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-			m_ship.SetPosition(screenPosition);
+			m_ship.MoveTo(screenPosition);
 		}
 		private void InitSize()
 		{
 			float width = m_ship.transform.localScale.x;
-			Vector3 shipLeftPos = m_ship.worldPosition + new Vector3(width, 0, 0);
+			Vector3 shipLeftPos = m_ship.origin + new Vector3(width, 0, 0);
 			Vector3 leftPoint = Camera.main.WorldToScreenPoint(shipLeftPos);
 			m_areaRadius = Mathf.Abs(leftPoint.x - m_ship.canvasPosition.x);
 			m_gameplayUI.areaSize = m_areaRadius;

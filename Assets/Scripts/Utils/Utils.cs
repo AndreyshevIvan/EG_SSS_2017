@@ -31,5 +31,17 @@ namespace MyGame
 			uint mod = value % 1000;
 			return kCount.ToString() + '.' + mod.ToString()[0] + " k";
 		}
+
+		public static void UpdateTimer(ref float timer, float coldown)
+		{
+			if (!IsColdownReady(timer, coldown))
+			{
+				timer += Time.deltaTime;
+			}
+		}
+		public static bool IsColdownReady(float timer, float coldown)
+		{
+			return timer > coldown;
+		}
 	}
 }
