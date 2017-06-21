@@ -12,5 +12,6 @@ namespace MyGame
 		byte minLevel { get; }
 
 		void SetLevel(byte newLevel);
+		void Modify();
 	}
 }

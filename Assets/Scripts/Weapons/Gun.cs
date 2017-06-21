@@ -1,36 +1,44 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Gun : MonoBehaviour, IModifiable
+	public abstract class Gun : ShipProperty
 	{
 		public Ammo m_ammo;
 
-		public byte level { get { return m_level; } }
-		public byte maxLevel { get { return GameData.maxModLevel; } }
-		public byte minLevel { get { return GameData.minModLevel; } }
-
 		public void Shoot()
 		{
+			if (!Utils.IsColdownReady(m_timer, m_coldown))
+			{
+				return;
+			}
+
 			OnShoot();
+			m_timer = 0;
 		}
-		public void SetLevel(byte level)
+		public sealed override void Modify()
 		{
-			OnSetLevel(level);
-			m_ammo.SetLevel(level);
-		}
-		public void Modify()
-		{
-			OnModify();
 			m_ammo.Modify();
+			OnModificateGun();
 		}
 
-		protected byte m_level;
-
+		protected float m_modifyColdownStep;
+		protected float m_minColdown;
+		protected sealed override void OnChangeLevel()
+		{
+			m_ammo.SetLevel(m_level);
+			OnChangeGunLevel();
+		}
 		protected abstract void OnShoot();
-		protected abstract void OnSetLevel(byte level);
-		protected abstract void OnModify();
+		protected abstract void OnChangeGunLevel();
+		protected abstract void OnModificateGun();
+
+		private void FixedUpdate()
+		{
+			Utils.UpdateTimer(ref m_timer, m_coldown);
+		}
 	}
 }

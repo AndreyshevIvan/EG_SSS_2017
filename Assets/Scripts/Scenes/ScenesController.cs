@@ -10,5 +10,4 @@ namespace MyGame
 			SceneManager.LoadScene("Scenes/" + sceneName);
 		}
 	}
-
 }

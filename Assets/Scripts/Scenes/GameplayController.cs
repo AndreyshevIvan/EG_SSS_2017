@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class GameplayController : MonoBehaviour
+	public class GameplayController : MonoBehaviour, IMapPhysics
 	{
 		public ShipModel m_shipModel;
 		public ShipModelsManager m_modelsManager;
 		public ShipController m_controller;
+		public MatchShip m_ship;
 
 		public void Pause(bool isPause)
 		{
@@ -17,7 +18,7 @@ namespace MyGame
 		private User m_user;
 
 		private void Start()
-		{	
+		{
 			InitUser();
 		}
 		private void FixedUpdate()

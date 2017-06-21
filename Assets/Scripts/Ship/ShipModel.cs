@@ -6,7 +6,7 @@ namespace MyGame
 {
 	public class ShipModel : MonoBehaviour
 	{
-		public Boundary m_boundary;
+		public BoundingBox m_boundary;
 
 		public Vector3 origin
 		{
@@ -47,12 +47,19 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
-			transform.position = new Vector3 (
+			UpdatePositionOnField();
+			UpdateRotation();
+		}
+		private void UpdatePositionOnField()
+		{
+			transform.position = new Vector3(
 				Mathf.Clamp(origin.x, m_boundary.xMin, m_boundary.xMax),
 				HEIGHT,
-				Mathf.Clamp(origin.z, m_boundary.yMin, m_boundary.yMax)
+				Mathf.Clamp(origin.z, m_boundary.zMin, m_boundary.zMax)
 			);
-
+		} 
+		private void UpdateRotation()
+		{
 			float eulerZ = m_rigidBody.velocity.x * -TILT;
 			m_rigidBody.rotation = Quaternion.Euler(0, 0, eulerZ);
 			m_rigidBody.velocity = Vector3.zero;

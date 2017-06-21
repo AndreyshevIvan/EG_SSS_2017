@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public interface IHealthBody
+	public interface ILivingBody
 	{
 		float addDemage { set; }
 		bool isLive { get; }

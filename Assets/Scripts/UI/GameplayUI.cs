@@ -11,11 +11,7 @@ namespace MyGame
 
 		public float areaSize
 		{
-			set
-			{
-				float size = value * 2;
-				Utils.SetSize(m_shipArea, size * AREA_SCALE_FACTOR);
-			}
+			set { Utils.SetSize(m_shipArea, 2 * value * AREA_SCALE_FACTOR); }
 		}
 		public Vector3 areaPosition
 		{

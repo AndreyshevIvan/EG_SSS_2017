@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace MyGame
 {
-	public class ShipController : MonoBehaviour, IDragHandler
+	public class ShipController : MonoBehaviour
 	{
 		public ShipModel m_ship;
 		public GameplayUI m_gameplayUI;
@@ -21,10 +21,7 @@ namespace MyGame
 		private void FixedUpdate()
 		{
 			HandleMouse();
-			HandleTouch();
-		}
-		public void OnDrag(PointerEventData data)
-		{
+			//HandleTouch();
 		}
 		private void HandleMouse()
 		{

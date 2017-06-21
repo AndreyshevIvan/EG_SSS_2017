@@ -13,46 +13,35 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public class ShipProperties : IGunProperties
+	public class ShipProperties : IShipProperties
 	{
 		public ShipProperties(ShipType type)
 		{
 			m_type = type;
 		}
 
-		public ShipType type
-		{
-			get { return m_type; }
-		}
-		public string shipName
-		{
-			get { return ToName(m_type); }
-		}
-		public byte gunLevel
+		public ShipType type { get { return m_type; } }
+		public string shipName { get { return ToName(m_type); } }
+		public byte baseGunLevel
 		{
 			get { return m_gunLevel; }
 			set { SetLevel(ref m_gunLevel, value); }
 		}
-		public byte specialGunLevel
+		public byte specificGunLevel
 		{
 			get { return m_rocketLevel; }
 			set { SetLevel(ref m_rocketLevel, value); }
 		}
-		public byte spellLevel
+		public byte activeSpellLevel
 		{
 			get { return m_spellLevel; }
 			set { SetLevel(ref m_spellLevel, value); }
 		}
-		public byte passiveLevel
+		public byte passiveSpellLevel
 		{
 			get { return m_passiveLevel; }
 			set { SetLevel(ref m_passiveLevel, value); }
 		}
-
-		public const byte MIN_LEVEL = 1;
-		public const byte MAX_LEVEL = 5;
-		public const float MIN_HEALTH = 100;
-		public const float MIN_MAGNETIC = 0.05f;
 
 		public static string ToName(ShipType type)
 		{
@@ -68,20 +57,40 @@ namespace MyGame
 
 		private void SetLevel(ref byte property, byte level)
 		{
-			if (level < MIN_LEVEL || level > MAX_LEVEL)
+			property = Utils.Clamp(level, GameData.minModLevel, GameData.maxModLevel);
+		}
+	}
+
+	public abstract class ShipProperty : MonoBehaviour, IModifiable
+	{
+		public byte level { get { return m_level; } }
+		public byte maxLevel { get { return GameData.maxModLevel; } }
+		public byte minLevel { get { return GameData.minModLevel; } }
+
+		public void SetLevel(byte newLevel)
+		{
+			if (newLevel < minLevel || newLevel > maxLevel)
 			{
 				return;
 			}
 
-			property = level;
+			OnChangeLevel();
 		}
+		public abstract void Modify();
+
+		protected abstract void OnChangeLevel();
+
+		protected byte m_level;
+
+		protected float m_timer;
+		protected float m_coldown;
 	}
 
-	public interface IGunProperties
+	public interface IShipProperties
 	{
-		byte gunLevel { get; }
-		byte specialGunLevel { get; }
-		byte spellLevel { get; }
-		byte passiveLevel { get; }
+		byte baseGunLevel { get; }
+		byte specificGunLevel { get; }
+		byte activeSpellLevel { get; }
+		byte passiveSpellLevel { get; }
 	}
 }
