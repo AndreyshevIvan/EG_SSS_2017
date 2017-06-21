@@ -21,20 +21,11 @@ namespace MyGame
 
 		public void Init(IGunProperties properties)
 		{
-			m_simpleGun.Init(properties.gunLevel);
+			m_simpleGun.SetLevel(properties.gunLevel);
 		}
 
 		private float m_health;
 		private float m_maxhealth;
 		private float m_touchDemage;
-
-		private void Awake()
-		{
-
-		}
-		private void FixedUpdate()
-		{
-
-		}
 	}
 }

@@ -4,18 +4,33 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class Gun : MonoBehaviour
+	public abstract class Gun : MonoBehaviour, IModifiable
 	{
-		public Ammo m_simpleAmmo;
+		public Ammo m_ammo;
 
-		public void Init(byte level)
+		public byte level { get { return m_level; } }
+		public byte maxLevel { get { return GameData.maxModLevel; } }
+		public byte minLevel { get { return GameData.minModLevel; } }
+
+		public void Shoot()
 		{
-			m_simpleAmmo.Init(level);
+			OnShoot();
+		}
+		public void SetLevel(byte level)
+		{
+			OnSetLevel(level);
+			m_ammo.SetLevel(level);
+		}
+		public void Modify()
+		{
+			OnModify();
+			m_ammo.Modify();
 		}
 
-		private void FixedUpdate()
-		{
+		protected byte m_level;
 
-		}
+		protected abstract void OnShoot();
+		protected abstract void OnSetLevel(byte level);
+		protected abstract void OnModify();
 	}
 }

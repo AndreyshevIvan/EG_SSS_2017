@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,6 +43,19 @@ namespace MyGame
 		public static bool IsColdownReady(float timer, float coldown)
 		{
 			return timer > coldown;
+		}
+		public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
+		{
+			if (value.CompareTo(min) < 0)
+			{
+				return min;
+			}
+			else if (value.CompareTo(max) > 0)
+			{
+				return max;
+			}
+
+			return min;
 		}
 	}
 }

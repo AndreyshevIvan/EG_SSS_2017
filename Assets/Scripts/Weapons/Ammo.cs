@@ -4,41 +4,42 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Ammo : MonoBehaviour, IDemageBody
+	public abstract class Ammo : MonoBehaviour, IDemageBody, IModifiable
 	{
 		public float demage { get { return m_demage; } }
+		public byte level { get { return m_level; } }
+		public byte maxLevel { get { return GameData.maxModLevel; } }
+		public byte minLevel { get { return GameData.minModLevel; } }
 
-		public abstract void Init(byte level);
-		public void DoShoot(Transform spawn)
+		public abstract void Start();
+		public void SetLevel(byte newLevel)
 		{
-			if (!isReady || !IsWeaponReady())
-			{
-				return;
-			}
-
-			Fire(spawn);
-			m_timer = 0;
+			m_level = Utils.Clamp(newLevel, minLevel, maxLevel);
+			OnUpdateLevel();
 		}
-		public virtual void UpdateWeapon()
+		public void Modify()
 		{
-			Utils.UpdateTimer(ref m_timer, m_coldown);
+			OnModify();
 		}
 
-		protected float m_coldown = 1;
 		protected float m_demage;
+		protected Rigidbody m_body;
+		protected byte m_level;
 
-		protected bool isReady { get { return Utils.IsColdownReady(m_timer, m_coldown); } }
+		protected Vector3 velocity { set { m_body.velocity = value; } }
 
-		protected abstract void Fire(Transform spawn);
-		protected abstract void Update();
-		protected abstract bool IsWeaponReady();
+		protected abstract void OnAwake();
+		protected abstract void OnModify();
+		protected abstract void OnUpdateLevel();
+		protected abstract void OnUpdate();
 
-		private float m_timer = 0;
-
+		private void Awake()
+		{
+			m_body = GetComponent<Rigidbody>();
+		}
 		private void FixedUpdate()
 		{
-			Update();
-			Utils.UpdateTimer(ref m_timer, m_coldown);
+			OnUpdate();
 		}
 	}
 }

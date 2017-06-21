@@ -17,6 +17,8 @@ namespace MyGame
 				return LOCALE_PATH + localeName + LOCALE_FILE_NAME;
 			}
 		}
+		public static byte minModLevel { get { return 0; } }
+		public static byte maxModLevel { get { return 5; } }
 
 		public static void SaveUser(User user)
 		{
