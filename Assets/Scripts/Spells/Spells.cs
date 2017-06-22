@@ -30,8 +30,7 @@ namespace MyGame
 
 		protected abstract void CreateEffect();
 		protected virtual void OnAwake() { }
-
-		private void Awake()
+		protected void Awake()
 		{
 			isPassive = true;
 			OnAwake();

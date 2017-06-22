@@ -8,6 +8,6 @@ namespace MyGame
 {
 	public abstract class Enemy : Body
 	{
-		
+
 	}
 }

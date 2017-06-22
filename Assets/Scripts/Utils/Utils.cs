@@ -63,17 +63,17 @@ namespace MyGame
 			return Clamp(level, GameData.minModLevel, GameData.maxModLevel);
 		}
 
-		public static float GetDemage(Collider other)
+		public static bool GetDemage(ref float demage, Collider other)
 		{
 			IDemageBody demageBody = other.GetComponent<IDemageBody>();
-			float demage = 0;
-
-			if (demageBody != null)
+			if (demageBody == null)
 			{
-				demage = demageBody.demage;
+				return false;
 			}
 
-			return demage;
+			demage = demageBody.demage;
+			demageBody.OnDemageTaked();
+			return true;
 		}
 	}
 }

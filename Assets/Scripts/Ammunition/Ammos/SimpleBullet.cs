@@ -12,6 +12,11 @@ namespace MyGame
 		public override void Start()
 		{
 			m_body.velocity = new Vector3(0, 0, speed);
+			demage = 1000;
+		}
+		public override void OnDemageTaked()
+		{
+			Destroy(gameObject);
 		}
 
 		private void FixedUpdate()

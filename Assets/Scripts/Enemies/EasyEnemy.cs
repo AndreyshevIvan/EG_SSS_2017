@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace MyGame
 {
-	public sealed class ExplosionSpell : Spell
+	public sealed class EasyEnemy : Enemy
 	{
-		protected override void CreateEffect()
+		private void Awake()
 		{
+			m_health = 100;
 		}
 	}
 }

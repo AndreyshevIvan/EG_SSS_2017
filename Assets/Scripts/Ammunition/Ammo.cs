@@ -10,12 +10,12 @@ namespace MyGame
 		public Vector3 position { set { transform.position = value; } }
 
 		public abstract void Start();
+		public virtual void OnDemageTaked() { }
 
 		protected Rigidbody m_body;
 
 		protected virtual void OnAwake() { }
-
-		private void Awake()
+		protected void Awake()
 		{
 			m_body = GetComponent<Rigidbody>();
 			OnAwake();

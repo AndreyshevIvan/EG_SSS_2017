@@ -7,5 +7,7 @@ namespace MyGame
 	public interface IDemageBody
 	{
 		float demage { get; }
+
+		void OnDemageTaked();
 	}
 }

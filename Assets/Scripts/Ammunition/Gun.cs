@@ -9,11 +9,12 @@ namespace MyGame
 	{
 		protected abstract void Shoot();
 
-		new private void FixedUpdate()
+		new protected void FixedUpdate()
 		{
 			base.FixedUpdate();
 			DoShoot();
 		}
+
 		private void DoShoot()
 		{
 			if (!isTimerReady)
