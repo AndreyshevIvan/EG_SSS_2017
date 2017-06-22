@@ -7,6 +7,8 @@ namespace MyGame
 {
 	public interface IMapPhysics
 	{
+		ShipMind ship { get; }
+
 		void AddPlayerBullet(Ammo bullet);
 		void AddEnemyBullet(Ammo bullet);
 	}

@@ -77,6 +77,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1395585325761764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4051537187392754}
+  - component: {fileID: 114302146659622852}
+  m_Layer: 9
+  m_Name: RocketLauncher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1572969125735038
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +103,38 @@ GameObject:
   - component: {fileID: 4925426768024442}
   m_Layer: 9
   m_Name: RightGun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1581604326190162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4666222349642378}
+  - component: {fileID: 114501601267508984}
+  m_Layer: 9
+  m_Name: MagneticSpell
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1606893107483214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4529575927546044}
+  - component: {fileID: 114892462890033560}
+  m_Layer: 9
+  m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,6 +191,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4051537187392754
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395585325761764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4588114398729680}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4219242269474698
 Transform:
   m_ObjectHideFlags: 1
@@ -208,6 +269,19 @@ Transform:
   m_Father: {fileID: 4588114398729680}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4529575927546044
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1606893107483214}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4588114398729680}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4588114398729680
 Transform:
   m_ObjectHideFlags: 1
@@ -225,6 +299,9 @@ Transform:
   - {fileID: 4457137958860242}
   - {fileID: 4636035386525320}
   - {fileID: 4442224998257752}
+  - {fileID: 4051537187392754}
+  - {fileID: 4529575927546044}
+  - {fileID: 4666222349642378}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -240,6 +317,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4588114398729680}
   m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4666222349642378
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1581604326190162}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4588114398729680}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4925426768024442
 Transform:
@@ -410,6 +500,32 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1807072758763022}
   m_Mesh: {fileID: 4300006, guid: 289d7adfdb215274a998219ee10218ad, type: 3}
+--- !u!114 &114302146659622852
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395585325761764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7a22da0a39a04488f519513de9e263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_icon: {fileID: 0}
+  m_name: 
+--- !u!114 &114501601267508984
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1581604326190162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2c728672b1c9a4ba9752236d6b1513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_icon: {fileID: 0}
+  m_name: 
 --- !u!114 &114553015599572318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -422,9 +538,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_baseGun: {fileID: 114554011412903934}
-  m_specificGun: {fileID: 114554011412903934}
-  m_activeSpell: {fileID: 0}
-  m_passiveSpell: {fileID: 0}
+  m_specificGun: {fileID: 114302146659622852}
+  m_activeSpell: {fileID: 114892462890033560}
+  m_passiveSpell: {fileID: 114501601267508984}
 --- !u!114 &114554011412903934
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -433,12 +549,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1015181749139352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baf5b40352dd5ba4fb73ed8c9e9fa5cf, type: 3}
+  m_Script: {fileID: 11500000, guid: d4fc5666d14b3e041818edeaff93d5e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_icon: {fileID: 0}
+  m_name: 
   m_ammo: {fileID: 114913540811696196, guid: 8cdab1d20f3211e40a0280182141389a, type: 2}
   m_leftSpawn: {fileID: 4504117842763810}
   m_rightSpawn: {fileID: 4925426768024442}
+--- !u!114 &114892462890033560
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1606893107483214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94601971764fb724dadd25641de511ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_icon: {fileID: 0}
+  m_name: 
 --- !u!198 &198374502041875510
 ParticleSystem:
   m_ObjectHideFlags: 1

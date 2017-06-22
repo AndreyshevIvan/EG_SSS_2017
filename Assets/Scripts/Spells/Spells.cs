@@ -5,11 +5,36 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class ActiveSpell : ShipProperty
+	public abstract class Spell : ShipProperty
 	{
-	}
+		public bool isPassive { get; protected set; }
 
-	public abstract class PassiveSpell : ShipProperty
-	{
+		public void DoEffect()
+		{
+			if (isPassive || !isTimerReady)
+			{
+				return;
+			}
+
+			CreateEffect();
+		}
+
+		protected override sealed void OnInit()
+		{
+			if (isPassive)
+			{
+				isTimerWork = false;
+				CreateEffect();
+			}
+		}
+
+		protected abstract void CreateEffect();
+		protected virtual void OnAwake() { }
+
+		private void Awake()
+		{
+			isPassive = true;
+			OnAwake();
+		}
 	}
 }

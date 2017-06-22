@@ -57,5 +57,10 @@ namespace MyGame
 
 			return min;
 		}
+
+		public static byte GetValidLevel(byte level)
+		{
+			return Utils.Clamp(level, GameData.minModLevel, GameData.maxModLevel);
+		}
 	}
 }

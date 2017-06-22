@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MyGame
 {
@@ -25,22 +26,22 @@ namespace MyGame
 		public byte baseGunLevel
 		{
 			get { return m_gunLevel; }
-			set { SetLevel(ref m_gunLevel, value); }
+			set { m_gunLevel = Utils.GetValidLevel(value); }
 		}
 		public byte specificGunLevel
 		{
 			get { return m_rocketLevel; }
-			set { SetLevel(ref m_rocketLevel, value); }
+			set { m_rocketLevel = Utils.GetValidLevel(value); }
 		}
 		public byte activeSpellLevel
 		{
 			get { return m_spellLevel; }
-			set { SetLevel(ref m_spellLevel, value); }
+			set { m_spellLevel = Utils.GetValidLevel(value); }
 		}
 		public byte passiveSpellLevel
 		{
 			get { return m_passiveLevel; }
-			set { SetLevel(ref m_passiveLevel, value); }
+			set { m_passiveLevel = Utils.GetValidLevel(value); }
 		}
 
 		public static string ToName(ShipType type)
@@ -49,27 +50,24 @@ namespace MyGame
 		}
 
 		private ShipType m_type;
-		private string m_name;
 		private byte m_gunLevel = 1;
 		private byte m_rocketLevel = 1;
 		private byte m_spellLevel = 1;
 		private byte m_passiveLevel = 1;
-
-		private void SetLevel(ref byte property, byte level)
-		{
-			property = Utils.Clamp(level, GameData.minModLevel, GameData.maxModLevel);
-		}
 	}
 
 	public abstract class ShipProperty : MonoBehaviour
 	{
-		public void Init(byte newLevel, IMapPhysics mapPhysics)
+		public Image m_icon;
+		public string m_name;
+
+		public void Init(byte newLevel, IMapPhysics map)
 		{
-			this.mapPhysics = mapPhysics;
-			level = Utils.Clamp(newLevel, GameData.minModLevel, GameData.maxModLevel);
+			level = Utils.GetValidLevel(newLevel);
+			mapPhysics = map;
 			OnInit();
 		}
-		public abstract void Modify();
+		public virtual void Modify() { }
 		public void ResetTimer()
 		{
 			m_timer = 0;
@@ -87,7 +85,12 @@ namespace MyGame
 
 		protected abstract void OnInit();
 
-		private float m_timer;
+		private float m_timer = 0;
+
+		private void Awake()
+		{
+			isTimerWork = true;
+		}
 
 		private void FixedUpdate()
 		{

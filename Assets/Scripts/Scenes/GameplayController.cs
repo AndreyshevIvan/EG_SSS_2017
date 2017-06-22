@@ -12,6 +12,8 @@ namespace MyGame
 
 		public Transform m_playerBullets;
 
+		public ShipMind ship { get { return m_shipMind; } }
+
 		public void AddPlayerBullet(Ammo bullet)
 		{
 			bullet.transform.SetParent(m_playerBullets);

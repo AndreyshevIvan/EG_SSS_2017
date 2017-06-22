@@ -8,9 +8,9 @@ namespace MyGame
 	public class ShipMind : MonoBehaviour, ILivingBody, IDemageBody
 	{
 		public Gun m_baseGun;
-		//public Gun m_specificGun;
-		//public ActiveSpell m_activeSpell;
-		//public PassiveSpell m_passiveSpell;
+		public Gun m_specificGun;
+		public Spell m_activeSpell;
+		public Spell m_passiveSpell;
 
 		public float demage { get { return m_touchDemage; } }
 		public float addDemage { set { m_health -= value; } }
@@ -21,9 +21,9 @@ namespace MyGame
 		public void Init(IShipProperties properties, IMapPhysics mapPhysics)
 		{
 			m_baseGun.Init(properties.baseGunLevel, mapPhysics);
-			//m_specificGun.Init(properties.specificGunLevel);
-			//m_activeSpell.Init(properties.activeSpellLevel);
-			//m_passiveSpell.Init(properties.passiveSpellLevel);
+			m_specificGun.Init(properties.specificGunLevel, mapPhysics);
+			m_activeSpell.Init(properties.activeSpellLevel, mapPhysics);
+			m_passiveSpell.Init(properties.passiveSpellLevel, mapPhysics);
 		}
 
 		private float m_health;
@@ -32,8 +32,12 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
-			m_baseGun.Modify();
+			Shoot();
+		}
+		private void Shoot()
+		{
 			m_baseGun.Shoot();
+			m_specificGun.Shoot();
 		}
 	}
 }

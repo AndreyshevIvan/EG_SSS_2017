@@ -14,11 +14,8 @@ namespace MyGame
 		{
 		}
 
-		protected float bulletsSpeed { get; set; }
-
 		protected override void OnInit()
 		{
-			isTimerWork = true;
 			coldown = 2;
 			bulletsSpeed = 16;
 		}
@@ -27,6 +24,8 @@ namespace MyGame
 			SpawnBullet(m_leftSpawn);
 			SpawnBullet(m_rightSpawn);
 		}
+
+		private float bulletsSpeed { get; set; }
 
 		private void SpawnBullet(Transform spawn)
 		{

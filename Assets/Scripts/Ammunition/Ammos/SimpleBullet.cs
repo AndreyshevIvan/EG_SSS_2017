@@ -16,7 +16,6 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
-
 		}
 	}
 }
