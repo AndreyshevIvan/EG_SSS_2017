@@ -23,22 +23,22 @@ namespace MyGame
 
 		public ShipType type { get { return m_type; } }
 		public string shipName { get { return ToName(m_type); } }
-		public byte baseGunLevel
+		public byte firstGunLevel
 		{
 			get { return m_gunLevel; }
 			set { m_gunLevel = Utils.GetValidLevel(value); }
 		}
-		public byte specificGunLevel
+		public byte secondGunLevel
 		{
 			get { return m_rocketLevel; }
 			set { m_rocketLevel = Utils.GetValidLevel(value); }
 		}
-		public byte activeSpellLevel
+		public byte firstSpellLevel
 		{
 			get { return m_spellLevel; }
 			set { m_spellLevel = Utils.GetValidLevel(value); }
 		}
-		public byte passiveSpellLevel
+		public byte secondSpellLevel
 		{
 			get { return m_passiveLevel; }
 			set { m_passiveLevel = Utils.GetValidLevel(value); }
@@ -65,7 +65,7 @@ namespace MyGame
 		{
 			level = Utils.GetValidLevel(newLevel);
 			mapPhysics = map;
-			OnInit();
+			DoAfterInit();
 		}
 		public virtual void Modify() { }
 		public void ResetTimer()
@@ -83,7 +83,14 @@ namespace MyGame
 			get { return Utils.IsTimerReady(m_timer, coldown); }
 		}
 
-		protected abstract void OnInit();
+		protected virtual void DoAfterInit() { }
+		protected void FixedUpdate()
+		{
+			if (isTimerWork)
+			{
+				Utils.UpdateTimer(ref m_timer, coldown);
+			}
+		}
 
 		private float m_timer = 0;
 
@@ -91,21 +98,13 @@ namespace MyGame
 		{
 			isTimerWork = true;
 		}
-
-		private void FixedUpdate()
-		{
-			if (isTimerWork)
-			{
-				Utils.UpdateTimer(ref m_timer, coldown);
-			}
-		}
 	}
 
 	public interface IShipProperties
 	{
-		byte baseGunLevel { get; }
-		byte specificGunLevel { get; }
-		byte activeSpellLevel { get; }
-		byte passiveSpellLevel { get; }
+		byte firstGunLevel { get; }
+		byte secondGunLevel { get; }
+		byte firstSpellLevel { get; }
+		byte secondSpellLevel { get; }
 	}
 }

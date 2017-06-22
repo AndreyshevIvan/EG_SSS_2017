@@ -19,7 +19,7 @@ namespace MyGame
 			CreateEffect();
 		}
 
-		protected override sealed void OnInit()
+		protected override sealed void DoAfterInit()
 		{
 			if (isPassive)
 			{

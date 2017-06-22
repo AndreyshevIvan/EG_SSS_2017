@@ -6,8 +6,8 @@ namespace MyGame
 {
 	public interface ILivingBody
 	{
-		float addDemage { set; }
 		bool isLive { get; }
+		bool isImmortal { get; }
 		int health { get; }
 		float healthPart { get; }
 	}

@@ -7,17 +7,22 @@ namespace MyGame
 {
 	public abstract class Gun : ShipProperty
 	{
-		public void Shoot()
+		protected abstract void Shoot();
+
+		new private void FixedUpdate()
+		{
+			base.FixedUpdate();
+			DoShoot();
+		}
+		private void DoShoot()
 		{
 			if (!isTimerReady)
 			{
 				return;
 			}
 
-			OnShoot();
+			Shoot();
 			ResetTimer();
 		}
-
-		protected abstract void OnShoot();
 	}
 }

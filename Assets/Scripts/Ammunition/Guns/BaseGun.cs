@@ -10,16 +10,13 @@ namespace MyGame
 		public Transform m_leftSpawn;
 		public Transform m_rightSpawn;
 
-		public override void Modify()
+		protected override void DoAfterInit()
 		{
-		}
-
-		protected override void OnInit()
-		{
+			isTimerWork = true;
 			coldown = 2;
 			bulletsSpeed = 16;
 		}
-		protected override void OnShoot()
+		protected override void Shoot()
 		{
 			SpawnBullet(m_leftSpawn);
 			SpawnBullet(m_rightSpawn);

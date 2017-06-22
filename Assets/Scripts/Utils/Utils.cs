@@ -60,7 +60,20 @@ namespace MyGame
 
 		public static byte GetValidLevel(byte level)
 		{
-			return Utils.Clamp(level, GameData.minModLevel, GameData.maxModLevel);
+			return Clamp(level, GameData.minModLevel, GameData.maxModLevel);
+		}
+
+		public static float GetDemage(Collider other)
+		{
+			IDemageBody demageBody = other.GetComponent<IDemageBody>();
+			float demage = 0;
+
+			if (demageBody != null)
+			{
+				demage = demageBody.demage;
+			}
+
+			return demage;
 		}
 	}
 }

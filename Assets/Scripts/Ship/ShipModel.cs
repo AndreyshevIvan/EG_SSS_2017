@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class ShipModel : MonoBehaviour
+	public class ShipModel : Body
 	{
 		public BoundingBox m_boundary;
 
