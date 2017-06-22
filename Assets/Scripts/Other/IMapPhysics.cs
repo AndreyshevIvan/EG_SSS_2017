@@ -7,5 +7,7 @@ namespace MyGame
 {
 	public interface IMapPhysics
 	{
+		void AddPlayerBullet(Ammo bullet);
+		void AddEnemyBullet(Ammo bullet);
 	}
 }

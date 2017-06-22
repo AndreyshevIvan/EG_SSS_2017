@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class MatchShip : MonoBehaviour, ILivingBody, IDemageBody
+	public class ShipMind : MonoBehaviour, ILivingBody, IDemageBody
 	{
-		public SimpleGun m_baseGun;
-		public Gun m_specificGun;
-		public ActiveSpell m_activeSpell;
-		public PassiveSpell m_passiveSpell;
+		public Gun m_baseGun;
+		//public Gun m_specificGun;
+		//public ActiveSpell m_activeSpell;
+		//public PassiveSpell m_passiveSpell;
 
 		public float demage { get { return m_touchDemage; } }
 		public float addDemage { set { m_health -= value; } }
@@ -18,12 +18,12 @@ namespace MyGame
 		public int health { get { return (int)m_health; } }
 		public float healthPart { get { return m_health / m_maxhealth; } }
 
-		public void Init(IShipProperties properties)
+		public void Init(IShipProperties properties, IMapPhysics mapPhysics)
 		{
-			m_baseGun.SetLevel(properties.baseGunLevel);
-			m_specificGun.SetLevel(properties.specificGunLevel);
-			m_activeSpell.SetLevel(properties.activeSpellLevel);
-			m_passiveSpell.SetLevel(properties.passiveSpellLevel);
+			m_baseGun.Init(properties.baseGunLevel, mapPhysics);
+			//m_specificGun.Init(properties.specificGunLevel);
+			//m_activeSpell.Init(properties.activeSpellLevel);
+			//m_passiveSpell.Init(properties.passiveSpellLevel);
 		}
 
 		private float m_health;
@@ -32,6 +32,7 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
+			m_baseGun.Modify();
 			m_baseGun.Shoot();
 		}
 	}

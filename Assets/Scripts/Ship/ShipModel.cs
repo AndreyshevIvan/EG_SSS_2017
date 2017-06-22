@@ -16,12 +16,9 @@ namespace MyGame
 		{
 			get { return Camera.main.WorldToScreenPoint(origin); }
 		}
+		public GameObject body { private get; set; }
+		public ShipMind mind { get { return body.GetComponent<ShipMind>(); } }
 
-		public void SetBody(GameObject newBody)
-		{
-			ClearBody();
-			m_body = Instantiate(newBody, transform);
-		}
 		public void MoveTo(Vector3 newPosition)
 		{
 			Vector3 direction = (newPosition - origin).normalized;
@@ -31,7 +28,6 @@ namespace MyGame
 			m_rigidBody.velocity = movement * SPEED;
 		}
 
-		private GameObject m_body;
 		private Rigidbody m_rigidBody;
 		private Vector3 m_smoothDir;
 
@@ -42,7 +38,6 @@ namespace MyGame
 
 		private void Awake()
 		{
-			ClearBody();
 			m_rigidBody = GetComponent<Rigidbody>();
 		}
 		private void FixedUpdate()
@@ -63,15 +58,6 @@ namespace MyGame
 			float eulerZ = m_rigidBody.velocity.x * -TILT;
 			m_rigidBody.rotation = Quaternion.Euler(0, 0, eulerZ);
 			m_rigidBody.velocity = Vector3.zero;
-		}
-		private void ClearBody()
-		{
-			if (m_body == null)
-			{
-				return;
-			}
-
-			Destroy(m_body);
 		}
 	}
 }

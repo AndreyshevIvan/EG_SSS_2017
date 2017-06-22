@@ -4,25 +4,32 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class ShipModelsManager : MonoBehaviour
+	public class ShipsManager : MonoBehaviour
 	{
 		public GameObject m_modelFirst;
 		public GameObject m_modelSecond;
 		public GameObject m_modelThird;
 
-		public GameObject Get(ShipType type)
+		public GameObject Get(ShipType type, Transform parent)
 		{
+			GameObject ship = null;
+
 			switch (type)
 			{
 				case ShipType.VOYAGER:
-					return m_modelFirst;
+					ship = m_modelFirst;
+					break;
+
 				case ShipType.DESTENY:
-					return m_modelSecond;
+					ship = m_modelSecond;
+					break;
+
 				case ShipType.SPLASH:
-					return m_modelThird;
+					ship = m_modelThird;
+					break;
 			}
 
-			return m_modelFirst;
+			return Instantiate(ship, parent);
 		}
 	}
 }

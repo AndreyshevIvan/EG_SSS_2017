@@ -153,10 +153,10 @@ Light:
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
-    m_Resolution: 0
+    m_Resolution: 3
     m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.3
+    m_Strength: 0.64
+    m_Bias: 0
     m_NormalBias: 0
     m_NearPlane: 0.1
   m_Cookie: {fileID: 0}
@@ -3571,8 +3571,8 @@ MonoBehaviour:
   m_boundary:
     xMin: -500
     xMax: 500
-    yMin: -600
-    yMax: 600
+    zMin: -500
+    zMax: 500
 --- !u!65 &670447631
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3914,6 +3914,7 @@ MonoBehaviour:
   m_shipModel: {fileID: 670447630}
   m_modelsManager: {fileID: 1253983629}
   m_controller: {fileID: 0}
+  m_ship: {fileID: 0}
 --- !u!4 &1423890041
 Transform:
   m_ObjectHideFlags: 0

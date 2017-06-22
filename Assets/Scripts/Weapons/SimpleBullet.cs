@@ -7,24 +7,16 @@ namespace MyGame
 {
 	public sealed class SimpleBullet : Ammo
 	{
+		public float speed { get; set; }
+
 		public override void Start()
 		{
-			velocity = new Vector3(0, 0, m_speed);
-		}
-		public override void Modify()
-		{
+			m_body.velocity = new Vector3(0, 0, speed);
 		}
 
-		protected override void OnAwake()
+		private void FixedUpdate()
 		{
-		}
-		protected override void OnUpdate()
-		{
-		}
-		protected override void OnChangeLevel()
-		{
-		}
 
-		private float m_speed = 10;
+		}
 	}
 }

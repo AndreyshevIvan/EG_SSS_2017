@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4588114398729680}
   - component: {fileID: 114553015599572318}
+  - component: {fileID: 114554011412903934}
   m_Layer: 9
   m_Name: ShipFirst
   m_TagString: Untagged
@@ -420,9 +421,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120870df97355724c8bd6db7c3c39314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_simpleGun: {fileID: 0}
-  m_leftGun: {fileID: 4504117842763810}
-  m_rightGun: {fileID: 4925426768024442}
+  m_baseGun: {fileID: 114554011412903934}
+  m_specificGun: {fileID: 114554011412903934}
+  m_activeSpell: {fileID: 0}
+  m_passiveSpell: {fileID: 0}
+--- !u!114 &114554011412903934
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1015181749139352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf5b40352dd5ba4fb73ed8c9e9fa5cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ammo: {fileID: 114913540811696196, guid: 8cdab1d20f3211e40a0280182141389a, type: 2}
+  m_leftSpawn: {fileID: 4504117842763810}
+  m_rightSpawn: {fileID: 4925426768024442}
 --- !u!198 &198374502041875510
 ParticleSystem:
   m_ObjectHideFlags: 1

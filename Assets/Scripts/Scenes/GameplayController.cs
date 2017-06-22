@@ -6,30 +6,36 @@ namespace MyGame
 {
 	public class GameplayController : MonoBehaviour, IMapPhysics
 	{
-		public ShipModel m_shipModel;
-		public ShipModelsManager m_modelsManager;
+		public ShipModel m_ship;
+		public ShipsManager m_shipsManager;
 		public ShipController m_controller;
-		public MatchShip m_ship;
+
+		public Transform m_playerBullets;
+
+		public void AddPlayerBullet(Ammo bullet)
+		{
+			bullet.transform.SetParent(m_playerBullets);
+		}
+		public void AddEnemyBullet(Ammo bullet)
+		{
+		}
 
 		public void Pause(bool isPause)
 		{
 		}
 
 		private User m_user;
+		private ShipMind m_shipMind;
 
 		private void Start()
 		{
-			InitUser();
+			m_user = GameData.LoadUser();
+			m_ship.body = m_shipsManager.Get(m_user.ship, m_ship.transform);
+			m_shipMind = m_ship.mind;
+			m_shipMind.Init(GameData.LoadShip(m_user.ship), this);
 		}
 		private void FixedUpdate()
 		{
-
-		}
-		private void InitUser()
-		{
-			m_user = GameData.LoadUser();
-			GameObject shipBody = m_modelsManager.Get(m_user.ship);
-			m_shipModel.SetBody(shipBody);
 		}
 	}
 }

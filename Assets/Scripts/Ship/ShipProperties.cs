@@ -61,29 +61,41 @@ namespace MyGame
 		}
 	}
 
-	public abstract class ShipProperty : MonoBehaviour, IModifiable
+	public abstract class ShipProperty : MonoBehaviour
 	{
-		public byte level { get { return m_level; } }
-		public byte maxLevel { get { return GameData.maxModLevel; } }
-		public byte minLevel { get { return GameData.minModLevel; } }
-
-		public void SetLevel(byte newLevel)
+		public void Init(byte newLevel, IMapPhysics mapPhysics)
 		{
-			if (newLevel < minLevel || newLevel > maxLevel)
-			{
-				return;
-			}
-
-			OnChangeLevel();
+			this.mapPhysics = mapPhysics;
+			level = Utils.Clamp(newLevel, GameData.minModLevel, GameData.maxModLevel);
+			OnInit();
 		}
 		public abstract void Modify();
+		public void ResetTimer()
+		{
+			m_timer = 0;
+		}
 
-		protected abstract void OnChangeLevel();
+		protected float coldown { get; set; }
+		protected bool isTimerWork { get; set; }
+		protected byte level { get; set; }
+		protected IMapPhysics mapPhysics { get; set; }
 
-		protected byte m_level;
+		protected bool isTimerReady
+		{
+			get { return Utils.IsTimerReady(m_timer, coldown); }
+		}
 
-		protected float m_timer;
-		protected float m_coldown;
+		protected abstract void OnInit();
+
+		private float m_timer;
+
+		private void FixedUpdate()
+		{
+			if (isTimerWork)
+			{
+				Utils.UpdateTimer(ref m_timer, coldown);
+			}
+		}
 	}
 
 	public interface IShipProperties

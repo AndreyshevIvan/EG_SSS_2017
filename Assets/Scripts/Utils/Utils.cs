@@ -35,12 +35,12 @@ namespace MyGame
 
 		public static void UpdateTimer(ref float timer, float coldown)
 		{
-			if (!IsColdownReady(timer, coldown))
+			if (!IsTimerReady(timer, coldown))
 			{
 				timer += Time.deltaTime;
 			}
 		}
-		public static bool IsColdownReady(float timer, float coldown)
+		public static bool IsTimerReady(float timer, float coldown)
 		{
 			return timer > coldown;
 		}
