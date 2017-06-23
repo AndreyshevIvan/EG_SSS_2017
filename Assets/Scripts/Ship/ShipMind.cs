@@ -12,7 +12,7 @@ namespace MyGame
 		//public Spell m_firstSpell;
 		//public Spell m_secondSpell;
 
-		public void Init(IShipProperties properties, IMapPhysics mapPhysics)
+		public void Init(IShipProperties properties, MapPhysics mapPhysics)
 		{
 			m_firstGun.Init(properties.firstGunLevel, mapPhysics);
 			//m_secondGun.Init(properties.secondGunLevel, mapPhysics);

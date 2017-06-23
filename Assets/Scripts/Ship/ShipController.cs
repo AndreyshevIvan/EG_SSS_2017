@@ -49,11 +49,6 @@ namespace MyGame
 		}
 		private void InitSize()
 		{
-			float width = m_ship.transform.localScale.x;
-			Vector3 shipLeftPos = m_ship.origin + new Vector3(width, 0, 0);
-			Vector3 leftPoint = Camera.main.WorldToScreenPoint(shipLeftPos);
-			m_areaRadius = Mathf.Abs(leftPoint.x - m_ship.canvasPosition.x);
-			m_gameplayUI.areaSize = m_areaRadius;
 		}
 		private bool IsShipTouch()
 		{

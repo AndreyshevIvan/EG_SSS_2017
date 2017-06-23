@@ -29,7 +29,7 @@ namespace MyGame
 			SimpleBullet bullet = Instantiate(m_ammo);
 			bullet.position = spawn.position;
 			bullet.speed = bulletsSpeed;
-			mapPhysics.AddPlayerBullet(bullet);
+			mapPhysics.AddPlayerBullet(bullet.gameObject);
 			bullet.Start();
 		}
 	}

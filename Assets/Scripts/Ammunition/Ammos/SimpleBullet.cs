@@ -16,11 +16,25 @@ namespace MyGame
 		}
 		public override void OnDemageTaked()
 		{
-			Destroy(gameObject);
+			DestroyMe();
 		}
 
 		private void FixedUpdate()
 		{
+			CheckValidArea();
+		}
+		private void CheckValidArea()
+		{
+			Vector3 position = transform.position;
+
+			if (!Utils.IsContain(position.x, m_mapBox.xMin, m_mapBox.xMax))
+			{
+				DestroyMe();
+			}
+			if (!Utils.IsContain(position.z, m_mapBox.zMin, m_mapBox.zMax))
+			{
+				DestroyMe();
+			}
 		}
 	}
 }

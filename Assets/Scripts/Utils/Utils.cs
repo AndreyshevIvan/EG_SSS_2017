@@ -20,7 +20,6 @@ namespace MyGame
 			SetWidth(rect, size);
 			SetHeight(rect, size);
 		}
-
 		public static string ToMoney(uint value)
 		{
 			if (value < 1000)
@@ -32,7 +31,6 @@ namespace MyGame
 			uint mod = value % 1000;
 			return kCount.ToString() + '.' + mod.ToString()[0] + " k";
 		}
-
 		public static void UpdateTimer(ref float timer, float coldown)
 		{
 			if (!IsTimerReady(timer, coldown))
@@ -57,12 +55,14 @@ namespace MyGame
 
 			return min;
 		}
-
+		public static bool IsContain<T>(T value, T min, T max) where T : IComparable<T>
+		{
+			return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
+		}
 		public static byte GetValidLevel(byte level)
 		{
 			return Clamp(level, GameData.minModLevel, GameData.maxModLevel);
 		}
-
 		public static bool GetDemage(ref float demage, Collider other)
 		{
 			IDemageBody demageBody = other.GetComponent<IDemageBody>();
@@ -74,6 +74,10 @@ namespace MyGame
 			demage = demageBody.demage;
 			demageBody.OnDemageTaked();
 			return true;
+		}
+		public static Vector3 WorldToCanvas(Vector3 worldPosition)
+		{
+			return Camera.main.WorldToScreenPoint(worldPosition);
 		}
 	}
 }

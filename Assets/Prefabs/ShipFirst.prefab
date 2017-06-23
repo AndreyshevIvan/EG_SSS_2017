@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1572969125735038
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1606893107483214
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1676060161470950
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,10 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120870df97355724c8bd6db7c3c39314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_baseGun: {fileID: 114554011412903934}
-  m_specificGun: {fileID: 114302146659622852}
-  m_activeSpell: {fileID: 114892462890033560}
-  m_passiveSpell: {fileID: 114501601267508984}
+  m_firstGun: {fileID: 114554011412903934}
 --- !u!114 &114554011412903934
 MonoBehaviour:
   m_ObjectHideFlags: 1

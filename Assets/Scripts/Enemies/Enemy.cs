@@ -8,6 +8,7 @@ namespace MyGame
 {
 	public abstract class Enemy : Body
 	{
-
+		private byte stars { get; set; }
+		private byte points { get; set; }
 	}
 }

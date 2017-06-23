@@ -20,9 +20,16 @@ namespace MyGame
 		protected int m_health;
 		protected float m_maxhealth;
 		protected float m_touchDemage;
+		protected Rigidbody m_physicsBody;
+		protected BoundingBox m_boundary;
 
 		protected float addDemage { set { m_health -= (int)value; } }
 
+		protected void Awake()
+		{
+			m_physicsBody = GetComponent<Rigidbody>();
+			m_boundary = GameData.mapBox;
+		}
 		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
 		protected virtual void DoBeforeDemaged() { }
 		protected virtual void OnTrigger(Collider other) { }

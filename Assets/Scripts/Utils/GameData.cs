@@ -19,6 +19,10 @@ namespace MyGame
 		}
 		public static byte minModLevel { get { return 0; } }
 		public static byte maxModLevel { get { return 5; } }
+		public static BoundingBox mapBox
+		{
+			get { return new BoundingBox(-10, 10, -25, 25); }
+		}
 
 		public static void SaveUser(User user)
 		{

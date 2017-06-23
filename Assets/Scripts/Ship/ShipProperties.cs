@@ -61,7 +61,7 @@ namespace MyGame
 		public Image m_icon;
 		public string m_name;
 
-		public void Init(byte newLevel, IMapPhysics map)
+		public void Init(byte newLevel, MapPhysics map)
 		{
 			level = Utils.GetValidLevel(newLevel);
 			mapPhysics = map;
@@ -76,7 +76,7 @@ namespace MyGame
 		protected float coldown { get; set; }
 		protected bool isTimerWork { get; set; }
 		protected byte level { get; set; }
-		protected IMapPhysics mapPhysics { get; set; }
+		protected MapPhysics mapPhysics { get; set; }
 
 		protected bool isTimerReady
 		{
