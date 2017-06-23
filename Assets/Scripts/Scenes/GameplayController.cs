@@ -8,7 +8,6 @@ namespace MyGame
 	public sealed class GameplayController : MapPhysics
 	{
 		public ShipModel m_ship;
-		public ShipController m_controller;
 
 		public Transform m_playerBullets;
 
@@ -24,10 +23,13 @@ namespace MyGame
 		private User m_user;
 		private ShipMind m_shipMind;
 		private ShipsFactory m_shipsFactory;
+		private ShipController m_controller;
 
 		private void Start()
 		{
 			m_shipsFactory = GetComponent<ShipsFactory>();
+			m_controller = GetComponent<ShipController>();
+
 			m_user = GameData.LoadUser();
 			m_ship.body = m_shipsFactory.Get(m_user.ship, m_ship.transform);
 			m_shipMind = m_ship.mind;

@@ -9,10 +9,11 @@ namespace MyGame
 	public class EnemiesFactory : MonoBehaviour
 	{
 		public EasyEnemy m_easyEnemy;
+		public MiddleEnemy m_middleEnemy;
+		public HardEnemy m_hardEnemy;
 
-		public EasyEnemy GetEasy()
-		{
-			return Instantiate(m_easyEnemy);
-		}
+		public EasyEnemy easy { get { return Instantiate(m_easyEnemy); } }
+		public MiddleEnemy middle { get { return Instantiate(m_middleEnemy); } }
+		public HardEnemy hard { get { return Instantiate(m_hardEnemy); } }
 	}
 }

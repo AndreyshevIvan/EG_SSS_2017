@@ -17,9 +17,11 @@ namespace MyGame
 			direction = m_smoothDir;
 			Vector3 movement = new Vector3(direction.x, 0, direction.z);
 			m_physicsBody.velocity = movement * SPEED;
+			m_isMoved = true;
 		}
 
 		private Vector3 m_smoothDir;
+		private bool m_isMoved = false;
 
 		private const float SPEED = 15;
 		private const float SMOOTHING = 15;
@@ -30,6 +32,7 @@ namespace MyGame
 		{
 			UpdatePositionOnField();
 			UpdateRotation();
+			UpdateMoveingSpeed();
 		}
 		private void UpdatePositionOnField()
 		{
@@ -41,9 +44,14 @@ namespace MyGame
 		} 
 		private void UpdateRotation()
 		{
-			float eulerZ = m_physicsBody.velocity.x * -TILT;
-			m_physicsBody.rotation = Quaternion.Euler(0, 0, eulerZ);
-			m_physicsBody.velocity = Vector3.zero;
+			float zEuler = m_physicsBody.velocity.x * -TILT;
+			m_physicsBody.rotation = Quaternion.Euler(0, 0, zEuler);
+		}
+		private void UpdateMoveingSpeed()
+		{
+			Vector3 velocity = m_physicsBody.velocity;
+			m_physicsBody.velocity = (m_isMoved) ? velocity : Vector3.zero;
+			m_isMoved = false;
 		}
 	}
 }

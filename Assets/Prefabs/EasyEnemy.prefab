@@ -53,9 +53,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4926247500842774}
-  - component: {fileID: 114781273794686490}
   - component: {fileID: 65362386566117216}
   - component: {fileID: 54757694034191056}
+  - component: {fileID: 114781273794686490}
   m_Layer: 10
   m_Name: EasyEnemy
   m_TagString: Untagged
@@ -347,8 +347,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 11, y: 3.5, z: 8}
-  m_Center: {x: 0, y: 1.2, z: -4}
+  m_Size: {x: 11, y: 4, z: 10}
+  m_Center: {x: 0, y: 1.5, z: -3.5}
 --- !u!114 &114781273794686490
 MonoBehaviour:
   m_ObjectHideFlags: 1

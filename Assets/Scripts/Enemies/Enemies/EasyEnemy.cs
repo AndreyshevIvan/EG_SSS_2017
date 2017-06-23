@@ -10,9 +10,6 @@ namespace MyGame
 	{
 		private void Start()
 		{
-			m_health = 100;
-			transform.position = new Vector3(0, 1, 30);
-			m_physicsBody.velocity = new Vector3(0, 0, -5);
 		}
 		private void FixedUpdate()
 		{
