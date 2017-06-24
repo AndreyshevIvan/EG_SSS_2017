@@ -6,31 +6,32 @@ namespace MyGame
 {
 	public class ShipsFactory : MonoBehaviour
 	{
+		public ShipModel m_shipBody;
 		public GameObject m_modelFirst;
 		public GameObject m_modelSecond;
 		public GameObject m_modelThird;
-		public Transform m_modelsParent;
 
 		public GameObject Spawn(ShipType type)
 		{
-			GameObject ship = null;
+			GameObject shipModelBody = Instantiate(m_shipBody).gameObject;
+			GameObject newShip = null;
 
 			switch (type)
 			{
 				case ShipType.VOYAGER:
-					ship = m_modelFirst;
+					newShip = m_modelFirst;
 					break;
 
 				case ShipType.DESTENY:
-					ship = m_modelSecond;
+					newShip = m_modelSecond;
 					break;
 
 				case ShipType.SPLASH:
-					ship = m_modelThird;
+					newShip = m_modelThird;
 					break;
 			}
-
-			return Instantiate(ship, m_modelsParent);
+			Instantiate(newShip, shipModelBody.transform);
+			return shipModelBody;
 		}
 	}
 }

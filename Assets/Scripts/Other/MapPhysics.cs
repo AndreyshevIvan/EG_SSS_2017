@@ -59,6 +59,8 @@ namespace MyGame
 		}
 		public void EraseStar(Star star)
 		{
+			AddPoints(1);
+			Destroy(star.gameObject);
 		}
 
 		public abstract void AddPoints(ushort pointsCount);
@@ -76,23 +78,28 @@ namespace MyGame
 		}
 		public void MoveToShip(Body body, bool useShipMagnetic = true)
 		{
-			float distanceFactor = (useShipMagnetic) ? shipMind.magnetic : 1;
-			float distance = MAGNETIC_DISTANCE * distanceFactor;
-
-			if (Vector3.Distance(body.position, shipBody.position) < distance)
+			float distance = Vector3.Distance(body.position, shipBody.position);
+			if (distance > shipMind.magneticDistance)
 			{
-
+				return;
 			}
+
+			float factor = (useShipMagnetic) ? shipMind.magnetic : 1;
+			float distanceFactor = shipMind.magneticDistance / distance;
+			body.position = Vector3.MoveTowards(
+				body.position,
+				shipBody.position,
+				factor * distanceFactor * MAGNETIC_SPEED * Time.deltaTime);
 		}
 
-		protected abstract ShipMind shipMind { get; set; }
-		protected abstract Body shipBody { get; set; }
-
+		protected ShipMind shipMind { get; set; }
+		protected Body shipBody { get; set; }
+			
 		protected void FixedUpdate()
 		{
 		}
 
-		private const float MAGNETIC_DISTANCE = 5;
+		private const float MAGNETIC_SPEED = 2;
 
 		private void CreateShipExplosion(Vector3 position)
 		{

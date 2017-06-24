@@ -14,22 +14,17 @@ namespace MyGame
 		{
 		}
 
-		protected override ShipMind shipMind { get; set; }
-		protected override Body shipBody { get; set; }
-
 		private User m_user;
 		private ShipsFactory m_shipsFactory;
-		private ShipController m_controller;
 
-		private void Start()
+		private void Awake()
 		{
 			m_shipsFactory = GetComponent<ShipsFactory>();
-			m_controller = GetComponent<ShipController>();
 			m_user = GameData.LoadUser();
 
 			GameObject ship = m_shipsFactory.Spawn(m_user.ship);
-			shipMind = ship.GetComponent<ShipMind>();
-			shipBody = ship.GetComponent<Body>();
+			shipMind = ship.GetComponentInChildren<ShipMind>();
+			shipBody = ship.GetComponent<ShipModel>();
 			shipMind.Init(GameData.LoadShip(m_user.ship), this);
 		}
 		new private void FixedUpdate()

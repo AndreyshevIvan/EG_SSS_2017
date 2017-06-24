@@ -7,21 +7,16 @@ namespace MyGame
 {
 	public class ShipController : MonoBehaviour
 	{
-		public ShipModel m_ship;
-		public GameplayUI m_gameplayUI;
-
-		private bool m_isTouchInit = false;
-		private bool m_isGameStart = false;
-		private float m_areaRadius;
+		private ShipModel m_ship;
 
 		private void Start()
 		{
-			InitSize();
+			m_ship = GetComponentInChildren<ShipModel>();
 		}
 		private void FixedUpdate()
 		{
 			HandleMouse();
-			//HandleTouch();
+			HandleTouch();
 		}
 		private void HandleMouse()
 		{
@@ -46,13 +41,6 @@ namespace MyGame
 			screenPosition.z = Camera.main.transform.position.y;
 			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 			m_ship.MoveTo(screenPosition);
-		}
-		private void InitSize()
-		{
-		}
-		private bool IsShipTouch()
-		{
-			return true;
 		}
 	}
 }

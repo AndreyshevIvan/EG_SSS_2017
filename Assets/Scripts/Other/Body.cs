@@ -13,7 +13,7 @@ namespace MyGame
 		public bool isImmortal { get; protected set; }
 		public int health { get; protected set; }
 		public float healthPart { get { return health / maxHealth; } }
-		public MapPhysics gameMap { get; set; }
+		public MapPhysics gameMap { protected get; set; }
 		public Vector3 position
 		{
 			get { return transform.position; }
