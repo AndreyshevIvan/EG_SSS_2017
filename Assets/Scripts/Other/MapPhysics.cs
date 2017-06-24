@@ -10,8 +10,11 @@ namespace MyGame
 	{
 		public GameObject m_shipExplosion;
 		public Star m_star;
+
 		public Transform m_garbageParent;
 		public Transform m_starsParent;
+		public Transform m_playerBulletsParent;
+
 		public int m_garbageLayer;
 
 		public void AddEnemy(Enemy enemy)
@@ -32,8 +35,8 @@ namespace MyGame
 
 		public void EraseEnemy(Enemy enemy)
 		{
-			List<Rigidbody> bodies = new List<Rigidbody>(enemy.GetComponentsInChildren<Rigidbody>());
-
+			List<Rigidbody> bodies = null;
+			bodies = Utils.ToList(enemy.GetComponentsInChildren<Rigidbody>());
 			bodies.Remove(enemy.GetComponent<Rigidbody>());
 
 			foreach (Rigidbody body in bodies)
@@ -67,13 +70,29 @@ namespace MyGame
 			{
 				Star newStar = Instantiate(m_star, m_starsParent);
 				newStar.position = position;
+				newStar.gameMap = this;
 				starsCount--;
 			}
 		}
+		public void MoveToShip(Body body, bool useShipMagnetic = true)
+		{
+			float distanceFactor = (useShipMagnetic) ? shipMind.magnetic : 1;
+			float distance = MAGNETIC_DISTANCE * distanceFactor;
+
+			if (Vector3.Distance(body.position, shipBody.position) < distance)
+			{
+
+			}
+		}
+
+		protected abstract ShipMind shipMind { get; set; }
+		protected abstract Body shipBody { get; set; }
 
 		protected void FixedUpdate()
 		{
 		}
+
+		private const float MAGNETIC_DISTANCE = 5;
 
 		private void CreateShipExplosion(Vector3 position)
 		{

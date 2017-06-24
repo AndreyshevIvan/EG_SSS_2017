@@ -7,14 +7,19 @@ namespace MyGame
 	public class Star : Body
 	{
 		private Vector3 rotationAngle { get; set; }
-		private Vector3 stopPosition { get; set; }
+		private Vector3 endPosition { get; set; }
+		private float moveDelta { get; set; }
 
 		private const float DELTA = 4;
+		private const float MOVE_DELTA = 0.95f;
+		private const float START_MOVE_DELTA = 0.1f;
+		private const float CRITICAL_MOVE_DELTA = 0.01f;
 
 		private void Start()
 		{
 			InitStopPosition();
 			InitRotation();
+			moveDelta = START_MOVE_DELTA;
 		}
 		private void InitStopPosition()
 		{
@@ -25,7 +30,7 @@ namespace MyGame
 			newStopPosition.x += deltaX;
 			newStopPosition.y = 1;
 			newStopPosition.z += deltaZ;
-			stopPosition = newStopPosition;
+			endPosition = newStopPosition;
 		}
 		private void InitRotation()
 		{
@@ -39,10 +44,13 @@ namespace MyGame
 		{
 			transform.Rotate(rotationAngle);
 
-			if (position != stopPosition)
+			if (position != endPosition)
 			{
-				Vector3 newPos = Vector3.MoveTowards(position, stopPosition, 0.1f);
-				position = newPos;
+				position = Vector3.MoveTowards(position, endPosition, moveDelta);
+				if (moveDelta * MOVE_DELTA > CRITICAL_MOVE_DELTA)
+				{
+					moveDelta *= MOVE_DELTA;
+				}
 			}
 		}
 	}

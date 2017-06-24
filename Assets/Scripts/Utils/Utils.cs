@@ -79,5 +79,9 @@ namespace MyGame
 		{
 			return Camera.main.WorldToScreenPoint(worldPosition);
 		}
+		public static List<T> ToList<T>(T[] arr)
+		{
+			return new List<T>(arr);
+		}
 	}
 }

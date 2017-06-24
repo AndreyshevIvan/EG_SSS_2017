@@ -9,8 +9,9 @@ namespace MyGame
 		public GameObject m_modelFirst;
 		public GameObject m_modelSecond;
 		public GameObject m_modelThird;
+		public Transform m_modelsParent;
 
-		public GameObject Get(ShipType type, Transform parent)
+		public GameObject Spawn(ShipType type)
 		{
 			GameObject ship = null;
 
@@ -29,7 +30,7 @@ namespace MyGame
 					break;
 			}
 
-			return Instantiate(ship, parent);
+			return Instantiate(ship, m_modelsParent);
 		}
 	}
 }

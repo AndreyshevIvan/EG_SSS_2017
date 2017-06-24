@@ -8,8 +8,6 @@ namespace MyGame
 	public sealed class ShipModel : Body
 	{
 		public Vector3 origin { get { return transform.position; } }
-		public GameObject body { private get; set; }
-		public ShipMind mind { get { return body.GetComponent<ShipMind>(); } }
 
 		public void MoveTo(Vector3 newPosition)
 		{

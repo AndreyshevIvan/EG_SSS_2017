@@ -7,12 +7,6 @@ namespace MyGame
 {
 	public sealed class GameplayController : MapPhysics
 	{
-		public ShipModel m_ship;
-
-		public Transform m_playerBullets;
-
-		public ShipMind ship { get { return m_shipMind; } }
-
 		public override void AddPoints(ushort pointsCount)
 		{
 		}
@@ -20,8 +14,10 @@ namespace MyGame
 		{
 		}
 
+		protected override ShipMind shipMind { get; set; }
+		protected override Body shipBody { get; set; }
+
 		private User m_user;
-		private ShipMind m_shipMind;
 		private ShipsFactory m_shipsFactory;
 		private ShipController m_controller;
 
@@ -29,11 +25,12 @@ namespace MyGame
 		{
 			m_shipsFactory = GetComponent<ShipsFactory>();
 			m_controller = GetComponent<ShipController>();
-
 			m_user = GameData.LoadUser();
-			m_ship.body = m_shipsFactory.Get(m_user.ship, m_ship.transform);
-			m_shipMind = m_ship.mind;
-			m_shipMind.Init(GameData.LoadShip(m_user.ship), this);
+
+			GameObject ship = m_shipsFactory.Spawn(m_user.ship);
+			shipMind = ship.GetComponent<ShipMind>();
+			shipBody = ship.GetComponent<Body>();
+			shipMind.Init(GameData.LoadShip(m_user.ship), this);
 		}
 		new private void FixedUpdate()
 		{
