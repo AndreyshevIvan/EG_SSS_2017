@@ -26,9 +26,9 @@ namespace MyGame
 			middle.transform.position = demoPositionSecond;
 			hard.transform.position = demoPositionThird;
 
-			m_mapPhysics.AddEnemy(easy.gameObject);
-			m_mapPhysics.AddEnemy(middle.gameObject);
-			m_mapPhysics.AddEnemy(hard.gameObject);
+			m_mapPhysics.AddEnemy(easy);
+			m_mapPhysics.AddEnemy(middle);
+			m_mapPhysics.AddEnemy(hard);
 		}
 		private void FixedUpdate()
 		{

@@ -8,9 +8,9 @@ namespace MyGame
 	public class ShipMind : MonoBehaviour
 	{
 		public Gun m_firstGun;
-		//public Gun m_secondGun;
-		//public Spell m_firstSpell;
-		//public Spell m_secondSpell;
+		public Gun m_secondGun;
+		public Spell m_firstSpell;
+		public Spell m_secondSpell;
 
 		public void Init(IShipProperties properties, MapPhysics mapPhysics)
 		{

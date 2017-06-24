@@ -6,8 +6,16 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class MiddleEnemy : Enemy
+	public sealed class MiddleEnemy : Enemy
 	{
-
+		private void Start()
+		{
+			health = 50;
+			touchDemage = 100;
+			starsCount = 8;
+		}
+		private void FixedUpdate()
+		{
+		}
 	}
 }

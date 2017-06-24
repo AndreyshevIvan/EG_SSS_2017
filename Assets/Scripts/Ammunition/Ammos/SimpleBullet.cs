@@ -11,8 +11,8 @@ namespace MyGame
 
 		public override void Start()
 		{
-			m_body.velocity = new Vector3(0, 0, speed);
-			demage = 1000;
+			body.velocity = new Vector3(0, 0, speed);
+			touchDemage = 20;
 		}
 		public override void OnDemageTaked()
 		{
@@ -27,11 +27,11 @@ namespace MyGame
 		{
 			Vector3 position = transform.position;
 
-			if (!Utils.IsContain(position.x, m_mapBox.xMin, m_mapBox.xMax))
+			if (!Utils.IsContain(position.x, mapBox.xMin, mapBox.xMax))
 			{
 				DestroyMe();
 			}
-			if (!Utils.IsContain(position.z, m_mapBox.zMin, m_mapBox.zMax))
+			if (!Utils.IsContain(position.z, mapBox.zMin, mapBox.zMax))
 			{
 				DestroyMe();
 			}

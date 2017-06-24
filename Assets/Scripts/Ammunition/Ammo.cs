@@ -6,20 +6,20 @@ namespace MyGame
 {
 	public abstract class Ammo : MonoBehaviour, IDemageBody
 	{
-		public float demage { get; set; }
+		public float touchDemage { get; set; }
 		public Vector3 position { set { transform.position = value; } }
 
 		public abstract void Start();
 		public virtual void OnDemageTaked() { }
 
-		protected Rigidbody m_body;
-		protected BoundingBox m_mapBox;
+		protected Rigidbody body { get; set; }
+		protected BoundingBox mapBox { get; set; }
 
 		protected virtual void OnAwake() { }
 		protected void Awake()
 		{
-			m_body = GetComponent<Rigidbody>();
-			m_mapBox = GameData.mapBox;
+			body = GetComponent<Rigidbody>();
+			mapBox = GameData.mapBox;
 			OnAwake();
 		}
 		protected virtual void DestroyMe()

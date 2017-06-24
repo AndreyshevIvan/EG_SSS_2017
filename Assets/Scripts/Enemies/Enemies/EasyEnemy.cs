@@ -8,12 +8,15 @@ namespace MyGame
 {
 	public sealed class EasyEnemy : Enemy
 	{
+
 		private void Start()
 		{
+			health = 10;
+			touchDemage = 100;
+			starsCount = 4;
 		}
 		private void FixedUpdate()
 		{
-
 		}
 	}
 }

@@ -8,6 +8,16 @@ namespace MyGame
 {
 	public abstract class Enemy : Body
 	{
+		public byte starsCount { get; protected set; }
+
+		protected override void DoAfterDemaged()
+		{
+			if (!isLive)
+			{
+				gameMap.EraseEnemy(this);
+			}
+		}
+
 		private byte stars { get; set; }
 		private byte points { get; set; }
 	}

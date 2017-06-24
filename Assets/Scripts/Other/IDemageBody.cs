@@ -6,7 +6,7 @@ namespace MyGame
 {
 	public interface IDemageBody
 	{
-		float demage { get; }
+		float touchDemage { get; }
 
 		void OnDemageTaked();
 	}

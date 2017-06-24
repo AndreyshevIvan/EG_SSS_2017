@@ -71,7 +71,7 @@ namespace MyGame
 				return false;
 			}
 
-			demage = demageBody.demage;
+			demage = demageBody.touchDemage;
 			demageBody.OnDemageTaked();
 			return true;
 		}

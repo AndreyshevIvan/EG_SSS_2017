@@ -8,6 +8,14 @@ namespace MyGame
 {
 	public class HardEnemy : Enemy
 	{
-
+		private void Start()
+		{
+			health = 100;
+			touchDemage = 100;
+			starsCount = 12;
+		}
+		private void FixedUpdate()
+		{
+		}
 	}
 }
