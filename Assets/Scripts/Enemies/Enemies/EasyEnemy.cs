@@ -8,6 +8,9 @@ namespace MyGame
 {
 	public sealed class EasyEnemy : Enemy
 	{
+		protected override void DoBeforeDeath()
+		{
+		}
 
 		private void Start()
 		{

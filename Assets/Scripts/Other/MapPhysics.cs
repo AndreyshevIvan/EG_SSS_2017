@@ -10,12 +10,15 @@ namespace MyGame
 	{
 		public GameObject m_shipExplosion;
 		public Star m_star;
+		public Material m_garbageMaterial;
 
-		public Transform m_garbageParent;
-		public Transform m_starsParent;
-		public Transform m_playerBulletsParent;
+		public Transform m_moveParent;
+		public Transform m_bulletsParent;
 
 		public int m_garbageLayer;
+
+		public Vector3 shipPosition { get { return shipBody.position; } }
+		public Body shipBody { get; protected set; }
 
 		public void AddEnemy(Enemy enemy)
 		{
@@ -26,6 +29,7 @@ namespace MyGame
 		}
 		public void AddEnemyBullet(GameObject bullet)
 		{
+			bullet.transform.SetParent(m_bulletsParent);
 		}
 
 		public Vector3 GetNearestEnemy(Vector3 point)
@@ -41,10 +45,13 @@ namespace MyGame
 
 			foreach (Rigidbody body in bodies)
 			{
-				body.transform.SetParent(m_garbageParent);
+				GameObject obj = body.gameObject;
+				body.transform.SetParent(m_moveParent);
 				body.useGravity = true;
-				body.gameObject.layer = m_garbageLayer;
-				body.AddExplosionForce(400, enemy.position, 100);
+				obj.layer = m_garbageLayer;
+				body.AddForce(Utils.RandomVect(-300, 300));
+				MeshRenderer renderer = obj.GetComponentInChildren<MeshRenderer>();
+				renderer.material = m_garbageMaterial;
 			}
 
 			CreateShipExplosion(enemy.position);
@@ -70,7 +77,7 @@ namespace MyGame
 
 			while (starsCount > 0)
 			{
-				Star newStar = Instantiate(m_star, m_starsParent);
+				Star newStar = Instantiate(m_star, m_moveParent);
 				newStar.position = position;
 				newStar.gameMap = this;
 				starsCount--;
@@ -78,7 +85,7 @@ namespace MyGame
 		}
 		public void MoveToShip(Body body, bool useShipMagnetic = true)
 		{
-			float distance = Vector3.Distance(body.position, shipBody.position);
+			float distance = Vector3.Distance(body.position, shipPosition);
 			if (distance > shipMind.magneticDistance)
 			{
 				return;
@@ -88,18 +95,24 @@ namespace MyGame
 			float distanceFactor = shipMind.magneticDistance / distance;
 			body.position = Vector3.MoveTowards(
 				body.position,
-				shipBody.position,
+				shipPosition,
 				factor * distanceFactor * MAGNETIC_SPEED * Time.deltaTime);
+		}
+		public void MoveWithMap(Body body)
+		{
+			body.transform.SetParent(m_moveParent);
 		}
 
 		protected ShipMind shipMind { get; set; }
-		protected Body shipBody { get; set; }
 			
 		protected void FixedUpdate()
 		{
+			Vector3 movement = new Vector3(0, 0, -MAP_MOVE_SPEED) * Time.deltaTime;
+			m_moveParent.position = m_moveParent.position + movement;
 		}
 
 		private const float MAGNETIC_SPEED = 2;
+		private const float MAP_MOVE_SPEED = 1.6f;
 
 		private void CreateShipExplosion(Vector3 position)
 		{

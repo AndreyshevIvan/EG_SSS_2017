@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Body : MonoBehaviour, ILivingBody, IDemageBody
+	public abstract class Body : MonoBehaviour
 	{
 		public float touchDemage { get; protected set; }
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
 		public int health { get; protected set; }
 		public float healthPart { get { return health / maxHealth; } }
-		public MapPhysics gameMap { protected get; set; }
+		public MapPhysics gameMap { get; set; }
 		public Vector3 position
 		{
 			get { return transform.position; }

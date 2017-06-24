@@ -13,7 +13,7 @@ namespace MyGame
 
 		private float moveDelta { get; set; }
 
-		private const float DELTA_FORCE = 300;
+		private const float DELTA_FORCE = 400;
 		private const float DELTA_ROTATION = 10;
 
 		private void Start()

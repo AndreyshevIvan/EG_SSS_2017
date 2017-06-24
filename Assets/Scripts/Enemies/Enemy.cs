@@ -14,9 +14,11 @@ namespace MyGame
 		{
 			if (!isLive)
 			{
+				DoBeforeDeath();
 				gameMap.EraseEnemy(this);
 			}
 		}
+		protected abstract void DoBeforeDeath();
 
 		private byte stars { get; set; }
 		private byte points { get; set; }

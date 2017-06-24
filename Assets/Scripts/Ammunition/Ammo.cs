@@ -4,27 +4,19 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Ammo : MonoBehaviour, IDemageBody
+	public abstract class Ammo : Body
 	{
-		public float touchDemage { get; set; }
-		public Vector3 position { set { transform.position = value; } }
+		protected float demage { set { touchDemage = value; } }
 
 		public abstract void Start();
-		public virtual void OnDemageTaked() { }
-
-		protected Rigidbody body { get; set; }
-		protected BoundingBox mapBox { get; set; }
 
 		protected virtual void OnAwake() { }
-		protected void Awake()
+		new protected void Awake()
 		{
-			body = GetComponent<Rigidbody>();
+			base.Awake();
+
 			mapBox = GameData.mapBox;
 			OnAwake();
-		}
-		protected virtual void DestroyMe()
-		{
-			Destroy(gameObject);
 		}
 	}
 }

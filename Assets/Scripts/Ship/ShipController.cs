@@ -16,7 +16,7 @@ namespace MyGame
 		private void FixedUpdate()
 		{
 			HandleMouse();
-			HandleTouch();
+			//HandleTouch();
 		}
 		private void HandleMouse()
 		{

@@ -4,25 +4,22 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public sealed class BaseGun : Gun
+	public sealed class PlayerBaseGun : Gun
 	{
 		public SimpleBullet m_ammo;
 
 		protected override void DoAfterInit()
 		{
-			isTimerWork = true;
 			coldown = 0.6f;
-			bulletsSpeed = 16;
 		}
 		protected override void Shoot()
 		{
 			SimpleBullet bullet = Instantiate(m_ammo);
 			bullet.position = transform.position;
-			bullet.speed = bulletsSpeed;
-			mapPhysics.AddPlayerBullet(bullet.gameObject);
+			Vector3 target = transform.position + Vector3.forward;
+			bullet.Init(target, 20, 25);
 			bullet.Start();
+			gameMap.AddPlayerBullet(bullet.gameObject);
 		}
-
-		private float bulletsSpeed { get; set; }
 	}
 }

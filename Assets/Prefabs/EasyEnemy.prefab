@@ -57,8 +57,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4926247500842774}
-  - component: {fileID: 65362386566117216}
   - component: {fileID: 54757694034191056}
+  - component: {fileID: 65362386566117216}
   - component: {fileID: 114781273794686490}
   m_Layer: 10
   m_Name: EasyEnemy

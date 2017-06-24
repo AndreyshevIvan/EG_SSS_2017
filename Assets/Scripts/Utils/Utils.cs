@@ -65,8 +65,8 @@ namespace MyGame
 		}
 		public static bool GetDemage(ref float demage, Collider other)
 		{
-			IDemageBody demageBody = other.GetComponent<IDemageBody>();
-			if (demageBody == null)
+			Body demageBody = other.GetComponent<Body>();
+			if (demageBody == null || demageBody.touchDemage == 0)
 			{
 				return false;
 			}

@@ -60,11 +60,14 @@ namespace MyGame
 	{
 		public Image m_icon;
 		public string m_name;
+		public bool isTimerWork { get; set; }
 
-		public void Init(byte newLevel, MapPhysics map)
+		public void Init(byte newLevel, MapPhysics map, Body target = null)
 		{
 			level = Utils.GetValidLevel(newLevel);
-			mapPhysics = map;
+			gameMap = map;
+			isTimerWork = true;
+			this.target = target;
 			DoAfterInit();
 		}
 		public virtual void Modify() { }
@@ -74,16 +77,16 @@ namespace MyGame
 		}
 
 		protected float coldown { get; set; }
-		protected bool isTimerWork { get; set; }
 		protected byte level { get; set; }
-		protected MapPhysics mapPhysics { get; set; }
+		protected MapPhysics gameMap { get; set; }
+		protected Body target { get; set; }
 
 		protected bool isTimerReady
 		{
 			get { return Utils.IsTimerReady(m_timer, coldown); }
 		}
 
-		protected virtual void DoAfterInit() { }
+		protected abstract void DoAfterInit();
 		protected void FixedUpdate()
 		{
 			if (isTimerWork)
@@ -93,11 +96,6 @@ namespace MyGame
 		}
 
 		private float m_timer = 0;
-
-		private void Awake()
-		{
-			isTimerWork = true;
-		}
 	}
 
 	public interface IShipProperties
