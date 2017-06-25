@@ -13,7 +13,6 @@ namespace MyGame
 		public void Init(Vector3 target, float speed, float demage)
 		{
 			direction = Vector3.Normalize(target - position);
-			Debug.Log(direction);
 			this.speed = speed;
 			this.demage = demage;
 		}

@@ -6,32 +6,35 @@ namespace MyGame
 {
 	public class ShipsFactory : MonoBehaviour
 	{
-		public ShipModel m_shipBody;
-		public GameObject m_modelFirst;
-		public GameObject m_modelSecond;
-		public GameObject m_modelThird;
+		public ShipMind m_modelFirst;
+		public ShipMind m_modelSecond;
+		public ShipMind m_modelThird;
 
-		public GameObject Spawn(ShipType type)
+		public ShipModel m_body;
+
+		public void Spawn(ShipType type, Map gameMap)
 		{
-			GameObject shipModelBody = Instantiate(m_shipBody).gameObject;
-			GameObject newShip = null;
+			ShipModel body = Instantiate(m_body);
+			ShipMind newMind = null;
 
 			switch (type)
 			{
 				case ShipType.VOYAGER:
-					newShip = m_modelFirst;
+					newMind = m_modelFirst;
 					break;
 
 				case ShipType.DESTENY:
-					newShip = m_modelSecond;
+					newMind = m_modelSecond;
 					break;
 
 				case ShipType.SPLASH:
-					newShip = m_modelThird;
+					newMind = m_modelThird;
 					break;
 			}
-			Instantiate(newShip, shipModelBody.transform);
-			return shipModelBody;
+
+			ShipMind mind = Instantiate(newMind, body.transform);
+			mind.Init(GameData.LoadShip(type), gameMap.world);
+			gameMap.Init(body, mind);
 		}
 	}
 }

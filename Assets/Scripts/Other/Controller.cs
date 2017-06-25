@@ -5,14 +5,10 @@ using UnityEngine.EventSystems;
 
 namespace MyGame
 {
-	public class ShipController : MonoBehaviour
+	public class Controller : MonoBehaviour
 	{
-		private ShipModel m_ship;
+		public ShipModel ship { get; set; }
 
-		private void Start()
-		{
-			m_ship = GetComponentInChildren<ShipModel>();
-		}
 		private void FixedUpdate()
 		{
 			HandleMouse();
@@ -40,7 +36,7 @@ namespace MyGame
 		{
 			screenPosition.z = Camera.main.transform.position.y;
 			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-			m_ship.MoveTo(screenPosition);
+			ship.MoveTo(screenPosition);
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace MyGame
 		{
 			health = 100;
 			touchDemage = 100;
-			starsCount = 12;
+			starsCount = 10;
 			gameMap.MoveWithMap(this);
 
 			m_turretGun = GetComponent<EnemyTurretGun>();
@@ -27,6 +27,7 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
+			//Debug.Log("Enemy position: " + position);
 		}
 	}
 }

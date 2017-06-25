@@ -506,6 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11b948d29c65344b8f596785cc1db35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_rocketGun: {fileID: 114688271120845028}
 --- !u!114 &114688271120845028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -519,4 +520,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_icon: {fileID: 0}
   m_name: 
-  m_rocket: {fileID: 0}
+  m_rocket: {fileID: 114071630511965582, guid: 2dda08b9bb82ccc44bf8e3542237880c, type: 2}

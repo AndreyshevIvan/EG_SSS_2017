@@ -5,33 +5,29 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public sealed class GameplayController : MapPhysics
+	public sealed class GameplayController : MonoBehaviour
 	{
-		public override void AddPoints(ushort pointsCount)
-		{
-		}
-		public void Pause(bool isPause)
-		{
-		}
+		public Controller m_controller;
 
+		private Map m_gameMap;
 		private User m_user;
 		private ShipsFactory m_shipsFactory;
+		private MapsFactory m_mapsFactory;
+		private EnemiesFactory m_enemiesFactory;
 
 		private void Awake()
 		{
 			m_shipsFactory = GetComponent<ShipsFactory>();
+			m_mapsFactory = GetComponent<MapsFactory>();
+			m_enemiesFactory = GetComponent<EnemiesFactory>();
 			m_user = GameData.LoadUser();
-
-			GameObject ship = m_shipsFactory.Spawn(m_user.ship);
-			shipMind = ship.GetComponentInChildren<ShipMind>();
-			shipBody = ship.GetComponent<ShipModel>();
-			shipMind.Init(GameData.LoadShip(m_user.ship), this);
+			m_gameMap = m_mapsFactory.GetMap();
 		}
-		new private void FixedUpdate()
+		private void Start()
 		{
-			base.FixedUpdate();
-
-
+			m_gameMap.enemies = m_enemiesFactory;
+			m_shipsFactory.Spawn(m_user.ship, m_gameMap);
+			m_controller.ship = m_gameMap.shipModel;
 		}
 	}
 }

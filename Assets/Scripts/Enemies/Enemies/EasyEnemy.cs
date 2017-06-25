@@ -16,7 +16,7 @@ namespace MyGame
 		{
 			health = 10;
 			touchDemage = 100;
-			starsCount = 4;
+			starsCount = 0;
 		}
 		private void FixedUpdate()
 		{

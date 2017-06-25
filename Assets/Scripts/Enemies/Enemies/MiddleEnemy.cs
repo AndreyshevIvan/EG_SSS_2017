@@ -19,7 +19,7 @@ namespace MyGame
 		{
 			health = 50;
 			touchDemage = 100;
-			starsCount = 8;
+			starsCount = 0;
 
 			m_rocketGun.Init(0, gameMap, gameMap.shipBody);
 		}

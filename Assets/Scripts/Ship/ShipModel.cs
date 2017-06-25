@@ -21,13 +21,12 @@ namespace MyGame
 
 		protected override void DoAfterDemaged()
 		{
-			Debug.Log("Player ship was be demaged, current health: " + health);
 		}
 
 		private Vector3 m_smoothDir;
 		private bool m_isMoved = false;
 
-		private const float SPEED = 15;
+		private const float SPEED = 20;
 		private const float SMOOTHING = 15;
 		private const float TILT = 2;
 		private const float HEIGHT = 1;
@@ -39,6 +38,7 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
+			//Debug.Log("Player position: " + position);
 			UpdatePositionOnField();
 			UpdateRotation();
 			UpdateMoveingSpeed();
