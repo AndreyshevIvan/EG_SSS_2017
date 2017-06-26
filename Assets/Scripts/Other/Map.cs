@@ -10,7 +10,8 @@ namespace MyGame
 	{
 		public Transform m_ground;
 
-		public List<Spawn> m_spawns;
+		public List<FlySpawn> m_flySpawns;
+		public List<GroundSpawn> m_groundSpawns;
 
 		public bool isPlay { get; set; }
 		public EnemiesFactory enemies { get; set; }
@@ -48,6 +49,7 @@ namespace MyGame
 		private void Start()
 		{
 			world.ground = m_ground;
+			SpawnGroundUnits();
 		}
 		private void FixedUpdate()
 		{
@@ -56,24 +58,33 @@ namespace MyGame
 				return;
 			}
 
-			Spawn spawn = m_spawns.Find(x => x.offset <= world.offset);
+			FlySpawn spawn = m_flySpawns.Find(x => x.offset <= world.offset);
 			if (spawn != null)
 			{
-				DoSpawn(spawn);
-				m_spawns.Remove(spawn);
+				SpawnFlyInits(spawn);
+				m_flySpawns.Remove(spawn);
 			}
 		}
-		private void DoSpawn(Spawn spawn)
+		private void SpawnFlyInits(FlySpawn spawn)
 		{
 			CurvySpline road = roads.Get(spawn.road);
 			for (int i = 0; i < spawn.count; i++)
 			{
 				Enemy enemy = Instantiate(spawn.enemy);
+				world.AddEnemy(enemy);
 				enemy.splineController.Spline = road;
 				float spawnPosition = MapPhysics.SPAWN_OFFSET * i / road.Length;
 				enemy.splineController.InitialPosition = spawnPosition;
 				enemy.splineController.Speed = spawn.speed;
+			}
+		}
+		private void SpawnGroundUnits()
+		{
+			foreach (GroundSpawn spawn in m_groundSpawns)
+			{
+				Enemy enemy = Instantiate(spawn.enemy);
 				world.AddEnemy(enemy);
+				enemy.position = spawn.position;
 			}
 		}
 	}

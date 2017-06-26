@@ -23,13 +23,19 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public class Spawn
+	public class FlySpawn
 	{
 		public RoadType road;
 		public Enemy enemy;
 		public float offset;
 		public float speed;
 		public int count;
+	}
+	[System.Serializable]
+	public class GroundSpawn
+	{
+		public Vector3 position;
+		public Enemy enemy;
 	}
 
 	[System.Serializable]

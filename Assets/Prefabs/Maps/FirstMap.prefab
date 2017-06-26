@@ -424,6 +424,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ground: {fileID: 4051352735780010}
+  m_flySpawns:
+  - road: 0
+    enemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
+    offset: 5
+    speed: 12
+    count: 6
+  - road: 1
+    enemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
+    offset: 10
+    speed: 3
+    count: 1
+  - road: 2
+    enemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
+    offset: 20
+    speed: 12
+    count: 4
+  - road: 3
+    enemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
+    offset: 24
+    speed: 4
+    count: 2
+  m_groundSpawns:
+  - position: {x: -3, y: 0, z: 16}
+    enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
+  - position: {x: 4, y: 0, z: 25}
+    enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
+  - position: {x: -4, y: 0, z: 27}
+    enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
 --- !u!198 &198917089717585566
 ParticleSystem:
   m_ObjectHideFlags: 1
