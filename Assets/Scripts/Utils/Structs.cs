@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FluffyUnderware.Curvy;
 
 namespace MyGame
 {
@@ -19,5 +20,14 @@ namespace MyGame
 		public float xMax;
 		public float zMin;
 		public float zMax;
+	}
+
+	[System.Serializable]
+	public struct SpawnTimer
+	{
+		public Enemy enemy;
+		public float time;
+		public int count;
+		public bool isCompleted;
 	}
 }

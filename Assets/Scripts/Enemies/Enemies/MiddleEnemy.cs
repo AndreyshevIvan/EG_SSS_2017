@@ -14,17 +14,23 @@ namespace MyGame
 		{
 			m_rocketGun.isTimerWork = false;
 		}
+		protected override void UpdateTactic()
+		{
+			position = position - Vector3.forward * speed * Time.deltaTime;
+		}
+
+		private float speed { get; set; }
 
 		private void Start()
 		{
 			health = 50;
 			touchDemage = 100;
-			starsCount = 0;
-
-			m_rocketGun.Init(0, gameMap, gameMap.shipBody);
-		}
-		private void FixedUpdate()
-		{
+			starsCount = 7;
+			speed = 2;
+			m_rocketGun.isTimerWork = true;
+			m_rocketGun.speed = 10;
+			m_rocketGun.factor = 1;
+			m_rocketGun.Init(0, world, world.shipBody);
 		}
 	}
 }

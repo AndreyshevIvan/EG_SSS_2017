@@ -12,22 +12,25 @@ namespace MyGame
 		{
 			m_turretGun.isTimerWork = false;
 		}
+		protected override void UpdateTactic()
+		{
+			m_turretGun.isTimerWork = m_renderer.isVisible;
+		}
 
 		private EnemyTurretGun m_turretGun;
+		private Renderer m_renderer;
 
 		private void Start()
 		{
 			health = 100;
 			touchDemage = 100;
 			starsCount = 10;
-			gameMap.MoveWithMap(this);
+			world.MoveWithMap(this);
 
 			m_turretGun = GetComponent<EnemyTurretGun>();
-			m_turretGun.Init(0, gameMap);
-		}
-		private void FixedUpdate()
-		{
-			//Debug.Log("Enemy position: " + position);
+			m_renderer = GetComponent<Renderer>();
+			m_turretGun.Init(0, world);
+			m_turretGun.speed = 6;
 		}
 	}
 }

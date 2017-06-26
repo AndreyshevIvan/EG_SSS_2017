@@ -18,11 +18,12 @@ TagManager:
   - 
   - PlayerBullets
   - Player
-  - Enemy
+  - FlyEnemy
   - EnemyBullets
   - Garbage
   - Ground
   - Star
+  - GroundEnemy
   - 
   - 
   - 
@@ -38,8 +39,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - TO_DELETE
   m_SortingLayers:
   - name: Default
     uniqueID: 0

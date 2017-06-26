@@ -18,6 +18,10 @@ namespace MyGame
 		public override void Start()
 		{
 		}
+		public override void OnDemageTaked()
+		{
+			Destroy(gameObject);
+		}
 
 		private float factor { get; set; }
 		private float speed { get; set; }

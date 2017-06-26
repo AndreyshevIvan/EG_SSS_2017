@@ -8,7 +8,11 @@ namespace MyGame
 	{
 		protected override void OnTrigger(Collider other)
 		{
-			gameMap.EraseStar(this);
+			world.EraseStar(this);
+		}
+		protected override void OnTouchDeleter()
+		{
+			world.EraseStar(this);
 		}
 
 		private float moveDelta { get; set; }
@@ -26,7 +30,7 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
-			gameMap.MoveToShip(this);
+			world.MoveToShip(this);
 		}
 	}
 }

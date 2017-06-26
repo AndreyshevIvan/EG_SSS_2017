@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using FluffyUnderware.Curvy;
 
 namespace MyGame
 {
@@ -10,6 +11,9 @@ namespace MyGame
 	{
 		public GameObject m_shipExplosion;
 		public Star m_star;
+
+		public Material m_garbage;
+		public List<CurvySpline> m_splines;
 
 		public Transform ground { get; set; }
 		public Body shipBody { get; set; }
@@ -20,22 +24,17 @@ namespace MyGame
 			set { shipBody.position = value; }
 		}
 
-		public const float FLY_HEIGHT = 1;
+		public const float FLY_HEIGHT = 4;
+		public const int DELETE_LAYER = 31;
 
 		public void AddEnemy(Enemy enemy)
 		{
-			enemy.gameMap = this;
-			Vector3 position = enemy.transform.position;
-			position.z += 10;
-			position.y = FLY_HEIGHT;
-			enemy.transform.position = position;
+			enemy.world = this;
 			enemy.transform.SetParent(transform);
 		}
-		public void AddPlayerBullet(GameObject bullet)
+		public void AddAmmo(Ammo ammo)
 		{
-		}
-		public void AddEnemyBullet(GameObject bullet)
-		{
+			ammo.world = this;
 		}
 
 		public Vector3 GetNearestEnemy(Vector3 point)
@@ -43,8 +42,9 @@ namespace MyGame
 			return Vector3.zero;
 		}
 
-		public void EraseEnemy(Enemy enemy)
+		public void EraseEnemyByKill(Enemy enemy)
 		{
+			/*
 			List<Rigidbody> bodies = null;
 			bodies = Utils.ToList(enemy.GetComponentsInChildren<Rigidbody>());
 			bodies.Remove(enemy.GetComponent<Rigidbody>());
@@ -57,33 +57,40 @@ namespace MyGame
 				obj.layer = GARBAGE_LAYER;
 				body.AddForce(Utils.RandomVect(-300, 300));
 				//MeshRenderer renderer = obj.GetComponentInChildren<MeshRenderer>();
-				//renderer.material = m_garbageMaterial;
+				//if (renderer != null) renderer.material = m_garbage;
 			}
-
+			*/
 			CreateShipExplosion(enemy.position);
 			SpawnStars(enemy.starsCount, enemy.position);
-			Destroy(enemy);
+			Destroy(enemy.gameObject);
 		}
-		public void EraseEnemyBullet(GameObject bullet)
+		public void EraseEnemy(Enemy enemy)
 		{
+			Destroy(enemy.gameObject);
 		}
-		public void ErasePlayerBullet(GameObject bullet)
+		public void EraseAmmo(Ammo ammo)
 		{
+			Destroy(ammo.gameObject);
 		}
 		public void EraseStar(Star star)
 		{
 			Destroy(star.gameObject);
 		}
 
+		public CurvySpline GetSpline()
+		{
+			int index = UnityEngine.Random.Range(0, m_splines.Count);
+			return m_splines[index];
+		}
 		public void SpawnStars(byte starsCount, Vector3 position)
 		{
-			position.y = 1;
+			position.y = MapPhysics.FLY_HEIGHT;
 
 			while (starsCount > 0)
 			{
 				Star newStar = Instantiate(m_star, ground);
 				newStar.position = position;
-				newStar.gameMap = this;
+				newStar.world = this;
 				starsCount--;
 			}
 		}

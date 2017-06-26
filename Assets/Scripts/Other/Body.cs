@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using FluffyUnderware.Curvy.Controllers;
 
 namespace MyGame
 {
@@ -13,42 +14,54 @@ namespace MyGame
 		public bool isImmortal { get; protected set; }
 		public int health { get; protected set; }
 		public float healthPart { get { return health / maxHealth; } }
-		public MapPhysics gameMap { get; set; }
+		public MapPhysics world { get; set; }
 		public Vector3 position
 		{
 			get { return transform.position; }
 			set { transform.position = value; }
 		}
+		public SplineController splineController { get; protected set; }
 
 		public virtual void OnDemageTaked() { }
 
 		protected float maxHealth { get; set; }
-		protected BoundingBox mapBox { get; set; }
 		protected Rigidbody physicsBody { get; set; }
 		protected float addDemage { set { health -= (int)value; } }
+		protected BoundingBox mapBox { get; set; }
 
 		protected void Awake()
 		{
 			physicsBody = GetComponent<Rigidbody>();
-			mapBox = GameData.mapBox;
+			splineController = GetComponent<SplineController>();
+			OnAwake();
 		}
+		protected virtual void OnAwake() { }
+		protected abstract void OnTouchDeleter();
 		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
 		protected virtual void DoBeforeDemaged() { }
 		protected virtual void OnTrigger(Collider other) { }
 		protected virtual void DoAfterDemaged() { }
 		protected void OnTriggerEnter(Collider other)
 		{
+			if (other.gameObject.layer == MapPhysics.DELETE_LAYER)
+			{
+				OnTouchDeleter();
+				return;
+			}
+
 			OnTrigger(other);
 
-			if (IsCanBeDemaged())
+			if (!IsCanBeDemaged())
 			{
-				float demage = 0;
-				if (Utils.GetDemage(ref demage, other))
-				{
-					DoBeforeDemaged();
-					addDemage = demage;
-					DoAfterDemaged();
-				}
+				return;
+			}
+
+			float demage = 0;
+			if (Utils.GetDemage(ref demage, other))
+			{
+				DoBeforeDemaged();
+				addDemage = demage;
+				DoAfterDemaged();
 			}
 		}
 	}

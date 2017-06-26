@@ -8,6 +8,7 @@ namespace MyGame
 	public sealed class GameplayController : MonoBehaviour
 	{
 		public Controller m_controller;
+		public MapPhysics m_mapPhysics;
 
 		private Map m_gameMap;
 		private User m_user;
@@ -25,6 +26,7 @@ namespace MyGame
 		}
 		private void Start()
 		{
+			m_gameMap.world = m_mapPhysics;
 			m_gameMap.enemies = m_enemiesFactory;
 			m_shipsFactory.Spawn(m_user.ship, m_gameMap);
 			m_controller.ship = m_gameMap.shipModel;

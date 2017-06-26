@@ -60,6 +60,7 @@ GameObject:
   - component: {fileID: 54263119228574590}
   - component: {fileID: 65209964950082996}
   - component: {fileID: 114082033760199608}
+  - component: {fileID: 114558323566588958}
   m_Layer: 10
   m_Name: MiddleEnemy
   m_TagString: Untagged
@@ -507,6 +508,79 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_rocketGun: {fileID: 114688271120845028}
+--- !u!114 &114558323566588958
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1292985229978794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dacc8a2ff207fca49bdaf5d45a943d80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 
+  UpdateIn: 2
+  m_Space: 0
+  m_PositionMode: 0
+  m_InitialPosition: 0.711
+  m_MoveMode: 2
+  m_Speed: 0
+  m_Clamping: 0
+  m_PlayAutomatically: 0
+  m_AdaptOnChange: 1
+  m_Animate: 0
+  m_Animation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_TimeScale: 1
+  m_SingleShot: 0
+  m_ResetOnStop: 0
+  m_OrientationMode: 1
+  m_OrientationAxis: 0
+  m_DampingDirection: 0
+  m_DampingUp: 0
+  m_IgnoreDirection: 0
+  m_OffsetAngle: 0
+  m_OffsetRadius: 0
+  m_OffsetCompensation: 1
+  m_OnAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: FluffyUnderware.Curvy.CurvyControllerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_Spline: {fileID: 0}
+  m_UseCache: 0
+  m_OnControlPointReached:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: FluffyUnderware.Curvy.CurvySplineMoveEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_OnEndReached:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: FluffyUnderware.Curvy.CurvySplineMoveEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_OnSwitch:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: FluffyUnderware.Curvy.CurvySplineMoveEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114688271120845028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -518,6 +592,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7a22da0a39a04488f519513de9e263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_icon: {fileID: 0}
-  m_name: 
   m_rocket: {fileID: 114071630511965582, guid: 2dda08b9bb82ccc44bf8e3542237880c, type: 2}

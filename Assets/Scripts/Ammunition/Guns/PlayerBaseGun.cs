@@ -10,16 +10,16 @@ namespace MyGame
 
 		protected override void DoAfterInit()
 		{
-			coldown = 0.6f;
+			coldown = 0.3f;
 		}
 		protected override void Shoot()
 		{
 			SimpleBullet bullet = Instantiate(m_ammo);
 			bullet.position = transform.position;
 			Vector3 target = transform.position + Vector3.forward;
-			bullet.Init(target, 20, 25);
+			bullet.Init(target, 20, 50);
 			bullet.Start();
-			gameMap.AddPlayerBullet(bullet.gameObject);
+			gameMap.AddAmmo(bullet);
 		}
 	}
 }

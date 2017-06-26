@@ -58,8 +58,6 @@ namespace MyGame
 
 	public abstract class ShipProperty : MonoBehaviour
 	{
-		public Image m_icon;
-		public string m_name;
 		public bool isTimerWork { get; set; }
 
 		public void Init(byte newLevel, MapPhysics map, Body target = null)

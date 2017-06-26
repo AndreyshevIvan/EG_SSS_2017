@@ -22,23 +22,25 @@ namespace MyGame
 		protected override void DoAfterDemaged()
 		{
 		}
+		protected override void OnTouchDeleter()
+		{
+		}
 
 		private Vector3 m_smoothDir;
 		private bool m_isMoved = false;
 
-		private const float SPEED = 20;
+		private const float SPEED = 30;
 		private const float SMOOTHING = 15;
 		private const float TILT = 2;
-		private const float HEIGHT = 1;
 
 		private void Start()
 		{
 			health = 10000;
 			touchDemage = 1000;
+			mapBox = GameData.mapBox;
 		}
 		private void FixedUpdate()
 		{
-			//Debug.Log("Player position: " + position);
 			UpdatePositionOnField();
 			UpdateRotation();
 			UpdateMoveingSpeed();
@@ -47,7 +49,7 @@ namespace MyGame
 		{
 			transform.position = new Vector3(
 				Mathf.Clamp(origin.x, mapBox.xMin, mapBox.xMax),
-				HEIGHT,
+				MapPhysics.FLY_HEIGHT,
 				Mathf.Clamp(origin.z, mapBox.zMin, mapBox.zMax)
 			);
 		} 

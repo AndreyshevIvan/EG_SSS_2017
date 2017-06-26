@@ -25,7 +25,8 @@ ExportedObj/
 *.svd
 *.pdb
 
-
+/Assets/Packages*
+/Assets/Entities*
 # Unity3D generated meta files
 *.pidb.meta
 
@@ -35,6 +36,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
 
 Library/*
 Temp/*

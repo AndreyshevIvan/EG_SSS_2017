@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,12 +11,13 @@ namespace MyGame
 
 		public abstract void Start();
 
-		protected virtual void OnAwake() { }
+		protected sealed override void OnTouchDeleter()
+		{
+			world.EraseAmmo(this);
+		}
 		new protected void Awake()
 		{
 			base.Awake();
-
-			mapBox = GameData.mapBox;
 			OnAwake();
 		}
 	}

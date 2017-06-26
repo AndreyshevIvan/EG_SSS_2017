@@ -31,16 +31,6 @@ namespace MyGame
 		}
 		private void CheckValidArea()
 		{
-			Vector3 position = transform.position;
-
-			if (!Utils.IsContain(position.x, mapBox.xMin, mapBox.xMax))
-			{
-				Destroy(gameObject);
-			}
-			if (!Utils.IsContain(position.z, mapBox.zMin, mapBox.zMax))
-			{
-				Destroy(gameObject);
-			}
 		}
 	}
 }

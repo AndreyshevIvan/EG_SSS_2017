@@ -8,18 +8,21 @@ namespace MyGame
 	public sealed class RocketLauncher : Gun
 	{
 		public Rocket m_rocket;
+		public float speed { get; set; }
+		public float demage { get; set; }
+		public float factor { get; set; }
 
 		protected override void DoAfterInit()
 		{
-			coldown = 1.2f;
+			coldown = 1.5f;
 		}
 		protected override void Shoot()
 		{
 			Rocket newRocket = Instantiate(m_rocket);
-			newRocket.Init(target, 70, 100, 0.3f);
+			newRocket.Init(target, speed, demage, factor);
 			newRocket.position = transform.position;
 			newRocket.Start();
-			gameMap.AddEnemyBullet(newRocket.gameObject);
+			gameMap.AddAmmo(newRocket);
 		}
 	}
 }

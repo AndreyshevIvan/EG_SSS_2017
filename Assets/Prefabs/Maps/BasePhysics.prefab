@@ -54,3 +54,4 @@ MonoBehaviour:
   m_shipExplosion: {fileID: 1879116672796906, guid: 905c4978ed191754f87b26817e5d7477,
     type: 2}
   m_star: {fileID: 114901461788739668, guid: 349377e0b98518744bddd8b0f05afc25, type: 2}
+  m_garbage: {fileID: 2100000, guid: 6f8e93869c167c84483ad57b013d6e2d, type: 2}
