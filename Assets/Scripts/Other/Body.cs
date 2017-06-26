@@ -23,6 +23,7 @@ namespace MyGame
 		public SplineController splineController { get; protected set; }
 
 		public virtual void OnDemageTaked() { }
+		public abstract void OnDeleteByWorld();
 
 		protected float maxHealth { get; set; }
 		protected Rigidbody physicsBody { get; set; }
@@ -36,19 +37,12 @@ namespace MyGame
 			OnAwake();
 		}
 		protected virtual void OnAwake() { }
-		protected abstract void OnTouchDeleter();
 		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
 		protected virtual void DoBeforeDemaged() { }
 		protected virtual void OnTrigger(Collider other) { }
 		protected virtual void DoAfterDemaged() { }
 		protected void OnTriggerEnter(Collider other)
 		{
-			if (other.gameObject.layer == MapPhysics.DELETE_LAYER)
-			{
-				OnTouchDeleter();
-				return;
-			}
-
 			OnTrigger(other);
 
 			if (!IsCanBeDemaged())

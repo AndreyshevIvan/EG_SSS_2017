@@ -6,11 +6,12 @@ namespace MyGame
 {
 	public sealed class Star : Body
 	{
-		protected override void OnTrigger(Collider other)
+		public override void OnDeleteByWorld()
 		{
 			world.EraseStar(this);
 		}
-		protected override void OnTouchDeleter()
+
+		protected override void OnTrigger(Collider other)
 		{
 			world.EraseStar(this);
 		}

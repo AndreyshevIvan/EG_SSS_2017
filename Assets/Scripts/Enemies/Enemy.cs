@@ -15,6 +15,10 @@ namespace MyGame
 		{
 			world.EraseEnemy(this);
 		}
+		public sealed override void OnDeleteByWorld()
+		{
+			world.EraseEnemy(this);
+		}
 
 		protected override void OnAwake()
 		{
@@ -30,10 +34,6 @@ namespace MyGame
 		}
 		protected abstract void DoBeforeDeath();
 		protected abstract void UpdateTactic();
-		protected sealed override void OnTouchDeleter()
-		{
-			world.EraseEnemy(this);
-		}
 		protected void FixedUpdate()
 		{
 			if (!isSleep)

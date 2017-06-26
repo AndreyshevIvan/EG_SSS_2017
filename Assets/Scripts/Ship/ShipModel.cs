@@ -18,11 +18,11 @@ namespace MyGame
 			physicsBody.velocity = movement * SPEED;
 			m_isMoved = true;
 		}
-
-		protected override void DoAfterDemaged()
+		public override void OnDeleteByWorld()
 		{
 		}
-		protected override void OnTouchDeleter()
+
+		protected override void DoAfterDemaged()
 		{
 		}
 

@@ -13,12 +13,12 @@ namespace MyGame
 		public Spell m_secondSpell;
 
 		public float magnetic { get; set; }
-		public float magneticDistance { get; set; }
+		public float magnetDistance { get; set; }
 
 		public void Init(IShipProperties properties, MapPhysics mapPhysics)
 		{
 			magnetic = 1;
-			magneticDistance = 5;
+			magnetDistance = 5;
 
 			m_firstGun.Init(properties.firstGunLevel, mapPhysics);
 			//m_secondGun.Init(properties.secondGunLevel, mapPhysics);

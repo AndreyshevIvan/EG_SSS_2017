@@ -10,8 +10,9 @@ namespace MyGame
 	{
 		public Transform m_ground;
 
-		public List<SpawnTimer> m_spawnTimer;
+		public List<Spawn> m_spawns;
 
+		public bool isPlay { get; set; }
 		public EnemiesFactory enemies { get; set; }
 		public ShipModel shipModel
 		{
@@ -19,6 +20,7 @@ namespace MyGame
 			set { world.shipBody = value; }
 		}
 		public MapPhysics world { get; set; }
+		public RoadsFactory roads { get; set; }
 
 		public void Init(ShipModel model, ShipMind mind)
 		{
@@ -39,7 +41,6 @@ namespace MyGame
 		}
 
 		private float m_timer = 0;
-		private float m_coldown = 1;
 
 		private void Awake()
 		{
@@ -50,22 +51,30 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
-			if (Utils.IsTimerReady(m_timer, m_coldown))
+			if (!isPlay)
 			{
-				Enemy enemy = null;
-				int rand = UnityEngine.Random.Range(0, 2);
-
-				if (rand == 1) enemy = enemies.middle;
-				else enemy = enemies.easy;
-
-				enemy.splineController.Spline = world.GetSpline();
-				enemy.splineController.Speed = 5;
-				world.AddEnemy(enemy);
-				m_timer = 0;
-				m_coldown = UnityEngine.Random.Range(1, 2);
+				return;
 			}
 
-			Utils.UpdateTimer(ref m_timer, m_coldown);
+			Spawn spawn = m_spawns.Find(x => x.offset <= world.offset);
+			if (spawn != null)
+			{
+				DoSpawn(spawn);
+				m_spawns.Remove(spawn);
+			}
+		}
+		private void DoSpawn(Spawn spawn)
+		{
+			CurvySpline road = roads.Get(spawn.road);
+			for (int i = 0; i < spawn.count; i++)
+			{
+				Enemy enemy = Instantiate(spawn.enemy);
+				enemy.splineController.Spline = road;
+				float spawnPosition = MapPhysics.SPAWN_OFFSET * i / road.Length;
+				enemy.splineController.InitialPosition = spawnPosition;
+				enemy.splineController.Speed = spawn.speed;
+				world.AddEnemy(enemy);
+			}
 		}
 	}
 }

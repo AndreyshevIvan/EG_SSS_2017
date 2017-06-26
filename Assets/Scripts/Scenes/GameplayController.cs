@@ -10,26 +10,24 @@ namespace MyGame
 		public Controller m_controller;
 		public MapPhysics m_mapPhysics;
 
-		private Map m_gameMap;
-		private User m_user;
-		private ShipsFactory m_shipsFactory;
-		private MapsFactory m_mapsFactory;
-		private EnemiesFactory m_enemiesFactory;
+		private Map gameMap { get; set; }
+		private User user { get; set; }
+		private Factories factories { get; set; }
 
 		private void Awake()
 		{
-			m_shipsFactory = GetComponent<ShipsFactory>();
-			m_mapsFactory = GetComponent<MapsFactory>();
-			m_enemiesFactory = GetComponent<EnemiesFactory>();
-			m_user = GameData.LoadUser();
-			m_gameMap = m_mapsFactory.GetMap();
+			factories = GetComponent<Factories>();
+			user = GameData.LoadUser();
+			gameMap = factories.maps.GetMap();
 		}
 		private void Start()
 		{
-			m_gameMap.world = m_mapPhysics;
-			m_gameMap.enemies = m_enemiesFactory;
-			m_shipsFactory.Spawn(m_user.ship, m_gameMap);
-			m_controller.ship = m_gameMap.shipModel;
+			gameMap.world = m_mapPhysics;
+			gameMap.enemies = factories.enemies;
+			gameMap.isPlay = true;
+			gameMap.roads = factories.roads;
+			factories.ships.Spawn(user.ship, gameMap);
+			m_controller.ship = gameMap.shipModel;
 		}
 	}
 }

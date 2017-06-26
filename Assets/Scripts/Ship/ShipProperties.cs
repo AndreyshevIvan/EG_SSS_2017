@@ -1,18 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MyGame
 {
-	[System.Serializable]
-	public enum ShipType
-	{
-		VOYAGER,
-		DESTENY,
-		SPLASH,
-	}
-
 	[System.Serializable]
 	public class ShipProperties : IShipProperties
 	{

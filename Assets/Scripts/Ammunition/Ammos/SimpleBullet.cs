@@ -27,10 +27,6 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
-			CheckValidArea();
-		}
-		private void CheckValidArea()
-		{
 		}
 	}
 }

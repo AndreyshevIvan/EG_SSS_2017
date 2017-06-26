@@ -23,11 +23,99 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public struct SpawnTimer
+	public class Spawn
 	{
+		public RoadType road;
 		public Enemy enemy;
-		public float time;
+		public float offset;
+		public float speed;
 		public int count;
-		public bool isCompleted;
+	}
+
+	[System.Serializable]
+	public struct MapsFactory
+	{
+		public Map m_firstMap;
+
+		public Map GetMap()
+		{
+			return Component.Instantiate(m_firstMap);
+		}
+	}
+
+	[System.Serializable]
+	public struct EnemiesFactory
+	{
+		public EasyEnemy m_easyEnemy;
+		public MiddleEnemy m_middleEnemy;
+		public HardEnemy m_hardEnemy;
+
+		public EasyEnemy easy { get { return Component.Instantiate(m_easyEnemy); } }
+		public MiddleEnemy middle { get { return Component.Instantiate(m_middleEnemy); } }
+		public HardEnemy hard { get { return Component.Instantiate(m_hardEnemy); } }
+	}
+
+	[System.Serializable]
+	public struct ShipsFactory
+	{
+		public ShipMind m_modelFirst;
+		public ShipMind m_modelSecond;
+		public ShipMind m_modelThird;
+
+		public ShipModel m_body;
+
+		public void Spawn(ShipType type, Map gameMap)
+		{
+			ShipModel body = Component.Instantiate(m_body);
+			ShipMind newMind = null;
+
+			switch (type)
+			{
+				case ShipType.VOYAGER:
+					newMind = m_modelFirst;
+					break;
+
+				case ShipType.DESTENY:
+					newMind = m_modelSecond;
+					break;
+
+				case ShipType.SPLASH:
+					newMind = m_modelThird;
+					break;
+			}
+
+			ShipMind mind = Component.Instantiate(newMind, body.transform);
+			mind.Init(GameData.LoadShip(type), gameMap.world);
+			gameMap.Init(body, mind);
+		}
+	}
+
+	[System.Serializable]
+	public struct RoadsFactory
+	{
+		public CurvySpline big;
+		public CurvySpline left;
+		public CurvySpline right;
+		public CurvySpline diff;
+
+		public CurvySpline Get(RoadType type)
+		{
+			switch (type)
+			{
+				case RoadType.BIG:
+					return big;
+
+				case RoadType.LEFT:
+					return left;
+
+				case RoadType.RIGHT:
+					return right;
+
+				case RoadType.DIFF:
+					return diff;
+			}
+
+			return big;
+		}
 	}
 }

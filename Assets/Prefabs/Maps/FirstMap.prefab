@@ -13,7 +13,7 @@ Prefab:
   m_IsPrefabParent: 1
 --- !u!1 &1081590261482794
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -37,7 +37,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4103939689821070}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4485680395965100}
   - component: {fileID: 108277852424989172}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RimLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4017802415777384}
   - component: {fileID: 114607863792255784}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FirstMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 4730089927854894}
   - component: {fileID: 198917089717585566}
   - component: {fileID: 199645743951022728}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: StarField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4127567982756050}
   - component: {fileID: 108786460533809648}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FillLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4051352735780010}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4371085377201630}
   - component: {fileID: 108988959382062468}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: MainLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,6 @@ Transform:
   m_Children:
   - {fileID: 4103939689821070}
   - {fileID: 4730089927854894}
-  - {fileID: 4907294338746408}
   - {fileID: 4051352735780010}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -166,9 +165,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4907294338746408}
   m_Father: {fileID: 4017802415777384}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4103939689821070
 Transform:
@@ -245,11 +245,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1081590261482794}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 3, y: 1, z: 6}
+  m_LocalPosition: {x: 0, y: 0, z: 80}
+  m_LocalScale: {x: 3, y: 1, z: 20}
   m_Children: []
-  m_Father: {fileID: 4017802415777384}
-  m_RootOrder: 2
+  m_Father: {fileID: 4051352735780010}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23277600078537600
 MeshRenderer:
@@ -424,15 +424,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ground: {fileID: 4051352735780010}
-  m_spawnTimer:
-  - enemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
-    time: 2
-    count: 4
-    isCompleted: 0
-  - enemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
-    time: 5
-    count: 4
-    isCompleted: 0
 --- !u!198 &198917089717585566
 ParticleSystem:
   m_ObjectHideFlags: 1
