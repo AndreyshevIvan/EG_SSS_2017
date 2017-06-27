@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace MyGame
 {
@@ -13,14 +14,19 @@ namespace MyGame
 		public EventDelegate onFirstTouch;
 		public EventDelegate onRestart;
 
+		public const float SLOW_TIME = 0.2f;
+
 		public void Pause(bool isPause)
 		{
 			onPause(isPause);
 			OpenPauseInterface(isPause);
 		}
+		public void GameOver()
+		{
+		}
 		public void Restart()
 		{
-
+			SceneManager.LoadScene("DemoScene");
 		}
 
 		private bool isFirstTouchCreated { get; set; }
@@ -30,7 +36,7 @@ namespace MyGame
 		{
 			OnStartNewGame();
 		}
-		private void FixedUpdate()
+		private void Update()
 		{
 			HandleMouse();
 		}
@@ -38,9 +44,11 @@ namespace MyGame
 		{
 			if (!Input.GetMouseButton(0))
 			{
+				onBeginControllPlayer(isFirstTouchCreated);
 				return;
 			}
 
+			onBeginControllPlayer(false);
 			OnCreateFirstTouch();
 			SetPosition(Input.mousePosition);
 		}
@@ -66,7 +74,6 @@ namespace MyGame
 		}
 		private void OpenPauseInterface(bool isPause)
 		{
-
 		}
 
 		private bool IsStartPause()

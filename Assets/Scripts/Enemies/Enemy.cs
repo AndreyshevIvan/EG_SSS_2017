@@ -21,7 +21,6 @@ namespace MyGame
 
 		protected override void OnAwake()
 		{
-			isSleep = true;
 		}
 		protected override void DoAfterDemaged()
 		{
@@ -32,16 +31,6 @@ namespace MyGame
 			}
 		}
 		protected abstract void DoBeforeDeath();
-		protected abstract void UpdateTactic();
-		protected void FixedUpdate()
-		{
-			if (isSleep)
-			{
-				return;
-			}
-
-			UpdateTactic();
-		}
 
 		private byte stars { get; set; }
 		private byte points { get; set; }

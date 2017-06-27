@@ -12,10 +12,6 @@ namespace MyGame
 		protected override void DoBeforeDeath()
 		{
 		}
-		protected override void UpdateTactic()
-		{
-			position = position - Vector3.forward * speed * Time.deltaTime;
-		}
 
 		private float speed { get; set; }
 

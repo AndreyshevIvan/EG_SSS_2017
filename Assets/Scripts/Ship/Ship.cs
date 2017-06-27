@@ -28,11 +28,13 @@ namespace MyGame
 			touchDemage = int.MaxValue;
 			isSleep = false;
 		}
-		protected override void OnUpdate()
+		protected override void WakeupUpdate()
 		{
 			UpdatePositionOnField();
 			UpdateRotation();
 			UpdateMoveingSpeed();
+
+			mind.isSleep = isSleep;
 		}
 		protected override void DoAfterDemaged()
 		{
@@ -41,13 +43,10 @@ namespace MyGame
 		private Vector3 m_smoothDir;
 		private bool m_isMoved = false;
 
-		private const float SPEED = 30;
+		private const float SPEED = 80;
 		private const float SMOOTHING = 15;
 		private const float TILT = 2;
 
-		private void Start()
-		{
-		}
 		private void UpdatePositionOnField()
 		{
 			transform.position = new Vector3(

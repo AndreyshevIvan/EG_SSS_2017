@@ -14,38 +14,26 @@ namespace MyGame
 		public List<FlySpawn> m_flySpawns;
 		public List<GroundSpawn> m_groundSpawns;
 
-		public Ship ship
-		{
-			get { return world.shipBody as Ship; }
-			set { world.shipBody = value; }
-		}
 		public MapPhysics world { get; set; }
-		public Factories factories { get; set; }
 		public bool isSleep { get; set; }
 
-		public void Init(Ship newShip)
-		{
-			ship = newShip;
-			ship.transform.SetParent(transform);
-			ship.mind.Init(world);
-			world.shipMind = ship.mind;
-			factories = world.factories;
-		}
 		public void Play()
 		{
 			isSleep = false;
-			
+			tempSkySpawns = new List<FlySpawn>(m_flySpawns);
 			SpawnGroundUnits();
-		}
-		public void Restart()
-		{
 		}
 		public void Pause(bool isPause)
 		{
 		}
 
+		private Ship ship { get { return world.ship; } }
+		private Factories factories { get { return world.factories; } }
+		private List<FlySpawn> tempSkySpawns { get; set; }
+
 		private void Start()
 		{
+			ship.transform.SetParent(transform);
 			world.ground = m_ground;
 			world.sky = m_sky;
 			isSleep = true;
@@ -64,11 +52,10 @@ namespace MyGame
 		private void UpdateGameSleep()
 		{
 			world.isSleep = isSleep;
-			ship.mind.isSleep = isSleep;
 		}
 		private void SpawnFlyInits()
 		{
-			FlySpawn spawn = m_flySpawns.Find(x => x.offset <= world.offset);
+			FlySpawn spawn = tempSkySpawns.Find(x => x.offset <= world.offset);
 			if (spawn == null)
 			{
 				return;
@@ -84,7 +71,7 @@ namespace MyGame
 				enemy.splineController.InitialPosition = spawnPosition;
 				enemy.splineController.Speed = spawn.speed;
 			}
-			m_flySpawns.Remove(spawn);
+			tempSkySpawns.Remove(spawn);
 		}
 		private void SpawnGroundUnits()
 		{

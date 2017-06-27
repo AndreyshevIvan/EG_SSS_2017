@@ -23,7 +23,7 @@ namespace MyGame
 			Destroy(gameObject);
 		}
 
-		protected override void OnUpdate()
+		protected override void WakeupUpdate()
 		{
 			Vector3 targetPosition = target.position;
 			Vector3 direction = Vector3.Normalize(targetPosition - position);

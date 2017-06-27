@@ -12,9 +12,9 @@ namespace MyGame
 		{
 			m_turretGun.isTimerWork = false;
 		}
-		protected override void UpdateTactic()
+		protected override void NotSleepUpdate()
 		{
-			m_turretGun.isTimerWork = m_renderer.isVisible;
+			m_turretGun.isTimerWork = m_renderer.isVisible && !isSleep;
 		}
 
 		private EnemyTurretGun m_turretGun;
@@ -24,7 +24,7 @@ namespace MyGame
 		{
 			health = 100;
 			touchDemage = 100;
-			starsCount = 10;
+			starsCount = 2;
 			world.SubscribeToMove(this);
 
 			m_turretGun = GetComponent<EnemyTurretGun>();

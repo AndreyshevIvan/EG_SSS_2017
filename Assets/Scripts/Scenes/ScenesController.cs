@@ -9,5 +9,9 @@ namespace MyGame
 		{
 			SceneManager.LoadScene("Scenes/" + sceneName);
 		}
+		public static void SetScene(Scene scene)
+		{
+			SceneManager.SetActiveScene(scene);
+		}
 	}
 }

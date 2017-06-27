@@ -14,9 +14,9 @@ namespace MyGame
 		{
 			m_rocketGun.isTimerWork = false;
 		}
-		protected override void UpdateTactic()
+		protected override void WakeupUpdate()
 		{
-			position = position - Vector3.forward * speed * Time.deltaTime;
+			m_rocketGun.isTimerWork = !isSleep;
 		}
 
 		private float speed { get; set; }
@@ -30,7 +30,7 @@ namespace MyGame
 			m_rocketGun.isTimerWork = true;
 			m_rocketGun.speed = 10;
 			m_rocketGun.factor = 1;
-			m_rocketGun.Init(0, world, world.shipBody);
+			m_rocketGun.Init(0, world, world.ship);
 		}
 	}
 }

@@ -17,12 +17,12 @@ namespace MyGame
 		public Factories factories { get; set; }
 		public Transform ground { get; set; }
 		public Transform sky { get; set; }
-		public Body shipBody { get; set; }
-		public ShipMind shipMind { get; set; }
+		public Ship ship { get; set; }
+		public ShipMind shipMind { get { return ship.mind; } }
 		public Vector3 shipPosition
 		{
-			get { return shipBody.position; }
-			set { shipBody.position = value; }
+			get { return ship.position; }
+			set { ship.position = value; }
 		}
 		public float offset { get; set; }
 		public bool isSleep { get; set; }
@@ -95,7 +95,11 @@ namespace MyGame
 
 		public void SetSlowMode(bool isModeOn)
 		{
-			Time.timeScale = (isModeOn) ? 1 : 0.5f;
+			float dt = Time.fixedDeltaTime;
+			float target = (isModeOn) ? SLOW_TIMESCALE : 1;
+			float step = dt / GameplayUI.SLOW_TIME * (1 - SLOW_TIMESCALE);
+
+			Time.timeScale = Mathf.MoveTowards(Time.timeScale, target, dt);
 		}
 
 		public void MoveToShip(Body body, bool useShipMagnetic = true)
@@ -151,17 +155,19 @@ namespace MyGame
 
 			MoveGround();
 
-			if (!shipBody.isLive)
+			if (!ship.isLive)
 			{
-				onPlayerDeath();
 				isSleep = true;
+				onPlayerDeath();
 			}
 		}
 
 		private BoundingBox m_gameBox;
+		private List<Enemy> m_enemies;
 
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;
+		private const float SLOW_TIMESCALE = 0.2f;
 		private const int GARBAGE_LAYER = 12;
 
 		private void CreateShipExplosion(Vector3 position)

@@ -11,8 +11,13 @@ namespace MyGame
 		protected override void OnRealize()
 		{
 		}
-		protected override void OnUpdate()
+		protected override void WakeupUpdate()
 		{
+			if (isSleep)
+			{
+				return;
+			}
+
 			world.MoveToShip(this);
 		}
 
@@ -30,6 +35,7 @@ namespace MyGame
 			physicsBody.AddTorque(rotation);
 
 			world.SubscribeToMove(this);
+			isUseSleep = false;
 		}
 	}
 }
