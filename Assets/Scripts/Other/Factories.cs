@@ -13,5 +13,6 @@ namespace MyGame
 		public EnemiesFactory enemies;
 		public ShipsFactory ships;
 		public RoadsFactory roads;
+		public BonusesFactory bonuses;
 	}
 }

@@ -23,15 +23,15 @@ namespace MyGame
 			Destroy(gameObject);
 		}
 
-		private float factor { get; set; }
-		private float speed { get; set; }
-		private Body target { get; set; }
-
-		private void FixedUpdate()
+		protected override void OnUpdate()
 		{
 			Vector3 targetPosition = target.position;
 			Vector3 direction = Vector3.Normalize(targetPosition - position);
 			physicsBody.velocity = direction * speed * factor;
 		}
+
+		private float factor { get; set; }
+		private float speed { get; set; }
+		private Body target { get; set; }
 	}
 }

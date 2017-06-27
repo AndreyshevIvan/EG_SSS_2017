@@ -12,6 +12,7 @@ namespace MyGame
 		public float touchDemage { get; protected set; }
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
+		public bool isSleep { get; set; }
 		public int health { get; protected set; }
 		public float healthPart { get { return health / maxHealth; } }
 		public MapPhysics world { get; set; }
@@ -58,6 +59,18 @@ namespace MyGame
 				addDemage = demage;
 				DoAfterDemaged();
 			}
+		}
+		protected virtual void OnUpdate() { }
+		protected void FixedUpdate()
+		{
+			if (isSleep)
+			{
+				physicsBody.Sleep();
+				return;
+			}
+
+			physicsBody.WakeUp();
+			OnUpdate();
 		}
 	}
 }

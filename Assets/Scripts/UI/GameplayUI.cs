@@ -41,6 +41,7 @@ namespace MyGame
 				return;
 			}
 
+			OnCreateFirstTouch();
 			SetPosition(Input.mousePosition);
 		}
 		private void SetPosition(Vector3 screenPosition)
@@ -52,12 +53,16 @@ namespace MyGame
 		private void OnStartNewGame()
 		{
 			isFirstTouchCreated = false;
-			onFirstTouch += OnCreateFirstTouch;
 		}
 		private void OnCreateFirstTouch()
 		{
+			if (isFirstTouchCreated)
+			{
+				return;
+			}
+
+			onFirstTouch();
 			isFirstTouchCreated = true;
-			onFirstTouch -= OnCreateFirstTouch;
 		}
 		private void OpenPauseInterface(bool isPause)
 		{

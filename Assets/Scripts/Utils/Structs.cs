@@ -70,7 +70,7 @@ namespace MyGame
 
 		public Ship m_body;
 
-		public Ship Spawn(ShipType type)
+		public Ship Get(ShipType type)
 		{
 			Ship body = Component.Instantiate(m_body);
 			ShipMind newMind = null;
@@ -123,6 +123,31 @@ namespace MyGame
 			}
 
 			return big;
+		}
+	}
+
+	[System.Serializable]
+	public struct BonusesFactory
+	{
+		public Bonus star;
+		public Bonus health;
+		public Bonus ammo;
+
+		public Bonus Get(BonusType type)
+		{
+			switch (type)
+			{
+				case BonusType.STAR:
+					return star;
+
+				case BonusType.HEALTH:
+					return health;
+
+				case BonusType.AMMO_UP:
+					return ammo;
+			}
+
+			return star;
 		}
 	}
 }

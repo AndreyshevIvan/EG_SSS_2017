@@ -1,22 +1,19 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace MyGame
 {
-	public sealed class Star : Body
+	public sealed class Star : Bonus
 	{
-		public override void OnDeleteByWorld()
+		protected override void OnRealize()
 		{
-			world.EraseStar(this);
 		}
-
-		protected override void OnTrigger(Collider other)
+		protected override void OnUpdate()
 		{
-			if (other.gameObject.layer != MapPhysics.DELETE_LAYER)
-			{
-				world.EraseStar(this);
-			}
+			world.MoveToShip(this);
 		}
 
 		private float moveDelta { get; set; }
@@ -31,10 +28,8 @@ namespace MyGame
 
 			Vector3 rotation = Utils.RandomVect(-DELTA_ROTATION, DELTA_ROTATION);
 			physicsBody.AddTorque(rotation);
-		}
-		private void FixedUpdate()
-		{
-			world.MoveToShip(this);
+
+			world.SubscribeToMove(this);
 		}
 	}
 }

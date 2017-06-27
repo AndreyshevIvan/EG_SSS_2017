@@ -12,9 +12,9 @@ namespace MyGame
 		public EventDelegate onPlayerDeath;
 
 		public GameObject m_shipExplosion;
-		public Star m_star;
 		public List<CurvySpline> m_splines;
 
+		public Factories factories { get; set; }
 		public Transform ground { get; set; }
 		public Transform sky { get; set; }
 		public Body shipBody { get; set; }
@@ -29,7 +29,7 @@ namespace MyGame
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
-		public const int DELETE_LAYER = 31;
+		public const int WORLD_BOX_LAYER = 31;
 
 		public void AddEnemy(Enemy enemy)
 		{
@@ -46,7 +46,7 @@ namespace MyGame
 
 			while (starsCount > 0)
 			{
-				Star newStar = Instantiate(m_star, ground);
+				Bonus newStar = Instantiate(factories.bonuses.star, ground);
 				newStar.position = position;
 				newStar.world = this;
 				starsCount--;
@@ -78,9 +78,9 @@ namespace MyGame
 		{
 			Destroy(ammo.gameObject);
 		}
-		public void EraseStar(Star star)
+		public void EraseBonus(Bonus bonus)
 		{
-			Destroy(star.gameObject);
+			Destroy(bonus.gameObject);
 		}
 
 		public Vector3 GetNearestEnemy(Vector3 point)

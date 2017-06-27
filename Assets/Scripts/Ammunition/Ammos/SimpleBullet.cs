@@ -24,9 +24,5 @@ namespace MyGame
 		{
 			Destroy(gameObject);
 		}
-
-		private void FixedUpdate()
-		{
-		}
 	}
 }

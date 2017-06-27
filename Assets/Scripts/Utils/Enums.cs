@@ -21,4 +21,12 @@ namespace MyGame
 		RIGHT,
 		DIFF,
 	}
+
+	[System.Serializable]
+	public enum BonusType
+	{
+		STAR,
+		HEALTH,
+		AMMO_UP,
+	}
 }

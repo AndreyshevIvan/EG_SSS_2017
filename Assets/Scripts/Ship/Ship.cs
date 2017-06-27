@@ -26,6 +26,13 @@ namespace MyGame
 		{
 			health = 100;
 			touchDemage = int.MaxValue;
+			isSleep = false;
+		}
+		protected override void OnUpdate()
+		{
+			UpdatePositionOnField();
+			UpdateRotation();
+			UpdateMoveingSpeed();
 		}
 		protected override void DoAfterDemaged()
 		{
@@ -40,12 +47,6 @@ namespace MyGame
 
 		private void Start()
 		{
-		}
-		private void FixedUpdate()
-		{
-			UpdatePositionOnField();
-			UpdateRotation();
-			UpdateMoveingSpeed();
 		}
 		private void UpdatePositionOnField()
 		{

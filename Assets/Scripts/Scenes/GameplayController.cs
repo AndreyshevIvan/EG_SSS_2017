@@ -19,14 +19,12 @@ namespace MyGame
 			factories = GetComponent<Factories>();
 			user = GameData.LoadUser();
 			gameMap = factories.maps.GetMap();
+			world.factories = factories;
 		}
 		private void Start()
 		{
 			gameMap.world = world;
-			gameMap.enemies = factories.enemies;
-			gameMap.roads = factories.roads;
-			Ship model = factories.ships.Spawn(user.ship);
-			gameMap.Init(model);
+			gameMap.Init(factories.ships.Get(user.ship));
 			InitUIEvents();
 		}
 		private void InitUIEvents()
@@ -35,6 +33,7 @@ namespace MyGame
 			m_interface.onRestart += gameMap.Restart;
 			m_interface.onControllPlayer += gameMap.ship.MoveTo;
 			m_interface.onBeginControllPlayer += world.SetSlowMode;
+			m_interface.onFirstTouch += gameMap.Play;
 			world.onPlayerDeath += OnGameOver;
 		}
 		private void OnGameOver()

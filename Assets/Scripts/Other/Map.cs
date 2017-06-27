@@ -14,14 +14,13 @@ namespace MyGame
 		public List<FlySpawn> m_flySpawns;
 		public List<GroundSpawn> m_groundSpawns;
 
-		public EnemiesFactory enemies { get; set; }
 		public Ship ship
 		{
 			get { return world.shipBody as Ship; }
 			set { world.shipBody = value; }
 		}
 		public MapPhysics world { get; set; }
-		public RoadsFactory roads { get; set; }
+		public Factories factories { get; set; }
 		public bool isSleep { get; set; }
 
 		public void Init(Ship newShip)
@@ -30,6 +29,7 @@ namespace MyGame
 			ship.transform.SetParent(transform);
 			ship.mind.Init(world);
 			world.shipMind = ship.mind;
+			factories = world.factories;
 		}
 		public void Play()
 		{
@@ -44,12 +44,6 @@ namespace MyGame
 		{
 		}
 
-		private Vector3 shipPosition
-		{
-			get { return world.shipPosition; }
-			set { world.shipPosition = value; }
-		}
-
 		private void Start()
 		{
 			world.ground = m_ground;
@@ -58,12 +52,19 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
-			if (!isSleep)
+			UpdateGameSleep();
+
+			if (isSleep)
 			{
 				return;
 			}
 
 			SpawnFlyInits();
+		}
+		private void UpdateGameSleep()
+		{
+			world.isSleep = isSleep;
+			ship.mind.isSleep = isSleep;
 		}
 		private void SpawnFlyInits()
 		{
@@ -73,7 +74,7 @@ namespace MyGame
 				return;
 			}
 
-			CurvySpline road = roads.Get(spawn.road);
+			CurvySpline road = factories.roads.Get(spawn.road);
 			for (int i = 0; i < spawn.count; i++)
 			{
 				Enemy enemy = Instantiate(spawn.enemy, m_sky);

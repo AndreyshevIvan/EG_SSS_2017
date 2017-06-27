@@ -16,10 +16,10 @@ namespace MyGame
 
 		public void Init(MapPhysics world)
 		{
-			IShipProperties properties = GameData.LoadShip(type);
 			magnetic = 1;
 			magnetDistance = 5;
 
+			IShipProperties properties = GameData.LoadShip(type);
 			m_firstGun.Init(properties.firstGunLevel, world);
 		}
 

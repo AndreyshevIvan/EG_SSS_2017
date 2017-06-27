@@ -8,7 +8,6 @@ namespace MyGame
 {
 	public abstract class Enemy : Body
 	{
-		public bool isSleep { get; set; }
 		public byte starsCount { get; protected set; }
 
 		public void DisableEnemy()
@@ -36,10 +35,12 @@ namespace MyGame
 		protected abstract void UpdateTactic();
 		protected void FixedUpdate()
 		{
-			if (!isSleep)
+			if (isSleep)
 			{
-				UpdateTactic();
+				return;
 			}
+
+			UpdateTactic();
 		}
 
 		private byte stars { get; set; }

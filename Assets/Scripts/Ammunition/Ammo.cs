@@ -14,11 +14,5 @@ namespace MyGame
 		}
 
 		protected float demage { set { touchDemage = value; } }
-
-		new protected void Awake()
-		{
-			base.Awake();
-			OnAwake();
-		}
 	}
 }
