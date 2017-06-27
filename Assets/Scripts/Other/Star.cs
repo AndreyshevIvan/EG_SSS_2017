@@ -13,7 +13,10 @@ namespace MyGame
 
 		protected override void OnTrigger(Collider other)
 		{
-			world.EraseStar(this);
+			if (other.gameObject.layer != MapPhysics.DELETE_LAYER)
+			{
+				world.EraseStar(this);
+			}
 		}
 
 		private float moveDelta { get; set; }

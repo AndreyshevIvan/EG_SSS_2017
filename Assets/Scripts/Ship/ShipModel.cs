@@ -7,11 +7,11 @@ namespace MyGame
 {
 	public sealed class ShipModel : Body
 	{
-		public Vector3 origin { get { return transform.position; } }
+		public ShipMind mind { get; set; }
 
 		public void MoveTo(Vector3 newPosition)
 		{
-			Vector3 direction = (newPosition - origin).normalized;
+			Vector3 direction = (newPosition - position).normalized;
 			m_smoothDir = Vector3.MoveTowards(m_smoothDir, direction, SMOOTHING);
 			direction = m_smoothDir;
 			Vector3 movement = new Vector3(direction.x, 0, direction.z);
@@ -48,9 +48,9 @@ namespace MyGame
 		private void UpdatePositionOnField()
 		{
 			transform.position = new Vector3(
-				Mathf.Clamp(origin.x, mapBox.xMin, mapBox.xMax),
+				Mathf.Clamp(position.x, mapBox.xMin, mapBox.xMax),
 				MapPhysics.FLY_HEIGHT,
-				Mathf.Clamp(origin.z, mapBox.zMin, mapBox.zMax)
+				Mathf.Clamp(position.z, mapBox.zMin, mapBox.zMax)
 			);
 		} 
 		private void UpdateRotation()

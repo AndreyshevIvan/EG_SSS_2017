@@ -12,11 +12,13 @@ namespace MyGame
 		public Spell m_firstSpell;
 		public Spell m_secondSpell;
 
+		public ShipType type { get; set; }
 		public float magnetic { get; set; }
 		public float magnetDistance { get; set; }
 
-		public void Init(IShipProperties properties, MapPhysics mapPhysics)
+		public void Init(MapPhysics mapPhysics)
 		{
+			IShipProperties properties = GameData.LoadShip(type);
 			magnetic = 1;
 			magnetDistance = 5;
 

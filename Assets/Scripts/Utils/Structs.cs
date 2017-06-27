@@ -70,7 +70,7 @@ namespace MyGame
 
 		public ShipModel m_body;
 
-		public void Spawn(ShipType type, Map gameMap)
+		public ShipModel Spawn(ShipType type)
 		{
 			ShipModel body = Component.Instantiate(m_body);
 			ShipMind newMind = null;
@@ -91,8 +91,9 @@ namespace MyGame
 			}
 
 			ShipMind mind = Component.Instantiate(newMind, body.transform);
-			mind.Init(GameData.LoadShip(type), gameMap.world);
-			gameMap.Init(body, mind);
+			mind.type = type;
+			body.mind = mind;
+			return body;
 		}
 	}
 

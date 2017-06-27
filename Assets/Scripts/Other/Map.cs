@@ -23,11 +23,20 @@ namespace MyGame
 		public MapPhysics world { get; set; }
 		public RoadsFactory roads { get; set; }
 
-		public void Init(ShipModel model, ShipMind mind)
+		public void Init(ShipModel model)
 		{
 			shipModel = model;
-			shipMind = mind;
+			shipMind = model.mind;
 			model.transform.SetParent(transform);
+		}
+		public void Play()
+		{
+		}
+		public void Restart()
+		{
+		}
+		public void Pause(bool isPause)
+		{
 		}
 
 		private Vector3 shipPosition

@@ -40,6 +40,7 @@ namespace MyGame
 		}
 		public void AddStars(byte starsCount, Vector3 position)
 		{
+			Debug.Log(starsCount);
 			position.y = FLY_HEIGHT;
 
 			while (starsCount > 0)
@@ -48,17 +49,8 @@ namespace MyGame
 				newStar.position = position;
 				newStar.world = this;
 				starsCount--;
+				Debug.Log("star");
 			}
-		}
-
-		public Vector3 GetNearestEnemy(Vector3 point)
-		{
-			return Vector3.zero;
-		}
-		public CurvySpline GetSpline()
-		{
-			int index = UnityEngine.Random.Range(0, m_splines.Count);
-			return m_splines[index];
 		}
 
 		public void EraseEnemyByKill(Enemy enemy)
@@ -93,6 +85,21 @@ namespace MyGame
 			Destroy(star.gameObject);
 		}
 
+		public Vector3 GetNearestEnemy(Vector3 point)
+		{
+			return Vector3.zero;
+		}
+		public CurvySpline GetSpline()
+		{
+			int index = UnityEngine.Random.Range(0, m_splines.Count);
+			return m_splines[index];
+		}
+
+		public void SetSlowMode(bool isModeOn)
+		{
+			Time.timeScale = (isModeOn) ? 1 : 0.5f;
+		}
+
 		public void MoveToShip(Body body, bool useShipMagnetic = true)
 		{
 			float distance = Vector3.Distance(body.position, shipPosition);
@@ -113,6 +120,7 @@ namespace MyGame
 		{
 			body.transform.SetParent(ground);
 		}
+
 		public void OnTriggerExit(Collider other)
 		{
 			Body body = other.GetComponent<Body>();
