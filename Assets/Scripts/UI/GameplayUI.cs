@@ -13,7 +13,18 @@ namespace MyGame
 		public EventDelegate onFirstTouch;
 		public EventDelegate onRestart;
 
+		public void Pause(bool isPause)
+		{
+			onPause(isPause);
+			OpenPauseInterface(isPause);
+		}
+		public void Restart()
+		{
+
+		}
+
 		private bool isFirstTouchCreated { get; set; }
+		private bool isControllAvailable { get; set; }
 
 		private void Awake()
 		{
@@ -25,15 +36,11 @@ namespace MyGame
 		}
 		private void HandleMouse()
 		{
-			bool isControll = Input.GetMouseButton(0);
-			onBeginControllPlayer(isControll);
-
-			if (!isControll)
+			if (!Input.GetMouseButton(0))
 			{
 				return;
 			}
 
-			if (onFirstTouch != null) onFirstTouch();
 			SetPosition(Input.mousePosition);
 		}
 		private void SetPosition(Vector3 screenPosition)
@@ -51,6 +58,15 @@ namespace MyGame
 		{
 			isFirstTouchCreated = true;
 			onFirstTouch -= OnCreateFirstTouch;
+		}
+		private void OpenPauseInterface(bool isPause)
+		{
+
+		}
+
+		private bool IsStartPause()
+		{
+			return isFirstTouchCreated && false;
 		}
 	}
 

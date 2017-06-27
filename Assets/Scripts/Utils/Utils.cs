@@ -91,5 +91,29 @@ namespace MyGame
 
 			return new Vector3(x, y, z);
 		}
+		public static float MoveTowards(float current, float target, float step)
+		{
+			float absoluteCurrent = Mathf.Abs(current);
+			float absoluteTarget = Mathf.Abs(target);
+
+			if (absoluteCurrent >= absoluteTarget)
+			{
+				return target;
+			}
+
+			float newValue = Mathf.Abs(current + step);
+			if (newValue >= absoluteTarget)
+			{
+				return target;
+			}
+
+			return current + step;
+		}
+		public static List<T> GetChilds<T>(Component parent) where T : Component
+		{
+			List<T> list = ToList(parent.GetComponentsInChildren<T>());
+			list.Remove(parent.GetComponent<T>());
+			return list;
+		}
 	}
 }

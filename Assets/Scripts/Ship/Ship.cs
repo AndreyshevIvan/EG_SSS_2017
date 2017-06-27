@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public sealed class ShipModel : Body
+	public sealed class Ship : Body
 	{
 		public ShipMind mind { get; set; }
 
@@ -22,6 +22,11 @@ namespace MyGame
 		{
 		}
 
+		protected override void OnAwake()
+		{
+			health = 100;
+			touchDemage = int.MaxValue;
+		}
 		protected override void DoAfterDemaged()
 		{
 		}
@@ -35,9 +40,6 @@ namespace MyGame
 
 		private void Start()
 		{
-			health = 10000;
-			touchDemage = 1000;
-			mapBox = GameData.mapBox;
 		}
 		private void FixedUpdate()
 		{

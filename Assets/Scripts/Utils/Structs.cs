@@ -68,11 +68,11 @@ namespace MyGame
 		public ShipMind m_modelSecond;
 		public ShipMind m_modelThird;
 
-		public ShipModel m_body;
+		public Ship m_body;
 
-		public ShipModel Spawn(ShipType type)
+		public Ship Spawn(ShipType type)
 		{
-			ShipModel body = Component.Instantiate(m_body);
+			Ship body = Component.Instantiate(m_body);
 			ShipMind newMind = null;
 
 			switch (type)

@@ -9,13 +9,14 @@ namespace MyGame
 {
 	public class MapPhysics : MonoBehaviour
 	{
+		public EventDelegate onPlayerDeath;
+
 		public GameObject m_shipExplosion;
 		public Star m_star;
-
-		public Material m_garbage;
 		public List<CurvySpline> m_splines;
 
 		public Transform ground { get; set; }
+		public Transform sky { get; set; }
 		public Body shipBody { get; set; }
 		public ShipMind shipMind { get; set; }
 		public Vector3 shipPosition
@@ -24,6 +25,7 @@ namespace MyGame
 			set { shipBody.position = value; }
 		}
 		public float offset { get; set; }
+		public bool isSleep { get; set; }
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
@@ -32,15 +34,14 @@ namespace MyGame
 		public void AddEnemy(Enemy enemy)
 		{
 			enemy.world = this;
-			enemy.transform.SetParent(transform);
 		}
 		public void AddAmmo(Ammo ammo)
 		{
 			ammo.world = this;
+			ammo.transform.SetParent(sky);
 		}
 		public void AddStars(byte starsCount, Vector3 position)
 		{
-			Debug.Log(starsCount);
 			position.y = FLY_HEIGHT;
 
 			while (starsCount > 0)
@@ -49,15 +50,12 @@ namespace MyGame
 				newStar.position = position;
 				newStar.world = this;
 				starsCount--;
-				Debug.Log("star");
 			}
 		}
 
 		public void EraseEnemyByKill(Enemy enemy)
 		{
-			List<Rigidbody> bodies = null;
-			bodies = Utils.ToList(enemy.GetComponentsInChildren<Rigidbody>());
-			bodies.Remove(enemy.GetComponent<Rigidbody>());
+			List<Rigidbody> bodies = Utils.GetChilds<Rigidbody>(enemy);
 
 			foreach (Rigidbody body in bodies)
 			{
@@ -116,11 +114,10 @@ namespace MyGame
 				shipPosition,
 				movement);
 		}
-		public void MoveWithMap(Body body)
+		public void SubscribeToMove(Body body)
 		{
 			body.transform.SetParent(ground);
 		}
-
 		public void OnTriggerExit(Collider other)
 		{
 			Body body = other.GetComponent<Body>();
@@ -131,17 +128,34 @@ namespace MyGame
 			}
 			Destroy(other.gameObject);
 		}
+		public void Cleanup()
+		{
+			List<Component> toDeleteObjects = new List<Component>();
+			toDeleteObjects.AddRange(Utils.GetChilds<Component>(sky));
+			toDeleteObjects.AddRange(Utils.GetChilds<Component>(ground));
+			toDeleteObjects.ForEach(element => Destroy(element.gameObject));
+		}
 
 		protected void Awake()
 		{
 			m_gameBox = GameData.mapBox;
+			isSleep = true;
 			offset = 0;
 		}
 		protected void FixedUpdate()
 		{
-			float movement = MAP_MOVE_SPEED * Time.deltaTime * Time.timeScale;
-			ground.transform.Translate(new Vector3(0, 0, -movement));
-			offset += movement;
+			if (isSleep)
+			{
+				return;
+			}
+
+			MoveGround();
+
+			if (!shipBody.isLive)
+			{
+				onPlayerDeath();
+				isSleep = true;
+			}
 		}
 
 		private BoundingBox m_gameBox;
@@ -154,6 +168,12 @@ namespace MyGame
 		{
 			GameObject explosion = Instantiate(m_shipExplosion);
 			explosion.transform.position = position;
+		}
+		private void MoveGround()
+		{
+			float movement = MAP_MOVE_SPEED * Time.deltaTime * Time.timeScale;
+			ground.transform.Translate(new Vector3(0, 0, -movement));
+			offset += movement;
 		}
 	}
 }

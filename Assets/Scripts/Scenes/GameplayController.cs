@@ -7,7 +7,7 @@ namespace MyGame
 {
 	public sealed class GameplayController : MonoBehaviour
 	{
-		public MapPhysics m_mapPhysics;
+		public MapPhysics world;
 		public GameplayUI m_interface;
 
 		private Map gameMap { get; set; }
@@ -22,12 +22,10 @@ namespace MyGame
 		}
 		private void Start()
 		{
-			gameMap.world = m_mapPhysics;
+			gameMap.world = world;
 			gameMap.enemies = factories.enemies;
-			gameMap.isPlay = true;
 			gameMap.roads = factories.roads;
-			ShipModel model = factories.ships.Spawn(user.ship);
-			model.mind.Init(gameMap.world);
+			Ship model = factories.ships.Spawn(user.ship);
 			gameMap.Init(model);
 			InitUIEvents();
 		}
@@ -35,8 +33,13 @@ namespace MyGame
 		{
 			m_interface.onPause += gameMap.Pause;
 			m_interface.onRestart += gameMap.Restart;
-			m_interface.onControllPlayer += gameMap.shipModel.MoveTo;
-			m_interface.onBeginControllPlayer += m_mapPhysics.SetSlowMode;
+			m_interface.onControllPlayer += gameMap.ship.MoveTo;
+			m_interface.onBeginControllPlayer += world.SetSlowMode;
+			world.onPlayerDeath += OnGameOver;
+		}
+		private void OnGameOver()
+		{
+			Debug.Log("Player dead");
 		}
 	}
 }

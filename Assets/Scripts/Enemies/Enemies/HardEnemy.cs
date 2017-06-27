@@ -25,7 +25,7 @@ namespace MyGame
 			health = 100;
 			touchDemage = 100;
 			starsCount = 10;
-			world.MoveWithMap(this);
+			world.SubscribeToMove(this);
 
 			m_turretGun = GetComponent<EnemyTurretGun>();
 			m_renderer = GetComponent<Renderer>();

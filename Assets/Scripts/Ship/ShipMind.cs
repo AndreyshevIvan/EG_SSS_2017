@@ -8,28 +8,28 @@ namespace MyGame
 	public class ShipMind : MonoBehaviour
 	{
 		public Gun m_firstGun;
-		public Gun m_secondGun;
-		public Spell m_firstSpell;
-		public Spell m_secondSpell;
 
 		public ShipType type { get; set; }
 		public float magnetic { get; set; }
 		public float magnetDistance { get; set; }
+		public bool isSleep { get; set; }
 
-		public void Init(MapPhysics mapPhysics)
+		public void Init(MapPhysics world)
 		{
 			IShipProperties properties = GameData.LoadShip(type);
 			magnetic = 1;
 			magnetDistance = 5;
 
-			m_firstGun.Init(properties.firstGunLevel, mapPhysics);
-			//m_secondGun.Init(properties.secondGunLevel, mapPhysics);
-			//m_firstSpell.Init(properties.firstSpellLevel, mapPhysics);
-			//m_secondSpell.Init(properties.secondSpellLevel, mapPhysics);
+			m_firstGun.Init(properties.firstGunLevel, world);
 		}
 
+		private void Awake()
+		{
+			isSleep = true;
+		}
 		private void FixedUpdate()
 		{
+			m_firstGun.isTimerWork = !isSleep;
 		}
 	}
 }

@@ -34,6 +34,7 @@ namespace MyGame
 		{
 			physicsBody = GetComponent<Rigidbody>();
 			splineController = GetComponent<SplineController>();
+			mapBox = GameData.mapBox;
 			OnAwake();
 		}
 		protected virtual void OnAwake() { }
