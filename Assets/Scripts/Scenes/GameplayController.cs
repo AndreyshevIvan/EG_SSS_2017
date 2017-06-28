@@ -48,13 +48,13 @@ namespace MyGame
 		private void InitShip()
 		{
 			ship = factories.ships.Get(user.ship);
-			ship.world = m_world;
-			ship.mind.Init(m_world);
+			ship.Init(m_world);
 		}
 		private void InitWorld()
 		{
 			m_world.factories = factories;
 			m_world.ship = ship;
+			m_world.playerBar = m_interface;
 		}
 		private void InitMap()
 		{

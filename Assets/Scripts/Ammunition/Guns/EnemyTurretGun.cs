@@ -12,7 +12,6 @@ namespace MyGame
 		public SimpleBullet m_bullet;
 
 		public float speed { get; set; }
-		public int demage { get; set; }
 
 		protected override void DoAfterInit()
 		{

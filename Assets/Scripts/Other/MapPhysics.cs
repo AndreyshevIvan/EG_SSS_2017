@@ -12,7 +12,6 @@ namespace MyGame
 		public EventDelegate onPlayerDeath;
 
 		public Material m_garbageMaterial;
-		public HealthBar m_shipHealthBar;
 
 		public Factories factories { get; set; }
 		public Transform ground { get; set; }
@@ -26,7 +25,7 @@ namespace MyGame
 		}
 		public float offset { get; set; }
 		public bool isSleep { get; set; }
-		public TempPlayer player { get; protected set; }
+		public IPlayerBar playerBar { get; set; }
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
@@ -34,11 +33,11 @@ namespace MyGame
 
 		public void AddEnemy(Enemy enemy)
 		{
-			enemy.world = this;
+			enemy.Init(this);
 		}
 		public void AddAmmo(Ammo ammo)
 		{
-			ammo.world = this;
+			ammo.Init(this);
 			ammo.transform.SetParent(sky);
 		}
 		public void AddBonus(Bonus bonus, byte count, Vector3 position)
@@ -55,7 +54,7 @@ namespace MyGame
 				Bonus newBonus = Instantiate(bonus, ground);
 				newBonus.explosionStart = true;
 				newBonus.position = position;
-				newBonus.world = this;
+				newBonus.Init(this);
 				count--;
 			}
 		}
@@ -78,11 +77,13 @@ namespace MyGame
 			CreateExplosion(enemy);
 			AddBonus(factories.bonuses.star, enemy.starsCount, enemy.position);
 			AddBonus(enemy.bonus, 1, enemy.position);
-			Destroy(enemy.gameObject);
+			m_player.points += enemy.points;
+			playerBar.points = m_player.points;
+			DestroyBody(enemy);
 		}
 		public void EraseEnemy(Enemy enemy)
 		{
-			Destroy(enemy.gameObject);
+			DestroyBody(enemy);
 		}
 		public void EraseAmmo(Ammo ammo)
 		{
@@ -167,6 +168,7 @@ namespace MyGame
 		}
 
 		private BoundingBox m_gameBox;
+		private TempPlayer m_player;
 
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;
@@ -189,6 +191,14 @@ namespace MyGame
 			float movement = MAP_MOVE_SPEED * Time.deltaTime * Time.timeScale;
 			ground.transform.Translate(new Vector3(0, 0, -movement));
 			offset += movement;
+		}
+		private void DestroyBody(Body body)
+		{
+			Destroy(body.gameObject);
+			if (body.healthBar != null)
+			{
+				Destroy(body.healthBar.gameObject);
+			}
 		}
 	}
 }

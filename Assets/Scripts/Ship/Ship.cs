@@ -22,6 +22,10 @@ namespace MyGame
 		{
 		}
 
+		protected override void OnInitEnd()
+		{
+			mind.Init(world);
+		}
 		protected override void WakeupUpdate()
 		{
 			UpdatePositionOnField();
@@ -29,7 +33,6 @@ namespace MyGame
 			UpdateMoveingSpeed();
 
 			mind.isSleep = isSleep;
-			healthBar.SetPosition(position);
 		}
 		protected override void DoAfterDemaged()
 		{
@@ -45,9 +48,9 @@ namespace MyGame
 
 		private void Start()
 		{
+			health = maxHealth = 100;
 			healthBar = world.factories.bars.shipHealth;
 			healthBar.SetValue(healthPart);
-			health = maxHealth = 100;
 			touchDemage = int.MaxValue;
 			isSleep = false;
 		}

@@ -9,7 +9,6 @@ namespace MyGame
 	{
 		public Rocket m_rocket;
 		public float speed { get; set; }
-		public int demage { get; set; }
 		public float factor { get; set; }
 
 		protected override void DoAfterInit()

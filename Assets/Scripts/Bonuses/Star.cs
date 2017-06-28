@@ -10,7 +10,6 @@ namespace MyGame
 	{
 		protected override void OnRealize()
 		{
-			world.shipMind.stars += price;
 		}
 		protected override void OnAwakeEnd()
 		{

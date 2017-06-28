@@ -7,6 +7,8 @@ namespace MyGame
 {
 	public abstract class Gun : ShipProperty
 	{
+		public int demage { get; set; }
+
 		protected abstract void Shoot();
 
 		new protected void FixedUpdate()

@@ -11,12 +11,11 @@ namespace MyGame
 	{
 		public ParticleSystem m_deathExplosion;
 
-		public int touchDemage { get; protected set; }
-		public bool isLive { get { return isImmortal || health > 0; } }
-		public bool isImmortal { get; protected set; }
 		public int health { get; protected set; }
 		public float healthPart { get { return (float)health / (float)maxHealth; } }
-		public MapPhysics world { get; set; }
+		public bool isLive { get { return isImmortal || health > 0; } }
+		public bool isImmortal { get; protected set; }
+		public int touchDemage { get; protected set; }
 		public Vector3 position
 		{
 			get { return transform.position; }
@@ -24,8 +23,13 @@ namespace MyGame
 		}
 		public SplineController splineController { get; protected set; }
 		public ParticleSystem deathExplosion { get { return m_deathExplosion; } }
-		public IBarsFactory bars { get; set; }
+		public UIBar healthBar { get; protected set; }
 
+		public void Init(MapPhysics newWorld)
+		{
+			world = newWorld;
+			OnInitEnd();
+		}
 		public virtual void OnDemageTaked() { }
 		public abstract void OnDeleteByWorld();
 		public virtual void Heal(int healCount)
@@ -37,8 +41,10 @@ namespace MyGame
 			}
 		}
 
-		protected int maxHealth { get; set; }
+		protected MapPhysics world { get; set; }
+		protected BoundingBox mapBox { get; set; }
 		protected Rigidbody physicsBody { get; set; }
+		protected int maxHealth { get; set; }
 		protected int addDemage
 		{
 			set
@@ -46,10 +52,8 @@ namespace MyGame
 				health = (health - value < 0) ? 0 : health - value;
 			}
 		}
-		protected BoundingBox mapBox { get; set; }
 		protected bool isUseSleep { get; set; }
 		protected bool isSleep { get; set; }
-		protected HealthBar healthBar { get; set; }
 
 		protected void Awake()
 		{
@@ -61,10 +65,8 @@ namespace MyGame
 			OnAwakeEnd();
 		}
 		protected virtual void OnAwakeEnd() { }
-		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
-		protected virtual void DoBeforeDemaged() { }
-		protected virtual void OnTrigger(Collider other) { }
-		protected virtual void DoAfterDemaged() { }
+		protected virtual void OnInitEnd() { }
+
 		protected void OnTriggerEnter(Collider other)
 		{
 			OnTrigger(other);
@@ -82,10 +84,14 @@ namespace MyGame
 				DoAfterDemaged();
 			}
 		}
-		protected virtual void WakeupUpdate() { }
-		protected virtual void NotSleepUpdate() { }
+		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
+		protected virtual void DoBeforeDemaged() { }
+		protected virtual void OnTrigger(Collider other) { }
+		protected virtual void DoAfterDemaged() { }
+
 		protected void FixedUpdate()
 		{
+			if (healthBar != null) healthBar.SetPosition(position);
 			isSleep = (world == null) ? true : world.isSleep;
 			NotSleepUpdate();
 
@@ -98,5 +104,7 @@ namespace MyGame
 			physicsBody.WakeUp();
 			WakeupUpdate();
 		}
+		protected virtual void WakeupUpdate() { }
+		protected virtual void NotSleepUpdate() { }
 	}
 }

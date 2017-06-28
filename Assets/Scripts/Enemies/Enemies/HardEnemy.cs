@@ -16,13 +16,9 @@ namespace MyGame
 		{
 			m_turretGun.isTimerWork = m_renderer.isVisible && !isSleep;
 		}
-
-		private EnemyTurretGun m_turretGun;
-		private Renderer m_renderer;
-
-		private void Start()
+		protected override void OnInitEnd()
 		{
-			health = 100;
+			health = maxHealth = 100;
 			touchDemage = 100;
 			starsCount = 2;
 			world.SubscribeToMove(this);
@@ -31,6 +27,10 @@ namespace MyGame
 			m_renderer = GetComponent<Renderer>();
 			m_turretGun.Init(0, world);
 			m_turretGun.speed = 6;
+			points = 157;
 		}
+
+		private EnemyTurretGun m_turretGun;
+		private Renderer m_renderer;
 	}
 }

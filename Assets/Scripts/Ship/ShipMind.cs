@@ -10,11 +10,10 @@ namespace MyGame
 		public Gun m_firstGun;
 
 		public ShipType type { get; set; }
+		public IPlayerBar playerBar { get; set; }
 		public float magnetic { get; set; }
 		public float magnetDistance { get; set; }
 		public bool isSleep { get; set; }
-
-		public byte stars { get; set; }
 
 		public void Init(MapPhysics world)
 		{
@@ -23,7 +22,6 @@ namespace MyGame
 
 			magnetic = 1;
 			magnetDistance = 5;
-			stars = 0;
 		}
 		public void Modificate()
 		{

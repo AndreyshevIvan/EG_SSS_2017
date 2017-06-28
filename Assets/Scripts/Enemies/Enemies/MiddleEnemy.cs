@@ -18,12 +18,9 @@ namespace MyGame
 		{
 			m_rocketGun.isTimerWork = !isSleep;
 		}
-
-		private float speed { get; set; }
-
-		private void Start()
+		protected override void OnInitEnd()
 		{
-			health = 50;
+			health = maxHealth = 50;
 			touchDemage = 100;
 			starsCount = 7;
 			speed = 2;
@@ -31,6 +28,9 @@ namespace MyGame
 			m_rocketGun.speed = 10;
 			m_rocketGun.factor = 1;
 			m_rocketGun.Init(0, world, world.ship);
+			points = 1527;
 		}
+
+		private float speed { get; set; }
 	}
 }

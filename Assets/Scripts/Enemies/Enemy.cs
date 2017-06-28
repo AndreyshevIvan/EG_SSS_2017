@@ -8,8 +8,9 @@ namespace MyGame
 {
 	public abstract class Enemy : Body
 	{
-		public byte starsCount { get; protected set; }
 		public Bonus bonus { get; set; }
+		public int points { get; set; }
+		public byte starsCount { get; protected set; }
 
 		public void DisableEnemy()
 		{
@@ -20,20 +21,21 @@ namespace MyGame
 			world.EraseEnemy(this);
 		}
 
-		protected override void OnAwakeEnd()
+		protected void Start()
 		{
+			healthBar = world.factories.bars.enemyHealth;
+			healthBar.SetValue(healthPart);
 		}
-		protected override void DoAfterDemaged()
+		protected sealed override void DoAfterDemaged()
 		{
 			if (!isLive)
 			{
 				DoBeforeDeath();
 				world.EraseEnemyByKill(this);
 			}
+
+			healthBar.SetValue(healthPart);
 		}
 		protected abstract void DoBeforeDeath();
-
-		private byte stars { get; set; }
-		private byte points { get; set; }
 	}
 }

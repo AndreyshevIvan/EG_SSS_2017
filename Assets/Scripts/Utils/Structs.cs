@@ -153,6 +153,7 @@ namespace MyGame
 
 	public struct TempPlayer
 	{
-		uint stars;
+		public int points { get; set; }
+		public int stars { get; set; }
 	}
 }

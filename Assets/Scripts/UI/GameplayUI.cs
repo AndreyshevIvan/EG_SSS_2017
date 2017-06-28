@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace MyGame
 {
-	public class GameplayUI : MonoBehaviour, IBarsFactory
+	public class GameplayUI : MonoBehaviour, IBarsFactory, IPlayerBar
 	{
 		public PointDelegate onControllPlayer;
 		public BoolEventDelegate onBeginControllPlayer;
@@ -17,14 +17,40 @@ namespace MyGame
 		public Transform m_barsParent;
 		public HealthBar m_shipHealthBar;
 		public HealthBar m_enemyHealthBar;
+		public PointsBar m_points;
 
-		public HealthBar shipHealth
+		public UIBar shipHealth
 		{
-			get { return Instantiate(m_shipHealthBar, m_barsParent); }
+			get
+			{
+				UIBar bar = Instantiate(m_shipHealthBar, m_barsParent);
+				bar.transform.position = Vector3.one * float.MaxValue;
+				return bar;
+			}
 		}
-		public HealthBar enemyHealth
+		public UIBar enemyHealth
 		{
-			get { return Instantiate(m_enemyHealthBar, m_barsParent); }
+			get
+			{
+				UIBar bar = Instantiate(m_enemyHealthBar, m_barsParent);
+				bar.transform.position = Vector3.one * float.MaxValue;
+				return bar;
+			}
+		}
+		public int points
+		{
+			get { return (int)m_points.value; }
+			set { m_points.SetValue(value); }
+		}
+		public int modifications
+		{
+			get;
+			set;
+		}
+		public int progress
+		{
+			get;
+			set;
 		}
 
 		public const float SLOW_TIME = 0.2f;
@@ -52,7 +78,7 @@ namespace MyGame
 		{
 			OnStartNewGame();
 		}
-		private void Update()
+		private void FixedUpdate()
 		{
 			HandleMouse();
 		}
@@ -104,7 +130,14 @@ namespace MyGame
 
 	public interface IBarsFactory
 	{
-		HealthBar shipHealth { get; }
-		HealthBar enemyHealth { get; }
+		UIBar shipHealth { get; }
+		UIBar enemyHealth { get; }
+	}
+
+	public interface IPlayerBar
+	{
+		int points { get; set; }
+		int modifications { get; set; }
+		int progress { get; set; }
 	}
 }

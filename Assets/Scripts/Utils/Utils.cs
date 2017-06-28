@@ -97,5 +97,9 @@ namespace MyGame
 			list.Remove(parent.GetComponent<T>());
 			return list;
 		}
+		public static int GetFromSreen(float factor)
+		{
+			return (int)(Screen.width * factor);
+		}
 	}
 }

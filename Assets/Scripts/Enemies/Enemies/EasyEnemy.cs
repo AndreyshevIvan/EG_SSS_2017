@@ -11,15 +11,16 @@ namespace MyGame
 		protected override void DoBeforeDeath()
 		{
 		}
-
-		private float speed { get; set; }
-
-		private void Start()
+		protected override void OnInitEnd()
 		{
-			health = 10;
+			health = maxHealth = 10;
 			touchDemage = 10;
 			starsCount = 5;
 			speed = 7;
+			points = 57;
 		}
+
+		private float speed { get; set; }
+
 	}
 }

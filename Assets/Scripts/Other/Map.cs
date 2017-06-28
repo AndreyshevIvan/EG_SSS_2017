@@ -10,7 +10,6 @@ namespace MyGame
 	{
 		public Transform m_ground;
 		public Transform m_sky;
-
 		public List<FlySpawn> m_flySpawns;
 		public List<GroundSpawn> m_groundSpawns;
 
