@@ -14,5 +14,6 @@ namespace MyGame
 		public ShipsFactory ships;
 		public RoadsFactory roads;
 		public BonusesFactory bonuses;
+		public IBarsFactory bars;
 	}
 }

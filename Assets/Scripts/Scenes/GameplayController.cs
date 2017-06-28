@@ -8,7 +8,7 @@ namespace MyGame
 {
 	public sealed class GameplayController : MonoBehaviour
 	{
-		public MapPhysics world;
+		public MapPhysics m_world;
 		public GameplayUI m_interface;
 
 		private Ship ship { get; set; }
@@ -18,10 +18,8 @@ namespace MyGame
 
 		private void Awake()
 		{
-			factories = GetComponent<Factories>();
-			user = GameData.LoadUser();
-			gameMap = factories.maps.GetMap();
-
+			InitFactories();
+			InitUser();
 			InitShip();
 			InitWorld();
 			InitMap();
@@ -34,24 +32,34 @@ namespace MyGame
 		{
 			m_interface.onPause += gameMap.Pause;
 			m_interface.onControllPlayer += ship.MoveTo;
-			m_interface.onBeginControllPlayer += world.SetSlowMode;
+			m_interface.onBeginControllPlayer += m_world.SetSlowMode;
 			m_interface.onFirstTouch += gameMap.Play;
-			world.onPlayerDeath += OnGameOver;
+			m_world.onPlayerDeath += OnGameOver;
+		}
+		private void InitFactories()
+		{
+			factories = GetComponent<Factories>();
+			factories.bars = m_interface;
+		}
+		private void InitUser()
+		{
+			user = GameData.LoadUser();
 		}
 		private void InitShip()
 		{
 			ship = factories.ships.Get(user.ship);
-			ship.world = world;
-			ship.mind.Init(world);
+			ship.world = m_world;
+			ship.mind.Init(m_world);
 		}
 		private void InitWorld()
 		{
-			world.factories = factories;
-			world.ship = ship;
+			m_world.factories = factories;
+			m_world.ship = ship;
 		}
 		private void InitMap()
 		{
-			gameMap.world = world;
+			gameMap = factories.maps.GetMap();
+			gameMap.world = m_world;
 		}
 		private void OnGameOver()
 		{

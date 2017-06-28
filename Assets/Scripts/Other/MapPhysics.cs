@@ -12,6 +12,7 @@ namespace MyGame
 		public EventDelegate onPlayerDeath;
 
 		public Material m_garbageMaterial;
+		public HealthBar m_shipHealthBar;
 
 		public Factories factories { get; set; }
 		public Transform ground { get; set; }
@@ -101,7 +102,6 @@ namespace MyGame
 		{
 			float dt = Time.fixedDeltaTime;
 			float target = (isModeOn) ? SLOW_TIMESCALE : 1;
-			float step = dt / GameplayUI.SLOW_TIME * (1 - SLOW_TIMESCALE);
 
 			Time.timeScale = Mathf.MoveTowards(Time.timeScale, target, dt);
 		}
@@ -167,7 +167,6 @@ namespace MyGame
 		}
 
 		private BoundingBox m_gameBox;
-		private List<Enemy> m_enemies;
 
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;

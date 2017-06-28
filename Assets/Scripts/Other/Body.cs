@@ -11,11 +11,11 @@ namespace MyGame
 	{
 		public ParticleSystem m_deathExplosion;
 
-		public float touchDemage { get; protected set; }
+		public int touchDemage { get; protected set; }
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
 		public int health { get; protected set; }
-		public float healthPart { get { return health / maxHealth; } }
+		public float healthPart { get { return (float)health / (float)maxHealth; } }
 		public MapPhysics world { get; set; }
 		public Vector3 position
 		{
@@ -24,6 +24,7 @@ namespace MyGame
 		}
 		public SplineController splineController { get; protected set; }
 		public ParticleSystem deathExplosion { get { return m_deathExplosion; } }
+		public IBarsFactory bars { get; set; }
 
 		public virtual void OnDemageTaked() { }
 		public abstract void OnDeleteByWorld();
@@ -38,10 +39,17 @@ namespace MyGame
 
 		protected int maxHealth { get; set; }
 		protected Rigidbody physicsBody { get; set; }
-		protected float addDemage { set { health -= (int)value; } }
+		protected int addDemage
+		{
+			set
+			{
+				health = (health - value < 0) ? 0 : health - value;
+			}
+		}
 		protected BoundingBox mapBox { get; set; }
 		protected bool isUseSleep { get; set; }
 		protected bool isSleep { get; set; }
+		protected HealthBar healthBar { get; set; }
 
 		protected void Awake()
 		{
@@ -66,7 +74,7 @@ namespace MyGame
 				return;
 			}
 
-			float demage = 0;
+			int demage = 0;
 			if (Utils.GetDemage(ref demage, other))
 			{
 				DoBeforeDemaged();

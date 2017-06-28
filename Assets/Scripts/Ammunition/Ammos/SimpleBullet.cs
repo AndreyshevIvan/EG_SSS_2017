@@ -10,7 +10,7 @@ namespace MyGame
 		public float speed { get; private set; }
 		public Vector3 direction { get; private set; }
 
-		public void Init(Vector3 target, float speed, float demage)
+		public void Init(Vector3 target, float speed, int demage)
 		{
 			direction = Vector3.Normalize(target - position);
 			this.speed = speed;
@@ -22,7 +22,7 @@ namespace MyGame
 		}
 		public override void OnDemageTaked()
 		{
-			Destroy(gameObject);
+			world.EraseAmmo(this);
 		}
 	}
 }

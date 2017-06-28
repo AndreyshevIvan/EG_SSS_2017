@@ -8,7 +8,7 @@ namespace MyGame
 {
 	public class Rocket : Ammo
 	{
-		public void Init(Body target, float speed, float demage, float factor)
+		public void Init(Body target, float speed, int demage, float factor)
 		{
 			this.speed = speed;
 			this.demage = demage;

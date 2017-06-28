@@ -7,16 +7,12 @@ namespace MyGame
 {
 	public abstract class Ammo : Body
 	{
-		public float demage { set { touchDemage = value; } }
+		public int demage { set { touchDemage = value; } }
 
 		public abstract void Start();
 		public sealed override void OnDeleteByWorld()
 		{
 			world.EraseAmmo(this);
-		}
-
-		protected sealed override void OnAwakeEnd()
-		{
 		}
 	}
 }

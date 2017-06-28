@@ -22,12 +22,6 @@ namespace MyGame
 		{
 		}
 
-		protected override void OnAwakeEnd()
-		{
-			health = 100;
-			touchDemage = int.MaxValue;
-			isSleep = false;
-		}
 		protected override void WakeupUpdate()
 		{
 			UpdatePositionOnField();
@@ -35,9 +29,11 @@ namespace MyGame
 			UpdateMoveingSpeed();
 
 			mind.isSleep = isSleep;
+			healthBar.SetPosition(position);
 		}
 		protected override void DoAfterDemaged()
 		{
+			healthBar.SetValue(healthPart);
 		}
 
 		private Vector3 m_smoothDir;
@@ -47,6 +43,14 @@ namespace MyGame
 		private const float SMOOTHING = 15;
 		private const float TILT = 2;
 
+		private void Start()
+		{
+			healthBar = world.factories.bars.shipHealth;
+			healthBar.SetValue(healthPart);
+			health = maxHealth = 100;
+			touchDemage = int.MaxValue;
+			isSleep = false;
+		}
 		private void UpdatePositionOnField()
 		{
 			transform.position = new Vector3(

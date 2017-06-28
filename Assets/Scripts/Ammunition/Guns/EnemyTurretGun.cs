@@ -12,16 +12,19 @@ namespace MyGame
 		public SimpleBullet m_bullet;
 
 		public float speed { get; set; }
-		public float demage { get; set; }
+		public int demage { get; set; }
 
 		protected override void DoAfterInit()
 		{
 			coldown = 1.3f;
+			demage = 15;
 		}
 		protected override void Shoot()
 		{
 			SimpleBullet bullet = Instantiate(m_bullet);
-			bullet.position = m_bulletsSpawn.position;
+			Vector3 position = m_bulletsSpawn.position;
+			position.y = MapPhysics.FLY_HEIGHT;
+			bullet.position = position;
 			bullet.Init(gameMap.shipPosition, speed, demage);
 			bullet.Start();
 			gameMap.AddAmmo(bullet);

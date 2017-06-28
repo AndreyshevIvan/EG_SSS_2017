@@ -17,7 +17,7 @@ namespace MyGame
 		private void Start()
 		{
 			health = 10;
-			touchDemage = 100;
+			touchDemage = 10;
 			starsCount = 5;
 			speed = 7;
 		}

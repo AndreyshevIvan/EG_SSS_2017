@@ -4483,6 +4483,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705ca24eb3867b24f98cf32979d9bcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_deathExplosion: {fileID: 198403414197330982, guid: 63da5de75246a7942869e5742830751d,
+    type: 2}
 --- !u!114 &114735616801059042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4494,7 +4496,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd56dc30522eb014799a7012e26a8e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_icon: {fileID: 0}
-  m_name: 
   m_bulletsSpawn: {fileID: 4891414314083922}
   m_bullet: {fileID: 114913540811696196, guid: 0af1860afc4830e48bfb7f69c0c87d3a, type: 2}

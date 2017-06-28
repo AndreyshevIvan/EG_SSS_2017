@@ -63,16 +63,16 @@ namespace MyGame
 		{
 			return Clamp(level, GameData.minModLevel, GameData.maxModLevel);
 		}
-		public static bool GetDemage(ref float demage, Collider other)
+		public static bool GetDemage(ref int demage, Collider other)
 		{
-			Body demageBody = other.GetComponent<Body>();
-			if (demageBody == null || demageBody.touchDemage == 0)
+			Body body = other.GetComponent<Body>();
+			if (body == null)
 			{
 				return false;
 			}
 
-			demage = demageBody.touchDemage;
-			demageBody.OnDemageTaked();
+			demage = body.touchDemage;
+			body.OnDemageTaked();
 			return true;
 		}
 		public static Vector3 WorldToCanvas(Vector3 worldPosition)
