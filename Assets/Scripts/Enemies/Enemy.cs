@@ -9,6 +9,7 @@ namespace MyGame
 	public abstract class Enemy : Body
 	{
 		public byte starsCount { get; protected set; }
+		public Bonus bonus { get; set; }
 
 		public void DisableEnemy()
 		{
@@ -19,7 +20,7 @@ namespace MyGame
 			world.EraseEnemy(this);
 		}
 
-		protected override void OnAwake()
+		protected override void OnAwakeEnd()
 		{
 		}
 		protected override void DoAfterDemaged()

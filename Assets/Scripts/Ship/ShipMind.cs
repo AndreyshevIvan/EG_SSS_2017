@@ -14,13 +14,20 @@ namespace MyGame
 		public float magnetDistance { get; set; }
 		public bool isSleep { get; set; }
 
+		public byte stars { get; set; }
+
 		public void Init(MapPhysics world)
 		{
-			magnetic = 1;
-			magnetDistance = 5;
-
 			IShipProperties properties = GameData.LoadShip(type);
 			m_firstGun.Init(properties.firstGunLevel, world);
+
+			magnetic = 1;
+			magnetDistance = 5;
+			stars = 0;
+		}
+		public void Modificate()
+		{
+
 		}
 
 		private void Awake()

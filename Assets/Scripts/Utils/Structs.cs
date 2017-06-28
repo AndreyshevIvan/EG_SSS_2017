@@ -150,4 +150,9 @@ namespace MyGame
 			return star;
 		}
 	}
+
+	public struct TempPlayer
+	{
+		uint stars;
+	}
 }

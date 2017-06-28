@@ -11,8 +11,7 @@ namespace MyGame
 	{
 		public EventDelegate onPlayerDeath;
 
-		public GameObject m_shipExplosion;
-		public List<CurvySpline> m_splines;
+		public Material m_garbageMaterial;
 
 		public Factories factories { get; set; }
 		public Transform ground { get; set; }
@@ -26,6 +25,7 @@ namespace MyGame
 		}
 		public float offset { get; set; }
 		public bool isSleep { get; set; }
+		public TempPlayer player { get; protected set; }
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
@@ -40,16 +40,22 @@ namespace MyGame
 			ammo.world = this;
 			ammo.transform.SetParent(sky);
 		}
-		public void AddStars(byte starsCount, Vector3 position)
+		public void AddBonus(Bonus bonus, byte count, Vector3 position)
 		{
+			if (bonus == null)
+			{
+				return;
+			}
+
 			position.y = FLY_HEIGHT;
 
-			while (starsCount > 0)
+			while (count > 0)
 			{
-				Bonus newStar = Instantiate(factories.bonuses.star, ground);
-				newStar.position = position;
-				newStar.world = this;
-				starsCount--;
+				Bonus newBonus = Instantiate(bonus, ground);
+				newBonus.explosionStart = true;
+				newBonus.position = position;
+				newBonus.world = this;
+				count--;
 			}
 		}
 
@@ -63,11 +69,14 @@ namespace MyGame
 				body.transform.SetParent(ground);
 				body.useGravity = true;
 				obj.layer = GARBAGE_LAYER;
-				body.AddForce(Utils.RandomVect(-300, 300));
+				body.AddForce(Utils.RandomVect(-EXPLOSION_FORCE, EXPLOSION_FORCE));
+				Renderer renderer = obj.GetComponentInChildren<Renderer>();
+				if (renderer != null) renderer.material = m_garbageMaterial;
 			}
 
-			CreateShipExplosion(enemy.position);
-			AddStars(enemy.starsCount, enemy.position);
+			CreateExplosion(enemy);
+			AddBonus(factories.bonuses.star, enemy.starsCount, enemy.position);
+			AddBonus(enemy.bonus, 1, enemy.position);
 			Destroy(enemy.gameObject);
 		}
 		public void EraseEnemy(Enemy enemy)
@@ -86,11 +95,6 @@ namespace MyGame
 		public Vector3 GetNearestEnemy(Vector3 point)
 		{
 			return Vector3.zero;
-		}
-		public CurvySpline GetSpline()
-		{
-			int index = UnityEngine.Random.Range(0, m_splines.Count);
-			return m_splines[index];
 		}
 
 		public void SetSlowMode(bool isModeOn)
@@ -168,12 +172,18 @@ namespace MyGame
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;
 		private const float SLOW_TIMESCALE = 0.2f;
+		private const float EXPLOSION_FORCE = 300;
 		private const int GARBAGE_LAYER = 12;
 
-		private void CreateShipExplosion(Vector3 position)
+		private void CreateExplosion(Body body)
 		{
-			GameObject explosion = Instantiate(m_shipExplosion);
-			explosion.transform.position = position;
+			if (body.deathExplosion == null)
+			{
+				return;
+			}
+
+			GameObject explosion = Instantiate(body.deathExplosion.gameObject, sky);
+			explosion.transform.position = body.position;
 		}
 		private void MoveGround()
 		{

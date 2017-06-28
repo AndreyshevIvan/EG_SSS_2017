@@ -9,6 +9,8 @@ namespace MyGame
 {
 	public abstract class Body : MonoBehaviour
 	{
+		public ParticleSystem m_deathExplosion;
+
 		public float touchDemage { get; protected set; }
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
@@ -21,11 +23,20 @@ namespace MyGame
 			set { transform.position = value; }
 		}
 		public SplineController splineController { get; protected set; }
+		public ParticleSystem deathExplosion { get { return m_deathExplosion; } }
 
 		public virtual void OnDemageTaked() { }
 		public abstract void OnDeleteByWorld();
+		public virtual void Heal(int healCount)
+		{
+			health = health + healCount;
+			if (health > maxHealth)
+			{
+				health = maxHealth;
+			}
+		}
 
-		protected float maxHealth { get; set; }
+		protected int maxHealth { get; set; }
 		protected Rigidbody physicsBody { get; set; }
 		protected float addDemage { set { health -= (int)value; } }
 		protected BoundingBox mapBox { get; set; }
@@ -67,7 +78,7 @@ namespace MyGame
 		protected virtual void NotSleepUpdate() { }
 		protected void FixedUpdate()
 		{
-			isSleep = (world == null) ? true : isUseSleep && world.isSleep;
+			isSleep = (world == null) ? true : world.isSleep;
 			NotSleepUpdate();
 
 			if (isUseSleep && isSleep)

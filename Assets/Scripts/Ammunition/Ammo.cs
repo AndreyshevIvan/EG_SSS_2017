@@ -15,7 +15,7 @@ namespace MyGame
 			world.EraseAmmo(this);
 		}
 
-		protected sealed override void OnAwake()
+		protected sealed override void OnAwakeEnd()
 		{
 		}
 	}

@@ -22,7 +22,7 @@ namespace MyGame
 		{
 		}
 
-		protected override void OnAwake()
+		protected override void OnAwakeEnd()
 		{
 			health = 100;
 			touchDemage = int.MaxValue;

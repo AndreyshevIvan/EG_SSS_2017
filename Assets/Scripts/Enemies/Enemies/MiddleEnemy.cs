@@ -14,7 +14,7 @@ namespace MyGame
 		{
 			m_rocketGun.isTimerWork = false;
 		}
-		protected override void WakeupUpdate()
+		protected override void NotSleepUpdate()
 		{
 			m_rocketGun.isTimerWork = !isSleep;
 		}
