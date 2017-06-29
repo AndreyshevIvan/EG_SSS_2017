@@ -8,9 +8,6 @@ namespace MyGame
 {
 	public sealed class EasyEnemy : Enemy
 	{
-		protected override void DoBeforeDeath()
-		{
-		}
 		protected override void OnInitEnd()
 		{
 			health = maxHealth = 10;
@@ -19,8 +16,10 @@ namespace MyGame
 			speed = 7;
 			points = 57;
 		}
+		protected override void DoBeforeDestroy()
+		{
+		}
 
 		private float speed { get; set; }
-
 	}
 }

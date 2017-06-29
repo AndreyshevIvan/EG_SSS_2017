@@ -52,7 +52,7 @@ namespace MyGame
 				health = (health - value < 0) ? 0 : health - value;
 			}
 		}
-		protected bool isUseSleep { get; set; }
+		protected bool isUseWorldSleep { get; set; }
 		protected bool isSleep { get; set; }
 
 		protected void Awake()
@@ -60,7 +60,7 @@ namespace MyGame
 			physicsBody = GetComponent<Rigidbody>();
 			splineController = GetComponent<SplineController>();
 			mapBox = GameData.mapBox;
-			isUseSleep = true;
+			isUseWorldSleep = true;
 			isSleep = true;
 			OnAwakeEnd();
 		}
@@ -91,20 +91,32 @@ namespace MyGame
 
 		protected void FixedUpdate()
 		{
-			if (healthBar != null) healthBar.position = position;
+			if (healthBar != null)
+			{
+				healthBar.position = position;
+			}
+
 			isSleep = (world == null) ? true : world.isSleep;
+
 			NotSleepUpdate();
 
-			if (isUseSleep && isSleep)
+			if (isUseWorldSleep && isSleep)
 			{
-				physicsBody.Sleep();
+				if (physicsBody != null) physicsBody.Sleep();
 				return;
 			}
 
-			physicsBody.WakeUp();
+			if (physicsBody != null) physicsBody.WakeUp();
 			WakeupUpdate();
 		}
 		protected virtual void WakeupUpdate() { }
 		protected virtual void NotSleepUpdate() { }
+
+		protected void OnDestroy()
+		{
+			Debug.Log(gameObject.name);
+			if (healthBar != null) Destroy(healthBar.gameObject);
+			OnDeleteByWorld();
+		}
 	}
 }

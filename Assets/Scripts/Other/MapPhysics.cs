@@ -30,6 +30,7 @@ namespace MyGame
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
 		public const int WORLD_BOX_LAYER = 31;
+		public const int MODIFICATION_COUNT = 7;
 
 		public void AddEnemy(Enemy enemy)
 		{
@@ -61,29 +62,17 @@ namespace MyGame
 
 		public void EraseEnemyByKill(Enemy enemy)
 		{
-			List<Rigidbody> bodies = Utils.GetChilds<Rigidbody>(enemy);
-
-			foreach (Rigidbody body in bodies)
-			{
-				GameObject obj = body.gameObject;
-				body.transform.SetParent(ground);
-				body.useGravity = true;
-				obj.layer = GARBAGE_LAYER;
-				body.AddForce(Utils.RandomVect(-EXPLOSION_FORCE, EXPLOSION_FORCE));
-				Renderer renderer = obj.GetComponentInChildren<Renderer>();
-				if (renderer != null) renderer.material = m_garbageMaterial;
-			}
-
+			Dismantle(enemy.transform);
 			CreateExplosion(enemy);
 			AddBonus(factories.bonuses.star, enemy.starsCount, enemy.position);
 			AddBonus(enemy.bonus, 1, enemy.position);
 			m_player.points += enemy.points;
 			playerBar.points = m_player.points;
-			DestroyBody(enemy);
+			DeleteBody(enemy);
 		}
 		public void EraseEnemy(Enemy enemy)
 		{
-			DestroyBody(enemy);
+			DeleteBody(enemy);
 		}
 		public void EraseAmmo(Ammo ammo)
 		{
@@ -136,12 +125,7 @@ namespace MyGame
 		public void OnTriggerExit(Collider other)
 		{
 			Body body = other.GetComponent<Body>();
-			if (body != null)
-			{
-				body.OnDeleteByWorld();
-				return;
-			}
-			Destroy(other.gameObject);
+			DeleteBody(body);
 		}
 		public void Cleanup()
 		{
@@ -156,6 +140,7 @@ namespace MyGame
 			m_gameBox = GameData.mapBox;
 			isSleep = true;
 			offset = 0;
+			onPlayerDeath += DestroyShip;
 		}
 		protected void FixedUpdate()
 		{
@@ -181,7 +166,7 @@ namespace MyGame
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;
 		private const float SLOW_TIMESCALE = 0.2f;
-		private const float EXPLOSION_FORCE = 300;
+		private const float DISMANTLE_FORCE = 300;
 		private const int GARBAGE_LAYER = 12;
 
 		private void CreateExplosion(Body body)
@@ -200,13 +185,34 @@ namespace MyGame
 			ground.transform.Translate(new Vector3(0, 0, -movement));
 			offset += movement;
 		}
-		private void DestroyBody(Body body)
+		private void Dismantle(Transform subject)
 		{
-			Destroy(body.gameObject);
-			if (body.healthBar != null)
+			List<Rigidbody> bodies = Utils.GetChilds<Rigidbody>(subject);
+
+			foreach (Rigidbody body in bodies)
 			{
-				Destroy(body.healthBar.gameObject);
+				GameObject obj = body.gameObject;
+				body.transform.SetParent(ground);
+				body.useGravity = true;
+				obj.layer = GARBAGE_LAYER;
+				body.AddForce(Utils.RandomVect(-DISMANTLE_FORCE, DISMANTLE_FORCE));
+				Renderer renderer = obj.GetComponentInChildren<Renderer>();
+				if (renderer != null) renderer.material = m_garbageMaterial;
 			}
+		}
+		private void DeleteBody(Body body)
+		{
+			if (body == null)
+			{
+				return;
+			}
+
+			Destroy(body.gameObject);
+			if (body.healthBar != null) Destroy(body.healthBar.gameObject);
+		}
+		private void DestroyShip()
+		{
+			Dismantle(ship.transform);
 		}
 	}
 }

@@ -64,36 +64,32 @@ namespace MyGame
 	[System.Serializable]
 	public struct ShipsFactory
 	{
-		public ShipMind m_modelFirst;
-		public ShipMind m_modelSecond;
-		public ShipMind m_modelThird;
-
-		public Ship m_body;
+		public Ship m_modelFirst;
+		public Ship m_modelSecond;
+		public Ship m_modelThird;
 
 		public Ship Get(ShipType type)
 		{
-			Ship body = Component.Instantiate(m_body);
-			ShipMind newMind = null;
+			Ship newShip = null;
 
 			switch (type)
 			{
 				case ShipType.VOYAGER:
-					newMind = m_modelFirst;
+					newShip = m_modelFirst;
 					break;
 
 				case ShipType.DESTENY:
-					newMind = m_modelSecond;
+					newShip = m_modelSecond;
 					break;
 
 				case ShipType.SPLASH:
-					newMind = m_modelThird;
+					newShip = m_modelThird;
 					break;
 			}
 
-			ShipMind mind = Component.Instantiate(newMind, body.transform);
-			mind.type = type;
-			body.mind = mind;
-			return body;
+			Ship ship = Component.Instantiate(newShip);
+			ship.mind.type = type;
+			return ship;
 		}
 	}
 

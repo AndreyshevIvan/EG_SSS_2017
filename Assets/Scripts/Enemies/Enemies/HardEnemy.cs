@@ -8,10 +8,6 @@ namespace MyGame
 {
 	public class HardEnemy : Enemy
 	{
-		protected override void DoBeforeDeath()
-		{
-			m_turretGun.isTimerWork = false;
-		}
 		protected override void NotSleepUpdate()
 		{
 			m_turretGun.isTimerWork = m_renderer.isVisible && !isSleep;
@@ -28,6 +24,10 @@ namespace MyGame
 			m_turretGun.Init(0, world);
 			m_turretGun.speed = 6;
 			points = 157;
+		}
+		protected override void DoBeforeDestroy()
+		{
+			m_turretGun.isTimerWork = false;
 		}
 
 		private EnemyTurretGun m_turretGun;

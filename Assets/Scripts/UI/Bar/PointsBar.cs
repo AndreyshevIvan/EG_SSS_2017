@@ -22,6 +22,6 @@ namespace MyGame
 
 		private Text m_field;
 
-		private const string PATTERN = "000 000 000 000";
+		private const string PATTERN = "000-000-000";
 	}
 }

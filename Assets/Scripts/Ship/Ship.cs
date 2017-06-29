@@ -22,6 +22,11 @@ namespace MyGame
 		{
 		}
 
+		protected override void OnAwakeEnd()
+		{
+			mind = GetComponent<ShipMind>();
+			//isUseWorldSleep = false;
+		}
 		protected override void OnInitEnd()
 		{
 			mind.Init(world);
@@ -45,6 +50,8 @@ namespace MyGame
 		private const float SPEED = 80;
 		private const float SMOOTHING = 15;
 		private const float TILT = 2;
+		private const float X_ANGLE = 180;
+		private const float MAX_VELOCITY_ANGLE = 80;
 
 		private void Start()
 		{
@@ -65,7 +72,10 @@ namespace MyGame
 		private void UpdateRotation()
 		{
 			float zEuler = physicsBody.velocity.x * -TILT;
-			physicsBody.rotation = Quaternion.Euler(0, 0, zEuler);
+			physicsBody.rotation = Quaternion.Euler(
+				0,
+				X_ANGLE,
+				Mathf.Clamp(-zEuler, -MAX_VELOCITY_ANGLE, MAX_VELOCITY_ANGLE));
 		}
 		private void UpdateMoveingSpeed()
 		{

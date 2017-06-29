@@ -30,7 +30,7 @@ namespace MyGame
 		}
 		protected override void InitSizing()
 		{
-			float barWidth = ((m_isShip) ? PLAYER_WIDTH : ENEMY_WIDTH);
+			float barWidth = (m_isShip) ? PLAYER_WIDTH : ENEMY_WIDTH;
 			barWidth = Utils.GetFromSreen(barWidth);
 			Utils.SetWidth(rect, barWidth);
 			Utils.SetHeight(rect, barWidth / HEIGHT_FACTOR);

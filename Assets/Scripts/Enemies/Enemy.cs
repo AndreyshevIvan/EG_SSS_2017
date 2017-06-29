@@ -12,10 +12,6 @@ namespace MyGame
 		public int points { get; set; }
 		public byte starsCount { get; protected set; }
 
-		public void DisableEnemy()
-		{
-			world.EraseEnemy(this);
-		}
 		public sealed override void OnDeleteByWorld()
 		{
 			world.EraseEnemy(this);
@@ -30,12 +26,16 @@ namespace MyGame
 		{
 			if (!isLive)
 			{
-				DoBeforeDeath();
 				world.EraseEnemyByKill(this);
 			}
 
 			healthBar.SetValue(healthPart);
 		}
-		protected abstract void DoBeforeDeath();
+		protected abstract void DoBeforeDestroy();
+
+		private void OnDestroy()
+		{
+			DoBeforeDestroy();
+		}
 	}
 }

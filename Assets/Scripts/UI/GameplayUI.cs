@@ -111,7 +111,7 @@ namespace MyGame
 		}
 		private void UpdateCurtain(bool isModeOn)
 		{
-			if (m_isSlowMode == isModeOn)
+			if (m_isSlowMode == isModeOn || m_slowmoCurtain == null)
 			{
 				return;
 			}

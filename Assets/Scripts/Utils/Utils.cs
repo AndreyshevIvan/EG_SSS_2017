@@ -101,5 +101,17 @@ namespace MyGame
 		{
 			return (int)(Screen.width * factor);
 		}
+		public static void DoAnyTimes(int iterCount, Action action)
+		{
+			if (iterCount <= 0)
+			{
+				return;
+			}
+
+			for (int i = 0; i < iterCount; i++)
+			{
+				action();
+			}
+		}
 	}
 }
