@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -16,7 +17,8 @@ namespace MyGame
 			speed = 7;
 			points = 57;
 		}
-		protected override void DoBeforeDestroy()
+
+		protected override void DisableGuns()
 		{
 		}
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -25,7 +26,7 @@ namespace MyGame
 			position.y = MapPhysics.FLY_HEIGHT;
 			bullet.position = position;
 			bullet.Init(gameMap.shipPosition, speed, demage);
-			bullet.Start();
+			bullet.StartAmmo();
 			gameMap.AddAmmo(bullet);
 		}
 	}

@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy;
 
-namespace MyGame
+namespace MyGame.World
 {
 	public class MapPhysics : MonoBehaviour
 	{
@@ -62,25 +62,25 @@ namespace MyGame
 
 		public void EraseEnemyByKill(Enemy enemy)
 		{
-			Dismantle(enemy.transform);
-			CreateExplosion(enemy);
+			CreateExplosion(enemy.deathExplosion, enemy.position);
 			AddBonus(factories.bonuses.star, enemy.starsCount, enemy.position);
 			AddBonus(enemy.bonus, 1, enemy.position);
 			m_player.points += enemy.points;
 			playerBar.points = m_player.points;
-			DeleteBody(enemy);
+			Dismantle(enemy.transform);
+			EraseBody(enemy);
 		}
 		public void EraseEnemy(Enemy enemy)
 		{
-			DeleteBody(enemy);
+			EraseBody(enemy);
 		}
 		public void EraseAmmo(Ammo ammo)
 		{
-			Destroy(ammo.gameObject);
+			EraseBody(ammo);
 		}
 		public void EraseBonus(Bonus bonus)
 		{
-			Destroy(bonus.gameObject);
+			EraseBody(bonus);
 		}
 
 		public Vector3 GetNearestEnemy(Vector3 point)
@@ -125,7 +125,12 @@ namespace MyGame
 		public void OnTriggerExit(Collider other)
 		{
 			Body body = other.GetComponent<Body>();
-			DeleteBody(body);
+			if (body == null)
+			{
+				return;
+			}
+			body.OnExitFromWorld();
+			Destroy(body);
 		}
 		public void Cleanup()
 		{
@@ -140,7 +145,6 @@ namespace MyGame
 			m_gameBox = GameData.mapBox;
 			isSleep = true;
 			offset = 0;
-			onPlayerDeath += DestroyShip;
 		}
 		protected void FixedUpdate()
 		{
@@ -155,9 +159,11 @@ namespace MyGame
 			{
 				isSleep = true;
 				onPlayerDeath();
+				Dismantle(ship.transform);
 			}
 		}
 
+		private List<Body> m_toEarse = new List<Body>();
 		private BoundingBox m_gameBox;
 		private TempPlayer m_player;
 		private bool lastModeType = false;
@@ -169,15 +175,16 @@ namespace MyGame
 		private const float DISMANTLE_FORCE = 300;
 		private const int GARBAGE_LAYER = 12;
 
-		private void CreateExplosion(Body body)
+		private void CreateExplosion(ParticleSystem explosion, Vector3 position)
 		{
-			if (body.deathExplosion == null)
+			if (explosion == null)
 			{
 				return;
 			}
 
-			GameObject explosion = Instantiate(body.deathExplosion.gameObject, sky);
-			explosion.transform.position = body.position;
+			ParticleSystem explosionObject = Instantiate(explosion);
+			explosionObject.transform.position = position;
+			explosionObject.transform.SetParent(sky);
 		}
 		private void MoveGround()
 		{
@@ -200,19 +207,17 @@ namespace MyGame
 				if (renderer != null) renderer.material = m_garbageMaterial;
 			}
 		}
-		private void DeleteBody(Body body)
+		private void EraseBody(Body body)
 		{
-			if (body == null)
+			if (m_toEarse.Find(erasible => erasible == body))
 			{
 				return;
 			}
 
+			m_toEarse.Add(body);
+			body.OnErase();
+			m_toEarse.Remove(body);
 			Destroy(body.gameObject);
-			if (body.healthBar != null) Destroy(body.healthBar.gameObject);
-		}
-		private void DestroyShip()
-		{
-			Dismantle(ship.transform);
 		}
 	}
 }

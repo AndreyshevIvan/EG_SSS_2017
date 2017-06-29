@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace MyGame
+namespace MyGame.World
 {
 	public abstract class Enemy : Body
 	{
@@ -12,7 +12,7 @@ namespace MyGame
 		public int points { get; set; }
 		public byte starsCount { get; protected set; }
 
-		public sealed override void OnDeleteByWorld()
+		public sealed override void OnExitFromWorld()
 		{
 			world.EraseEnemy(this);
 		}
@@ -31,11 +31,11 @@ namespace MyGame
 
 			healthBar.SetValue(healthPart);
 		}
-		protected abstract void DoBeforeDestroy();
+		protected abstract void DisableGuns();
 
-		private void OnDestroy()
+		internal sealed override void OnErase()
 		{
-			DoBeforeDestroy();
+			DisableGuns();
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -25,7 +26,7 @@ namespace MyGame
 			m_turretGun.speed = 6;
 			points = 157;
 		}
-		protected override void DoBeforeDestroy()
+		protected override void DisableGuns()
 		{
 			m_turretGun.isTimerWork = false;
 		}

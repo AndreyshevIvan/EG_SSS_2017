@@ -322,7 +322,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: c5dbb1106d3d65c40a37bfbeef246a94, type: 2}
+  - {fileID: 2100000, guid: 40b377f53b4ce3647b7aa158cf831063, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -486,30 +486,30 @@ MonoBehaviour:
   m_flySpawns:
   - road: 0
     enemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
-    offset: 5
-    speed: 12
+    offset: 3
+    speed: 10
     count: 6
   - road: 1
     enemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
-    offset: 10
+    offset: 15
     speed: 3
     count: 1
   - road: 2
     enemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
     offset: 20
-    speed: 12
+    speed: 10
     count: 4
   - road: 3
     enemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
-    offset: 24
+    offset: 30
     speed: 4
-    count: 2
+    count: 1
   m_groundSpawns:
-  - position: {x: -3, y: 0, z: 16}
+  - position: {x: -3, y: 0, z: 20}
     enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
-  - position: {x: 4, y: 0, z: 25}
+  - position: {x: 4, y: 0, z: 35}
     enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
-  - position: {x: -4, y: 0, z: 27}
+  - position: {x: -4, y: 0, z: 40}
     enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
 --- !u!198 &198917089717585566
 ParticleSystem:

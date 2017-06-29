@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -18,14 +19,13 @@ namespace MyGame
 			physicsBody.velocity = movement * SPEED;
 			m_isMoved = true;
 		}
-		public override void OnDeleteByWorld()
+		public override void OnExitFromWorld()
 		{
 		}
 
 		protected override void OnAwakeEnd()
 		{
 			mind = GetComponent<ShipMind>();
-			//isUseWorldSleep = false;
 		}
 		protected override void OnInitEnd()
 		{
@@ -42,6 +42,9 @@ namespace MyGame
 		protected override void DoAfterDemaged()
 		{
 			healthBar.SetValue(healthPart);
+		}
+		internal sealed override void OnErase()
+		{
 		}
 
 		private Vector3 m_smoothDir;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -15,7 +16,7 @@ namespace MyGame
 			this.target = target;
 			this.factor = factor;
 		}
-		public override void Start()
+		public override void StartAmmo()
 		{
 		}
 		public override void OnDemageTaked()

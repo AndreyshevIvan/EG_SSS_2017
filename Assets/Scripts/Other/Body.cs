@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy.Controllers;
 
-namespace MyGame
+namespace MyGame.World
 {
 	public abstract class Body : MonoBehaviour
 	{
@@ -31,7 +31,7 @@ namespace MyGame
 			OnInitEnd();
 		}
 		public virtual void OnDemageTaked() { }
-		public abstract void OnDeleteByWorld();
+		public abstract void OnExitFromWorld();
 		public virtual void Heal(int healCount)
 		{
 			health = health + healCount;
@@ -114,9 +114,9 @@ namespace MyGame
 
 		protected void OnDestroy()
 		{
-			Debug.Log(gameObject.name);
 			if (healthBar != null) Destroy(healthBar.gameObject);
-			OnDeleteByWorld();
 		}
+
+		internal abstract void OnErase();
 	}
 }

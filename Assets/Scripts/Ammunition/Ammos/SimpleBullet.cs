@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -16,7 +17,7 @@ namespace MyGame
 			this.speed = speed;
 			this.demage = demage;
 		}
-		public override void Start()
+		public override void StartAmmo()
 		{
 			physicsBody.velocity = direction * speed;
 		}

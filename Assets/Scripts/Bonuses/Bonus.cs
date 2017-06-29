@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyGame
+namespace MyGame.World
 {
 	public abstract class Bonus : Body
 	{
@@ -19,10 +19,11 @@ namespace MyGame
 				SetExplosionForce();
 			}
 		}
-		public sealed override void OnDeleteByWorld()
+		public sealed override void OnExitFromWorld()
 		{
 			world.EraseBonus(this);
 		}
+
 		protected sealed override void OnTrigger(Collider other)
 		{
 			if (other.gameObject.layer == MapPhysics.WORLD_BOX_LAYER)
@@ -50,6 +51,9 @@ namespace MyGame
 		protected const float DELTA_FORCE = 400;
 		private const float DELTA_ROTATION = 10;
 
+		internal sealed override void OnErase()
+		{
+		}
 		private void SetExplosionForce()
 		{
 			Vector3 force = Utils.RandomVect(-DELTA_FORCE, DELTA_FORCE);

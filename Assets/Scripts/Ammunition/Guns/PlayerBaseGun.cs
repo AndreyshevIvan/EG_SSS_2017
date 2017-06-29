@@ -18,7 +18,7 @@ namespace MyGame
 			bullet.position = transform.position;
 			Vector3 target = transform.position + Vector3.forward;
 			bullet.Init(target, 20, 7);
-			bullet.Start();
+			bullet.StartAmmo();
 			gameMap.AddAmmo(bullet);
 		}
 	}
