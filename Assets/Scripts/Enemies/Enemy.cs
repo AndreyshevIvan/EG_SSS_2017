@@ -12,11 +12,6 @@ namespace MyGame.World
 		public int points { get; set; }
 		public byte starsCount { get; protected set; }
 
-		public sealed override void OnExitFromWorld()
-		{
-			world.EraseEnemy(this);
-		}
-
 		protected void Start()
 		{
 			healthBar = world.factories.bars.enemyHealth;
@@ -37,5 +32,10 @@ namespace MyGame.World
 		{
 			DisableGuns();
 		}
+		internal sealed override void OnExitFromWorld()
+		{
+			world.EraseEnemy(this);
+		}
+
 	}
 }

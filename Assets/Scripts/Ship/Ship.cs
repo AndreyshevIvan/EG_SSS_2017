@@ -19,9 +19,6 @@ namespace MyGame
 			physicsBody.velocity = movement * SPEED;
 			m_isMoved = true;
 		}
-		public override void OnExitFromWorld()
-		{
-		}
 
 		protected override void OnAwakeEnd()
 		{
@@ -42,9 +39,6 @@ namespace MyGame
 		protected override void DoAfterDemaged()
 		{
 			healthBar.SetValue(healthPart);
-		}
-		internal sealed override void OnErase()
-		{
 		}
 
 		private Vector3 m_smoothDir;
@@ -85,6 +79,13 @@ namespace MyGame
 			Vector3 velocity = physicsBody.velocity;
 			physicsBody.velocity = (m_isMoved) ? velocity : Vector3.zero;
 			m_isMoved = false;
+		}
+
+		internal sealed override void OnErase()
+		{
+		}
+		internal sealed override void OnExitFromWorld()
+		{
 		}
 	}
 }

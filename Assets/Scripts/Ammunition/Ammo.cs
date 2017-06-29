@@ -10,11 +10,11 @@ namespace MyGame.World
 		public int demage { set { touchDemage = value; } }
 
 		public abstract void StartAmmo();
-		public sealed override void OnExitFromWorld()
+
+		internal sealed override void OnExitFromWorld()
 		{
 			world.EraseAmmo(this);
 		}
-
 		internal sealed override void OnErase()
 		{
 		}

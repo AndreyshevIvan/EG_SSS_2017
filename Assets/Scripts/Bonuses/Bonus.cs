@@ -19,10 +19,6 @@ namespace MyGame.World
 				SetExplosionForce();
 			}
 		}
-		public sealed override void OnExitFromWorld()
-		{
-			world.EraseBonus(this);
-		}
 
 		protected sealed override void OnTrigger(Collider other)
 		{
@@ -51,9 +47,6 @@ namespace MyGame.World
 		protected const float DELTA_FORCE = 400;
 		private const float DELTA_ROTATION = 10;
 
-		internal sealed override void OnErase()
-		{
-		}
 		private void SetExplosionForce()
 		{
 			Vector3 force = Utils.RandomVect(-DELTA_FORCE, DELTA_FORCE);
@@ -63,6 +56,14 @@ namespace MyGame.World
 		{
 			Vector3 rotation = Utils.RandomVect(-DELTA_ROTATION, DELTA_ROTATION);
 			physicsBody.AddTorque(rotation);
+		}
+
+		internal sealed override void OnErase()
+		{
+		}
+		internal sealed override void OnExitFromWorld()
+		{
+			world.EraseBonus(this);
 		}
 	}
 }

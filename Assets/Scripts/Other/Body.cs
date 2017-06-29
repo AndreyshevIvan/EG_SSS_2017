@@ -31,7 +31,6 @@ namespace MyGame.World
 			OnInitEnd();
 		}
 		public virtual void OnDemageTaked() { }
-		public abstract void OnExitFromWorld();
 		public virtual void Heal(int healCount)
 		{
 			health = health + healCount;
@@ -118,5 +117,6 @@ namespace MyGame.World
 		}
 
 		internal abstract void OnErase();
+		internal abstract void OnExitFromWorld();
 	}
 }
