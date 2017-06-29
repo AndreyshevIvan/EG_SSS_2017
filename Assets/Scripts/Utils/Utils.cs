@@ -31,11 +31,11 @@ namespace MyGame
 			uint mod = value % 1000;
 			return kCount.ToString() + '.' + mod.ToString()[0] + " k";
 		}
-		public static void UpdateTimer(ref float timer, float coldown)
+		public static void UpdateTimer(ref float timer, float coldown, float delta)
 		{
 			if (!IsTimerReady(timer, coldown))
 			{
-				timer += Time.deltaTime;
+				timer += delta;
 			}
 		}
 		public static bool IsTimerReady(float timer, float coldown)

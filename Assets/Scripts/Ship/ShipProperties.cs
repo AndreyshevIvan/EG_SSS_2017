@@ -80,7 +80,7 @@ namespace MyGame
 		{
 			if (isTimerWork)
 			{
-				Utils.UpdateTimer(ref m_timer, coldown);
+				Utils.UpdateTimer(ref m_timer, coldown, Time.fixedDeltaTime);
 			}
 		}
 

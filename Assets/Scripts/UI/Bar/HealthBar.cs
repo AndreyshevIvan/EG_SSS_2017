@@ -13,12 +13,11 @@ namespace MyGame
 		public Image m_healthLine;
 		public bool m_isShip;
 
-		public override void SetPosition(Vector3 worldPosition)
+		protected override void SetPosition(Vector3 worldPosition)
 		{
 			Vector3 screenPosition = Utils.WorldToCanvas(worldPosition);
 			transform.position = screenPosition;
 		}
-
 		protected override void OnAwakeEnd()
 		{
 			layout = GetComponent<HorizontalLayoutGroup>();
@@ -26,7 +25,7 @@ namespace MyGame
 		}
 		protected override void OnSetNewValue()
 		{
-			m_textField.text = value.ToString("0%");
+			m_textField.text = value.ToString(PATTERN);
 			if (m_healthLine != null) m_healthLine.fillAmount = value;
 		}
 		protected override void InitSizing()
@@ -54,5 +53,6 @@ namespace MyGame
 		private const float ENEMY_WIDTH = 0.06f;
 		private const float HEIGHT_FACTOR = 3.2f;
 		private const float PADDING_FACTOR = 0.0015f;
+		private const string PATTERN = "0%";
 	}
 }

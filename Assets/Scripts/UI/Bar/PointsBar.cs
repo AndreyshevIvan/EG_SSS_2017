@@ -12,13 +12,16 @@ namespace MyGame
 		protected override void OnAwakeEnd()
 		{
 			m_field = GetComponent<Text>();
+			OnSetNewValue();
 		}
 		protected override void OnSetNewValue()
 		{
 			int intValue = (int)value;
-			m_field.text = intValue.ToString("000 000 000 000");
+			m_field.text = intValue.ToString(PATTERN);
 		}
 
 		private Text m_field;
+
+		private const string PATTERN = "000 000 000 000";
 	}
 }

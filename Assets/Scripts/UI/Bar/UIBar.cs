@@ -10,8 +10,8 @@ namespace MyGame
 	public abstract class UIBar : MonoBehaviour
 	{
 		public float value { get; protected set; }
+		public Vector3 position { get; set; }
 
-		public virtual void SetPosition(Vector3 worldPosition) { }
 		public void SetValue(float newValue)
 		{
 			if (newValue == value)
@@ -47,5 +47,11 @@ namespace MyGame
 		protected virtual void OnAwakeEnd() { }
 		protected virtual void InitSizing() { }
 		protected abstract void OnSetNewValue();
+		protected virtual void SetPosition(Vector3 worldPosition) { }
+
+		private void LateUpdate()
+		{
+			SetPosition(position);
+		}
 	}
 }

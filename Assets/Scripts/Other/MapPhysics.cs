@@ -101,10 +101,16 @@ namespace MyGame
 
 		public void SetSlowMode(bool isModeOn)
 		{
-			float dt = Time.fixedDeltaTime;
 			float target = (isModeOn) ? SLOW_TIMESCALE : 1;
 
-			Time.timeScale = Mathf.MoveTowards(Time.timeScale, target, dt);
+			if (isModeOn != lastModeType)
+			{
+				deltaScale = Mathf.Abs(target - Time.timeScale);
+				lastModeType = isModeOn;
+			}
+
+			float step = Time.deltaTime / GameplayUI.SLOWMO_CHANGE_TIME * deltaScale;
+			Time.timeScale = Mathf.MoveTowards(Time.timeScale, target, step);
 		}
 
 		public void MoveToShip(Body body, bool useShipMagnetic = true)
@@ -117,7 +123,7 @@ namespace MyGame
 
 			float factor = (useShipMagnetic) ? shipMind.magnetic : 1;
 			float distanceFactor = shipMind.magnetDistance / distance;
-			float movement = factor * distanceFactor * MAGNETIC_SPEED * Time.deltaTime;
+			float movement = factor * distanceFactor * MAGNETIC_SPEED * Time.fixedDeltaTime;
 			body.position = Vector3.MoveTowards(
 				body.position,
 				shipPosition,
@@ -139,10 +145,10 @@ namespace MyGame
 		}
 		public void Cleanup()
 		{
-			List<Component> toDeleteObjects = new List<Component>();
-			toDeleteObjects.AddRange(Utils.GetChilds<Component>(sky));
-			toDeleteObjects.AddRange(Utils.GetChilds<Component>(ground));
-			toDeleteObjects.ForEach(element => Destroy(element.gameObject));
+			List<Component> toDelete = new List<Component>();
+			toDelete.AddRange(Utils.GetChilds<Component>(sky));
+			toDelete.AddRange(Utils.GetChilds<Component>(ground));
+			toDelete.ForEach(element => Destroy(element.gameObject));
 		}
 
 		protected void Awake()
@@ -169,6 +175,8 @@ namespace MyGame
 
 		private BoundingBox m_gameBox;
 		private TempPlayer m_player;
+		private bool lastModeType = false;
+		private float deltaScale = 1 - SLOW_TIMESCALE;
 
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;
@@ -188,7 +196,7 @@ namespace MyGame
 		}
 		private void MoveGround()
 		{
-			float movement = MAP_MOVE_SPEED * Time.deltaTime * Time.timeScale;
+			float movement = MAP_MOVE_SPEED * Time.fixedDeltaTime;
 			ground.transform.Translate(new Vector3(0, 0, -movement));
 			offset += movement;
 		}

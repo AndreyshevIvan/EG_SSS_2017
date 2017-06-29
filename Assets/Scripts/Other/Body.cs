@@ -91,7 +91,7 @@ namespace MyGame
 
 		protected void FixedUpdate()
 		{
-			if (healthBar != null) healthBar.SetPosition(position);
+			if (healthBar != null) healthBar.position = position;
 			isSleep = (world == null) ? true : world.isSleep;
 			NotSleepUpdate();
 

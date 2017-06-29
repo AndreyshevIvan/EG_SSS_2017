@@ -14,6 +14,7 @@ namespace MyGame
 		public EventDelegate onFirstTouch;
 		public EventDelegate onRestart;
 
+		public Image m_slowmoCurtain;
 		public Transform m_barsParent;
 		public HealthBar m_shipHealthBar;
 		public HealthBar m_enemyHealthBar;
@@ -53,7 +54,7 @@ namespace MyGame
 			set;
 		}
 
-		public const float SLOW_TIME = 0.2f;
+		public const float SLOWMO_CHANGE_TIME = 0.3f;
 
 		public void Pause(bool isPause)
 		{
@@ -69,16 +70,24 @@ namespace MyGame
 		}
 		public void Cleanup()
 		{
+			List<Component> toDelete = new List<Component>();
+			toDelete.AddRange(Utils.GetChilds<Component>(m_barsParent));
+			toDelete.ForEach(element => Destroy(element.gameObject));
 		}
+
+		private bool m_isSlowMode = true;
 
 		private bool isFirstTouchCreated { get; set; }
 		private bool isControllAvailable { get; set; }
 
+		private const float MAX_CURTAIN_TRANSPARENCY = 160;
+
 		private void Awake()
 		{
 			OnStartNewGame();
+			onBeginControllPlayer += UpdateCurtain;
 		}
-		private void FixedUpdate()
+		private void Update()
 		{
 			HandleMouse();
 		}
@@ -99,6 +108,17 @@ namespace MyGame
 			screenPosition.z = Camera.main.transform.position.y;
 			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 			onControllPlayer(screenPosition);
+		}
+		private void UpdateCurtain(bool isModeOn)
+		{
+			if (m_isSlowMode == isModeOn)
+			{
+				return;
+			}
+
+			float target = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
+			m_slowmoCurtain.CrossFadeAlpha(target / 255, SLOWMO_CHANGE_TIME, true);
+			m_isSlowMode = isModeOn;
 		}
 		private void OnStartNewGame()
 		{
