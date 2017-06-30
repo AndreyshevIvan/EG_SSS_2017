@@ -3,19 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FluffyUnderware.Curvy;
-using MyGame.World;
+using MyGame.Hero;
 
 namespace MyGame
 {
 	public sealed class Map : MonoBehaviour
 	{
+		public ParticleSystem m_windParticles;
 		public Transform m_ground;
 		public Transform m_sky;
 		public List<FlySpawn> m_flySpawns;
 		public List<GroundSpawn> m_groundSpawns;
 
 		public MapPhysics world { get; set; }
-		public bool isSleep { get; set; }
+		public bool isGamePaused { get; set; }
+		public bool isSleep { get; private set; }
 
 		public void Play()
 		{
@@ -25,6 +27,10 @@ namespace MyGame
 		}
 		public void Pause(bool isPause)
 		{
+		}
+		public void Stop()
+		{
+			isSleep = true;
 		}
 
 		private Ship ship { get { return world.ship; } }
@@ -40,6 +46,12 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
+			world.isGamePaused = isGamePaused;
+			if (isGamePaused)
+			{
+				return;
+			}
+
 			UpdateGameSleep();
 
 			if (isSleep)
@@ -52,6 +64,13 @@ namespace MyGame
 		private void UpdateGameSleep()
 		{
 			world.isSleep = isSleep;
+
+			if (isSleep)
+			{
+				m_windParticles.Pause();
+			}
+
+			m_windParticles.Play();
 		}
 		private void SpawnFlyInits()
 		{

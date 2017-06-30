@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using MyGame.World;
+using MyGame.Hero;
 
 namespace MyGame
 {
@@ -29,12 +30,20 @@ namespace MyGame
 		{
 			InitUIEvents();
 		}
+
 		private void InitUIEvents()
 		{
 			m_interface.onPause += gameMap.Pause;
+
 			m_interface.onControllPlayer += ship.MoveTo;
-			m_interface.onBeginControllPlayer += m_world.SetSlowMode;
-			m_interface.onFirstTouch += gameMap.Play;
+
+			m_interface.onBeginControllPlayer += isTrue => {
+				m_world.SetSlowMode(isTrue, false);
+			};
+
+			m_interface.onFirstTouch += ship.splineController.Play;
+			ship.splineController.OnEndReached.AddListener(T => OnMapStart());
+
 			m_world.onPlayerDeath += OnGameOver;
 		}
 		private void InitFactories()
@@ -62,10 +71,17 @@ namespace MyGame
 			gameMap = factories.maps.GetMap();
 			gameMap.world = m_world;
 		}
+
+		private void OnMapStart()
+		{
+			gameMap.Play();
+			m_interface.OnPrepareEnd();
+			Destroy(ship.splineController);
+		}
 		private void OnGameOver()
 		{
 			m_interface.GameOver();
-			gameMap.isSleep = true;
+			gameMap.Stop();
 		}
 	}
 }

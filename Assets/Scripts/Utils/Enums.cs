@@ -20,6 +20,7 @@ namespace MyGame
 		LEFT,
 		RIGHT,
 		DIFF,
+		PLAYER,
 	}
 
 	[System.Serializable]

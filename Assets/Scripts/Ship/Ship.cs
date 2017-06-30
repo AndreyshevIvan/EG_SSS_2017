@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MyGame.World;
 
-namespace MyGame
+namespace MyGame.Hero
 {
 	public sealed class Ship : Body
 	{
@@ -12,6 +12,11 @@ namespace MyGame
 
 		public void MoveTo(Vector3 newPosition)
 		{
+			if (world.isSleep)
+			{
+				return;
+			}
+
 			Vector3 direction = (newPosition - position).normalized;
 			m_smoothDir = Vector3.MoveTowards(m_smoothDir, direction, SMOOTHING);
 			direction = m_smoothDir;
@@ -33,8 +38,9 @@ namespace MyGame
 			UpdatePositionOnField();
 			UpdateRotation();
 			UpdateMoveingSpeed();
-
-			mind.isSleep = isSleep;
+		}
+		protected override void NotSleepUpdate()
+		{
 		}
 		protected override void DoAfterDemaged()
 		{
@@ -57,6 +63,7 @@ namespace MyGame
 			healthBar.SetValue(healthPart);
 			touchDemage = int.MaxValue;
 			isSleep = false;
+			splineController.Spline = roads.Get(RoadType.PLAYER);
 		}
 		private void UpdatePositionOnField()
 		{

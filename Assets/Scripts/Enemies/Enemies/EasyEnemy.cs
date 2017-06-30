@@ -9,7 +9,7 @@ namespace MyGame
 {
 	public sealed class EasyEnemy : Enemy
 	{
-		protected override void OnInitEnd()
+		protected override void InitProperties()
 		{
 			health = maxHealth = 10;
 			touchDemage = 10;
@@ -17,8 +17,7 @@ namespace MyGame
 			speed = 7;
 			points = 57;
 		}
-
-		protected override void DisableGuns()
+		protected override void InitGuns()
 		{
 		}
 

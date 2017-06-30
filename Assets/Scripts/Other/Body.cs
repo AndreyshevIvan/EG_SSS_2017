@@ -5,11 +5,12 @@ using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy.Controllers;
 
-namespace MyGame.World
+namespace MyGame
 {
 	public abstract class Body : MonoBehaviour
 	{
 		public ParticleSystem m_deathExplosion;
+		public List<ParticleSystem> m_destroyParticles;
 
 		public int health { get; protected set; }
 		public float healthPart { get { return (float)health / (float)maxHealth; } }
@@ -40,7 +41,8 @@ namespace MyGame.World
 			}
 		}
 
-		protected MapPhysics world { get; set; }
+		protected IMapPhysics world { get; set; }
+		protected RoadsFactory roads { get { return world.factories.roads; } }
 		protected BoundingBox mapBox { get; set; }
 		protected Rigidbody physicsBody { get; set; }
 		protected int maxHealth { get; set; }
@@ -88,24 +90,33 @@ namespace MyGame.World
 		protected virtual void OnTrigger(Collider other) { }
 		protected virtual void DoAfterDemaged() { }
 
-		protected void FixedUpdate()
+		protected void Update()
 		{
-			if (healthBar != null)
+			if (world.isGamePaused)
 			{
-				healthBar.position = position;
+				return;
 			}
 
-			isSleep = (world == null) ? true : world.isSleep;
+			if (healthBar) healthBar.position = position;
+		} 
+		protected void FixedUpdate()
+		{
+			if (world.isGamePaused)
+			{
+				return;
+			}
+
+			isSleep = (world != null) ? world.isSleep : true;
 
 			NotSleepUpdate();
 
 			if (isUseWorldSleep && isSleep)
 			{
-				if (physicsBody != null) physicsBody.Sleep();
+				if (physicsBody) physicsBody.Sleep();
 				return;
 			}
 
-			if (physicsBody != null) physicsBody.WakeUp();
+			if (physicsBody) physicsBody.WakeUp();
 			WakeupUpdate();
 		}
 		protected virtual void WakeupUpdate() { }
@@ -113,7 +124,15 @@ namespace MyGame.World
 
 		protected void OnDestroy()
 		{
+			OnDestroyBody();
 			if (healthBar != null) Destroy(healthBar.gameObject);
+			m_destroyParticles.ForEach(particles => Destroy(particles));
+		}
+		protected virtual void OnDestroyBody() { }
+
+		protected void ExitFromWorld()
+		{
+			Destroy(gameObject);
 		}
 
 		internal abstract void OnErase();

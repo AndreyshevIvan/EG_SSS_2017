@@ -56,6 +56,10 @@ namespace MyGame
 
 		public const float SLOWMO_CHANGE_TIME = 0.3f;
 
+		public void OnPrepareEnd()
+		{
+			isMapStart = true;
+		}
 		public void Pause(bool isPause)
 		{
 			onPause(isPause);
@@ -78,21 +82,27 @@ namespace MyGame
 		private bool m_isSlowMode = true;
 
 		private bool isFirstTouchCreated { get; set; }
-		private bool isControllAvailable { get; set; }
+		private bool isMapStart { get; set; }
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 160;
 
 		private void Awake()
 		{
-			OnStartNewGame();
 			onBeginControllPlayer += UpdateCurtain;
+			OnStartNewGame();
 		}
 		private void Update()
 		{
-			HandleMouse();
+			ControllInterface();
+			ControllShip();
 		}
-		private void HandleMouse()
+		private void ControllShip()
 		{
+			if (!isMapStart)
+			{
+				return;
+			}
+
 			if (!Input.GetMouseButton(0))
 			{
 				onBeginControllPlayer(isFirstTouchCreated);
@@ -103,6 +113,18 @@ namespace MyGame
 			OnCreateFirstTouch();
 			SetPosition(Input.mousePosition);
 		}
+		private void ControllInterface()
+		{
+			if (!Input.GetMouseButton(0))
+			{
+				return;
+			}
+
+			if (!isMapStart)
+			{
+				onFirstTouch();
+			}
+		}
 		private void SetPosition(Vector3 screenPosition)
 		{
 			screenPosition.z = Camera.main.transform.position.y;
@@ -111,8 +133,9 @@ namespace MyGame
 		}
 		private void UpdateCurtain(bool isModeOn)
 		{
-			if (m_isSlowMode == isModeOn || m_slowmoCurtain == null)
+			if (!isMapStart || m_isSlowMode == isModeOn || !m_slowmoCurtain)
 			{
+				m_slowmoCurtain.CrossFadeAlpha(0, 0, true);
 				return;
 			}
 
@@ -123,6 +146,8 @@ namespace MyGame
 		private void OnStartNewGame()
 		{
 			isFirstTouchCreated = false;
+			isMapStart = false;
+			m_slowmoCurtain.CrossFadeAlpha(0, 0, true);
 		}
 		private void OnCreateFirstTouch()
 		{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MyGame.World;
 
-namespace MyGame
+namespace MyGame.World
 {
 	[System.Serializable]
 	public class ShipProperties : IShipProperties
@@ -50,9 +50,7 @@ namespace MyGame
 
 	public abstract class ShipProperty : MonoBehaviour
 	{
-		public bool isTimerWork { get; set; }
-
-		public void Init(byte newLevel, MapPhysics map, Body target = null)
+		public void Init(byte newLevel, IMapPhysics map, Body target = null)
 		{
 			level = Utils.GetValidLevel(newLevel);
 			gameMap = map;
@@ -68,9 +66,8 @@ namespace MyGame
 
 		protected float coldown { get; set; }
 		protected byte level { get; set; }
-		protected MapPhysics gameMap { get; set; }
+		protected IMapPhysics gameMap { get; set; }
 		protected Body target { get; set; }
-
 		protected bool isTimerReady
 		{
 			get { return Utils.IsTimerReady(m_timer, coldown); }
@@ -86,6 +83,8 @@ namespace MyGame
 		}
 
 		private float m_timer = 0;
+
+		internal bool isTimerWork { get; set; }
 	}
 
 	public interface IShipProperties

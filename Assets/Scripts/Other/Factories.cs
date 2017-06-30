@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy;
+using MyGame.Hero;
 
 namespace MyGame
 {

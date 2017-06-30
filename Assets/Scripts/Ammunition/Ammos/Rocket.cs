@@ -21,11 +21,16 @@ namespace MyGame
 		}
 		public override void OnDemageTaked()
 		{
-			Destroy(gameObject);
+			ExitFromWorld();
 		}
 
-		protected override void WakeupUpdate()
+		protected override void NotSleepUpdate()
 		{
+			if (!target)
+			{
+				ExitFromWorld();
+			}
+
 			Vector3 targetPosition = target.position;
 			Vector3 direction = Vector3.Normalize(targetPosition - position);
 			physicsBody.velocity = direction * speed * factor;

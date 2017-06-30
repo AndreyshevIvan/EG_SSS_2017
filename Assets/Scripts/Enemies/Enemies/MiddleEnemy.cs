@@ -11,26 +11,22 @@ namespace MyGame
 	{
 		public RocketLauncher m_rocketGun;
 
-		protected override void NotSleepUpdate()
-		{
-			m_rocketGun.isTimerWork = !isSleep;
-		}
-		protected override void OnInitEnd()
+		protected override void InitProperties()
 		{
 			health = maxHealth = 50;
 			touchDemage = 100;
 			starsCount = 7;
 			speed = 2;
+			points = 1527;
+		}
+		protected override void InitGuns()
+		{
 			m_rocketGun.isTimerWork = true;
 			m_rocketGun.speed = 10;
 			m_rocketGun.factor = 1;
 			m_rocketGun.Init(0, world, world.ship);
-			points = 1527;
-		}
 
-		protected override void DisableGuns()
-		{
-			m_rocketGun.isTimerWork = false;
+			guns.Add(m_rocketGun);
 		}
 
 		private float speed { get; set; }

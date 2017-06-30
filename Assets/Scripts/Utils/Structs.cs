@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FluffyUnderware.Curvy;
 using MyGame.World;
+using MyGame.Hero;
 
 namespace MyGame
 {
@@ -63,44 +64,13 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public struct ShipsFactory
-	{
-		public Ship m_modelFirst;
-		public Ship m_modelSecond;
-		public Ship m_modelThird;
-
-		public Ship Get(ShipType type)
-		{
-			Ship newShip = null;
-
-			switch (type)
-			{
-				case ShipType.VOYAGER:
-					newShip = m_modelFirst;
-					break;
-
-				case ShipType.DESTENY:
-					newShip = m_modelSecond;
-					break;
-
-				case ShipType.SPLASH:
-					newShip = m_modelThird;
-					break;
-			}
-
-			Ship ship = Component.Instantiate(newShip);
-			ship.mind.type = type;
-			return ship;
-		}
-	}
-
-	[System.Serializable]
 	public struct RoadsFactory
 	{
 		public CurvySpline big;
 		public CurvySpline left;
 		public CurvySpline right;
 		public CurvySpline diff;
+		public CurvySpline player;
 
 		public CurvySpline Get(RoadType type)
 		{
@@ -117,6 +87,9 @@ namespace MyGame
 
 				case RoadType.DIFF:
 					return diff;
+
+				case RoadType.PLAYER:
+					return player;
 			}
 
 			return big;
@@ -152,5 +125,40 @@ namespace MyGame
 	{
 		public int points { get; set; }
 		public int stars { get; set; }
+	}
+}
+
+namespace MyGame.Hero
+{
+	[System.Serializable]
+	public struct ShipsFactory
+	{
+		public Ship m_modelFirst;
+		public Ship m_modelSecond;
+		public Ship m_modelThird;
+
+		public Ship Get(ShipType type)
+		{
+			Ship newShip = null;
+
+			switch (type)
+			{
+				case ShipType.VOYAGER:
+					newShip = m_modelFirst;
+					break;
+
+				case ShipType.DESTENY:
+					newShip = m_modelSecond;
+					break;
+
+				case ShipType.SPLASH:
+					newShip = m_modelThird;
+					break;
+			}
+
+			Ship ship = Component.Instantiate(newShip);
+			ship.mind.type = type;
+			return ship;
+		}
 	}
 }

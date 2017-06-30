@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace MyGame.World
+namespace MyGame
 {
 	public abstract class Enemy : Body
 	{
@@ -12,9 +12,19 @@ namespace MyGame.World
 		public int points { get; set; }
 		public byte starsCount { get; protected set; }
 
-		protected void Start()
+		protected List<Gun> guns { get; set; }
+
+		protected sealed override void OnAwakeEnd()
+		{
+			guns = new List<Gun>();
+		}
+		protected sealed override void OnInitEnd()
 		{
 			healthBar = world.factories.bars.enemyHealth;
+
+			InitProperties();
+			InitGuns();
+
 			healthBar.SetValue(healthPart);
 		}
 		protected sealed override void DoAfterDemaged()
@@ -26,16 +36,28 @@ namespace MyGame.World
 
 			healthBar.SetValue(healthPart);
 		}
-		protected abstract void DisableGuns();
+		protected sealed override void NotSleepUpdate()
+		{
+			guns.ForEach(gun =>
+			{
+				if (gun == null) return;
+				gun.isTimerWork = !world.isSleep;
+			});
+		}
+		protected abstract void InitProperties();
+		protected abstract void InitGuns();
 
 		internal sealed override void OnErase()
 		{
-			DisableGuns();
+			guns.ForEach(gun =>
+			{
+				if (gun == null) return;
+				Destroy(gun);
+			});
 		}
 		internal sealed override void OnExitFromWorld()
 		{
 			world.EraseEnemy(this);
 		}
-
 	}
 }
