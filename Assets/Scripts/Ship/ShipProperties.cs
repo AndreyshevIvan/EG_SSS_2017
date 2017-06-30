@@ -53,7 +53,7 @@ namespace MyGame.World
 		public void Init(byte newLevel, IMapPhysics map, Body target = null)
 		{
 			level = Utils.GetValidLevel(newLevel);
-			gameMap = map;
+			world = map;
 			isTimerWork = true;
 			this.target = target;
 			DoAfterInit();
@@ -66,7 +66,7 @@ namespace MyGame.World
 
 		protected float coldown { get; set; }
 		protected byte level { get; set; }
-		protected IMapPhysics gameMap { get; set; }
+		protected IMapPhysics world { get; set; }
 		protected Body target { get; set; }
 		protected bool isTimerReady
 		{
@@ -76,10 +76,12 @@ namespace MyGame.World
 		protected abstract void DoAfterInit();
 		protected void FixedUpdate()
 		{
-			if (isTimerWork)
+			if (!world.gameplay.isPlaying || !isTimerWork)
 			{
-				Utils.UpdateTimer(ref m_timer, coldown, Time.fixedDeltaTime);
+				return;
 			}
+
+			Utils.UpdateTimer(ref m_timer, coldown, Time.fixedDeltaTime);
 		}
 
 		private float m_timer = 0;

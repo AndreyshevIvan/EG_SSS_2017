@@ -12,7 +12,7 @@ namespace MyGame.Hero
 
 		public void MoveTo(Vector3 newPosition)
 		{
-			if (world.isSleep)
+			if (world.gameplay.isMapSleep)
 			{
 				return;
 			}
@@ -62,8 +62,7 @@ namespace MyGame.Hero
 			healthBar = world.factories.bars.shipHealth;
 			healthBar.SetValue(healthPart);
 			touchDemage = int.MaxValue;
-			isSleep = false;
-			splineController.Spline = roads.Get(RoadType.PLAYER);
+			roadController.Spline = roads.Get(RoadType.PLAYER);
 		}
 		private void UpdatePositionOnField()
 		{

@@ -19,10 +19,10 @@ namespace MyGame
 		public int touchDemage { get; protected set; }
 		public Vector3 position
 		{
-			get { return transform.position; }
+			protected get { return transform.position; }
 			set { transform.position = value; }
 		}
-		public SplineController splineController { get; protected set; }
+		public SplineController roadController { get; protected set; }
 		public ParticleSystem deathExplosion { get { return m_deathExplosion; } }
 		public UIBar healthBar { get; protected set; }
 
@@ -54,15 +54,13 @@ namespace MyGame
 			}
 		}
 		protected bool isUseWorldSleep { get; set; }
-		protected bool isSleep { get; set; }
 
 		protected void Awake()
 		{
 			physicsBody = GetComponent<Rigidbody>();
-			splineController = GetComponent<SplineController>();
+			roadController = GetComponent<SplineController>();
 			mapBox = GameData.mapBox;
 			isUseWorldSleep = true;
-			isSleep = true;
 			OnAwakeEnd();
 		}
 		protected virtual void OnAwakeEnd() { }
@@ -90,27 +88,18 @@ namespace MyGame
 		protected virtual void OnTrigger(Collider other) { }
 		protected virtual void DoAfterDemaged() { }
 
-		protected void Update()
-		{
-			if (world.isGamePaused)
-			{
-				return;
-			}
-
-			if (healthBar) healthBar.position = position;
-		} 
 		protected void FixedUpdate()
 		{
-			if (world.isGamePaused)
+			if (healthBar) healthBar.position = position;
+
+			if (!world.gameplay.isPlaying)
 			{
 				return;
 			}
-
-			isSleep = (world != null) ? world.isSleep : true;
 
 			NotSleepUpdate();
 
-			if (isUseWorldSleep && isSleep)
+			if (isUseWorldSleep && world.gameplay.isMapSleep)
 			{
 				if (physicsBody) physicsBody.Sleep();
 				return;

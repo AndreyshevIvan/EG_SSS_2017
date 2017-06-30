@@ -10,24 +10,20 @@ namespace MyGame
 {
 	public partial class MapPhysics : MonoBehaviour, IMapPhysics
 	{
-		public EventDelegate onPlayerDeath;
-
 		public Material m_garbageMaterial;
 
 		public Factories factories { get; set; }
+		public Transform groundObjects { get; set; }
+		public Transform skyObjects { get; set; }
 		public Transform ground { get; set; }
-		public Transform sky { get; set; }
 		public Ship ship { get; set; }
 		public ShipMind shipMind { get { return ship.mind; } }
-		public Vector3 shipPosition
-		{
-			get { return ship.position; }
-			set { ship.position = value; }
-		}
+		public bool isPlayerLive { get; private set; }
+
 		public float offset { get; set; }
-		public bool isSleep { get; set; }
-		public bool isGamePaused { get; set; }
+
 		public IPlayerBar playerBar { get; set; }
+		public IGameplay gameplay { get; set; }
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
@@ -41,7 +37,7 @@ namespace MyGame
 		public void AddAmmo(Ammo ammo)
 		{
 			ammo.Init(this);
-			ammo.transform.SetParent(sky);
+			ammo.transform.SetParent(skyObjects);
 		}
 		public void AddBonus(Bonus bonus, byte count, Vector3 position)
 		{
@@ -54,7 +50,7 @@ namespace MyGame
 
 			while (count > 0)
 			{
-				Bonus newBonus = Instantiate(bonus, ground);
+				Bonus newBonus = Instantiate(bonus, groundObjects);
 				newBonus.explosionStart = true;
 				newBonus.position = position;
 				newBonus.Init(this);
@@ -64,8 +60,8 @@ namespace MyGame
 
 		public void EraseEnemyByKill(Enemy enemy)
 		{
-			AddBonus(factories.bonuses.star, enemy.starsCount, enemy.position);
-			AddBonus(enemy.bonus, 1, enemy.position);
+			AddBonus(factories.bonuses.star, enemy.starsCount, enemy.transform.position);
+			AddBonus(enemy.bonus, 1, enemy.transform.position);
 			m_player.points += enemy.points;
 			playerBar.points = m_player.points;
 			Dismantle(enemy);
@@ -89,19 +85,14 @@ namespace MyGame
 			return Vector3.zero;
 		}
 
-		public void SetSlowMode(bool isModeOn, bool igoneSleep = false)
+		public void SetSlowMode(bool isModeOn)
 		{
-			if (!igoneSleep && isSleep)
-			{
-				return;
-			}
-
 			float target = (isModeOn) ? SLOW_TIMESCALE : 1;
 
-			if (isModeOn != lastModeType)
+			if (isModeOn != m_lastModeType)
 			{
 				deltaScale = Mathf.Abs(target - Time.timeScale);
-				lastModeType = isModeOn;
+				m_lastModeType = isModeOn;
 			}
 
 			float step = Time.deltaTime / GameplayUI.SLOWMO_CHANGE_TIME * deltaScale;
@@ -110,11 +101,11 @@ namespace MyGame
 
 		public void SubscribeToMove(Body body)
 		{
-			body.transform.SetParent(ground);
+			body.transform.SetParent(groundObjects);
 		}
 		public void MoveToShip(Body body, bool useShipMagnetic = true)
 		{
-			float distance = Vector3.Distance(body.position, shipPosition);
+			float distance = Vector3.Distance(body.transform.position, ship.transform.position);
 			if (distance > shipMind.magnetDistance)
 			{
 				return;
@@ -124,9 +115,14 @@ namespace MyGame
 			float distanceFactor = shipMind.magnetDistance / distance;
 			float movement = factor * distanceFactor * MAGNETIC_SPEED * Time.fixedDeltaTime;
 			body.position = Vector3.MoveTowards(
-				body.position,
-				shipPosition,
+				body.transform.position,
+				ship.transform.position,
 				movement);
+		}
+		public void KillPlayer()
+		{
+			Dismantle(ship);
+			Destroy(ship);
 		}
 
 		public void OnTriggerExit(Collider other)
@@ -140,15 +136,15 @@ namespace MyGame
 		public void Cleanup()
 		{
 			List<Component> toDelete = new List<Component>();
-			toDelete.AddRange(Utils.GetChilds<Component>(sky));
-			toDelete.AddRange(Utils.GetChilds<Component>(ground));
+			toDelete.AddRange(Utils.GetChilds<Component>(skyObjects));
+			toDelete.AddRange(Utils.GetChilds<Component>(groundObjects));
 			toDelete.ForEach(element => Destroy(element.gameObject));
 		}
 
 		private List<Body> m_toEarse = new List<Body>();
 		private BoundingBox m_gameBox;
 		private TempPlayer m_player;
-		private bool lastModeType = false;
+		private bool m_lastModeType = false;
 		private float deltaScale = 1 - SLOW_TIMESCALE;
 
 		private const float MAGNETIC_SPEED = 2;
@@ -160,22 +156,15 @@ namespace MyGame
 		private void Awake()
 		{
 			m_gameBox = GameData.mapBox;
-			isGamePaused = false;
-			isSleep = true;
 			offset = 0;
 		}
 		private void FixedUpdate()
 		{
-			if (isSleep)
-			{
-				return;
-			}
+			isPlayerLive = ship.isLive;
 
-			MoveGround();
-
-			if (!ship.isLive)
+			if (!gameplay.isMapSleep && gameplay.isPlaying)
 			{
-				PlayerLose();
+				MoveGround();
 			}
 		}
 		private void CreateExplosion(ParticleSystem explosion, Vector3 position)
@@ -187,7 +176,7 @@ namespace MyGame
 
 			ParticleSystem explosionObject = Instantiate(explosion);
 			explosionObject.transform.position = position;
-			explosionObject.transform.SetParent(sky);
+			explosionObject.transform.SetParent(skyObjects);
 		}
 		private void MoveGround()
 		{
@@ -195,20 +184,18 @@ namespace MyGame
 			ground.transform.Translate(new Vector3(0, 0, -movement));
 			offset += movement;
 		}
-		private void PlayerLose()
-		{
-			isSleep = true;
-			onPlayerDeath();
-			Dismantle(ship);
-			Destroy(ship);
-		}
 		private void Dismantle(Body subject)
 		{
-			CreateExplosion(subject.deathExplosion, subject.position);
+			if (!subject)
+			{
+				return;
+			}
+
+			CreateExplosion(subject.deathExplosion, subject.transform.position);
 			List<Rigidbody> bodies = Utils.GetChilds<Rigidbody>(subject.transform);
 			bodies.ForEach(body =>
 			{
-				body.transform.SetParent(ground);
+				body.transform.SetParent(groundObjects);
 				body.useGravity = true;
 				body.isKinematic = false;
 				body.gameObject.layer = GARBAGE_LAYER;
@@ -236,9 +223,8 @@ namespace MyGame
 		Factories factories { get; }
 		Ship ship { get; }
 		ShipMind shipMind { get; }
-		Vector3 shipPosition { get; }
-		bool isSleep { get; }
-		bool isGamePaused { get; }
+		IGameplay gameplay { get; }
+		bool isPlayerLive { get; }
 
 		void AddEnemy(Enemy enemy);
 		void AddAmmo(Ammo ammo);

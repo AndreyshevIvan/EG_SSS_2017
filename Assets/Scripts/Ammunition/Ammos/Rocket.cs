@@ -31,7 +31,7 @@ namespace MyGame
 				ExitFromWorld();
 			}
 
-			Vector3 targetPosition = target.position;
+			Vector3 targetPosition = target.transform.position;
 			Vector3 direction = Vector3.Normalize(targetPosition - position);
 			physicsBody.velocity = direction * speed * factor;
 		}

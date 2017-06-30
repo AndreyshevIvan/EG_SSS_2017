@@ -17,6 +17,10 @@ namespace MyGame
 		protected sealed override void OnAwakeEnd()
 		{
 			guns = new List<Gun>();
+			if (roadController) roadController.OnEndReached.AddListener((T) =>
+			{
+				ExitFromWorld();
+			});
 		}
 		protected sealed override void OnInitEnd()
 		{
@@ -41,7 +45,7 @@ namespace MyGame
 			guns.ForEach(gun =>
 			{
 				if (gun == null) return;
-				gun.isTimerWork = !world.isSleep;
+				gun.isTimerWork = !world.gameplay.isMapSleep;
 			});
 		}
 		protected abstract void InitProperties();

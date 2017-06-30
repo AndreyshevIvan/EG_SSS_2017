@@ -8,10 +8,10 @@ namespace MyGame
 {
 	public class GameplayUI : MonoBehaviour, IBarsFactory, IPlayerBar
 	{
-		public PointDelegate onControllPlayer;
-		public BoolEventDelegate onBeginControllPlayer;
+		public PointDelegate moveShip;
+		public BoolEventDelegate uncontrollEvents;
 		public BoolEventDelegate onPause;
-		public EventDelegate onFirstTouch;
+		public EventDelegate firstTouchEvents;
 		public EventDelegate onRestart;
 
 		public Image m_slowmoCurtain;
@@ -20,6 +20,7 @@ namespace MyGame
 		public HealthBar m_enemyHealthBar;
 		public PointsBar m_points;
 
+		public IGameplay gameplay { get; set; }
 		public UIBar shipHealth
 		{
 			get
@@ -56,9 +57,8 @@ namespace MyGame
 
 		public const float SLOWMO_CHANGE_TIME = 0.3f;
 
-		public void OnPrepareEnd()
+		public void OnMapStart()
 		{
-			isMapStart = true;
 		}
 		public void Pause(bool isPause)
 		{
@@ -79,39 +79,56 @@ namespace MyGame
 			toDelete.ForEach(element => Destroy(element.gameObject));
 		}
 
-		private bool m_isSlowMode = true;
+		private bool m_isPlayerControll = false;
 
+		private bool isSlowMode
+		{
+			get
+			{
+				return
+					gameplay.isMapStart &&
+					isFirstTouchCreated &&
+					!m_isPlayerControll &&
+					!gameplay.isGameEnd &&
+					isSecondTouchCreated;
+			}
+		}
 		private bool isFirstTouchCreated { get; set; }
-		private bool isMapStart { get; set; }
+		private bool isSecondTouchCreated { get; set; }
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 160;
 
 		private void Awake()
 		{
-			onBeginControllPlayer += UpdateCurtain;
+			firstTouchEvents += () => { isFirstTouchCreated = true; };
 			OnStartNewGame();
 		}
 		private void Update()
 		{
+			UpdateCurtain();
+		}
+		private void FixedUpdate()
+		{
 			ControllInterface();
-			ControllShip();
+
+			if (gameplay.isMapStart)
+			{
+				ControllShip();
+			}
 		}
 		private void ControllShip()
 		{
-			if (!isMapStart)
-			{
-				return;
-			}
-
 			if (!Input.GetMouseButton(0))
 			{
-				onBeginControllPlayer(isFirstTouchCreated);
+				m_isPlayerControll = false;
 				return;
 			}
 
-			onBeginControllPlayer(false);
-			OnCreateFirstTouch();
-			SetPosition(Input.mousePosition);
+			isSecondTouchCreated = m_isPlayerControll = true;
+			Vector3 screenPosition = Input.mousePosition;
+			screenPosition.z = Camera.main.transform.position.y;
+			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+			if (moveShip != null) moveShip(screenPosition);
 		}
 		private void ControllInterface()
 		{
@@ -120,44 +137,22 @@ namespace MyGame
 				return;
 			}
 
-			if (!isMapStart)
+			if (!isFirstTouchCreated)
 			{
-				onFirstTouch();
+				firstTouchEvents();
 			}
 		}
-		private void SetPosition(Vector3 screenPosition)
+		private void UpdateCurtain()
 		{
-			screenPosition.z = Camera.main.transform.position.y;
-			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-			onControllPlayer(screenPosition);
-		}
-		private void UpdateCurtain(bool isModeOn)
-		{
-			if (!isMapStart || m_isSlowMode == isModeOn || !m_slowmoCurtain)
-			{
-				m_slowmoCurtain.CrossFadeAlpha(0, 0, true);
-				return;
-			}
-
-			float target = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
+			uncontrollEvents(isSlowMode);
+			float target = (isSlowMode) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			m_slowmoCurtain.CrossFadeAlpha(target / 255, SLOWMO_CHANGE_TIME, true);
-			m_isSlowMode = isModeOn;
 		}
 		private void OnStartNewGame()
 		{
 			isFirstTouchCreated = false;
-			isMapStart = false;
+			m_isPlayerControll = false;
 			m_slowmoCurtain.CrossFadeAlpha(0, 0, true);
-		}
-		private void OnCreateFirstTouch()
-		{
-			if (isFirstTouchCreated)
-			{
-				return;
-			}
-
-			onFirstTouch();
-			isFirstTouchCreated = true;
 		}
 		private void OpenPauseInterface(bool isPause)
 		{

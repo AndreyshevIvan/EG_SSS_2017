@@ -10,27 +10,23 @@ namespace MyGame
 	public sealed class Map : MonoBehaviour
 	{
 		public ParticleSystem m_windParticles;
+		public Transform m_groundObjects;
+		public Transform m_skyObjects;
 		public Transform m_ground;
-		public Transform m_sky;
 		public List<FlySpawn> m_flySpawns;
 		public List<GroundSpawn> m_groundSpawns;
 
 		public MapPhysics world { get; set; }
-		public bool isGamePaused { get; set; }
-		public bool isSleep { get; private set; }
+		public IGameplay gameplay { get; set; }
+		public bool isReached { get; private set; }
 
 		public void Play()
 		{
-			isSleep = false;
 			tempSkySpawns = new List<FlySpawn>(m_flySpawns);
 			SpawnGroundUnits();
 		}
 		public void Pause(bool isPause)
 		{
-		}
-		public void Stop()
-		{
-			isSleep = true;
 		}
 
 		private Ship ship { get { return world.ship; } }
@@ -40,21 +36,16 @@ namespace MyGame
 		private void Start()
 		{
 			ship.transform.SetParent(transform);
+			world.groundObjects = m_groundObjects;
+			world.skyObjects = m_skyObjects;
 			world.ground = m_ground;
-			world.sky = m_sky;
-			isSleep = true;
+			isReached = false;
 		}
 		private void FixedUpdate()
 		{
-			world.isGamePaused = isGamePaused;
-			if (isGamePaused)
-			{
-				return;
-			}
-
 			UpdateGameSleep();
 
-			if (isSleep)
+			if (!gameplay.isPlaying)
 			{
 				return;
 			}
@@ -63,11 +54,10 @@ namespace MyGame
 		}
 		private void UpdateGameSleep()
 		{
-			world.isSleep = isSleep;
-
-			if (isSleep)
+			if (gameplay.isMapSleep)
 			{
 				m_windParticles.Pause();
+				return;
 			}
 
 			m_windParticles.Play();
@@ -83,12 +73,12 @@ namespace MyGame
 			CurvySpline road = factories.roads.Get(spawn.road);
 			for (int i = 0; i < spawn.count; i++)
 			{
-				Enemy enemy = Instantiate(spawn.enemy, m_sky);
+				Enemy enemy = Instantiate(spawn.enemy, m_skyObjects);
 				world.AddEnemy(enemy);
-				enemy.splineController.Spline = road;
+				enemy.roadController.Spline = road;
 				float spawnPosition = MapPhysics.SPAWN_OFFSET * i / road.Length;
-				enemy.splineController.InitialPosition = spawnPosition;
-				enemy.splineController.Speed = spawn.speed;
+				enemy.roadController.InitialPosition = spawnPosition;
+				enemy.roadController.Speed = spawn.speed;
 			}
 			tempSkySpawns.Remove(spawn);
 		}
@@ -96,7 +86,7 @@ namespace MyGame
 		{
 			m_groundSpawns.ForEach(spawn =>
 			{
-				Enemy enemy = Instantiate(spawn.enemy, m_ground);
+				Enemy enemy = Instantiate(spawn.enemy, m_groundObjects);
 				world.AddEnemy(enemy);
 				enemy.position = spawn.position;
 			});

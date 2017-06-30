@@ -25,7 +25,7 @@ namespace MyGame.Hero
 		}
 		private void FixedUpdate()
 		{
-			m_firstGun.isTimerWork = !world.isSleep;
+			m_firstGun.isTimerWork = !world.gameplay.isMapSleep;
 		}
 
 		internal void Init(IMapPhysics newWorld)

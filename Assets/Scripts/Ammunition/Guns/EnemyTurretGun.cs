@@ -25,9 +25,9 @@ namespace MyGame
 			Vector3 position = m_bulletsSpawn.position;
 			position.y = MapPhysics.FLY_HEIGHT;
 			bullet.position = position;
-			bullet.Init(gameMap.shipPosition, speed, demage);
+			bullet.Init(world.ship.transform.position, speed, demage);
 			bullet.StartAmmo();
-			gameMap.AddAmmo(bullet);
+			world.AddAmmo(bullet);
 		}
 	}
 }

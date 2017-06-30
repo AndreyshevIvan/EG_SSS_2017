@@ -21,7 +21,7 @@ namespace MyGame
 			newRocket.Init(target, speed, demage, factor);
 			newRocket.position = transform.position;
 			newRocket.StartAmmo();
-			gameMap.AddAmmo(newRocket);
+			world.AddAmmo(newRocket);
 		}
 	}
 }

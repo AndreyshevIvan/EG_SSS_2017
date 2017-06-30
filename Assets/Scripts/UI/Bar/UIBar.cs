@@ -49,7 +49,7 @@ namespace MyGame
 		protected abstract void OnSetNewValue();
 		protected virtual void SetPosition(Vector3 worldPosition) { }
 
-		private void LateUpdate()
+		private void Update()
 		{
 			SetPosition(position);
 		}

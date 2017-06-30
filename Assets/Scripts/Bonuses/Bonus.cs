@@ -32,7 +32,7 @@ namespace MyGame
 		}
 		protected sealed override void WakeupUpdate()
 		{
-			if (isSleep)
+			if (world.gameplay.isMapSleep)
 			{
 				return;
 			}
