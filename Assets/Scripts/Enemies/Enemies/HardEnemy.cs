@@ -16,6 +16,8 @@ namespace MyGame
 			starsCount = 2;
 			points = 157;
 
+			healthBar = world.factories.bars.enemyHealth;
+
 			world.SubscribeToMove(this);
 		}
 		protected override void InitGuns()

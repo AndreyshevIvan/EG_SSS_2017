@@ -24,12 +24,10 @@ namespace MyGame
 		}
 		protected sealed override void OnInitEnd()
 		{
-			healthBar = world.factories.bars.enemyHealth;
-
 			InitProperties();
 			InitGuns();
 
-			healthBar.SetValue(healthPart);
+			if (healthBar) healthBar.SetValue(healthPart);
 		}
 		protected sealed override void DoAfterDemaged()
 		{
@@ -38,7 +36,7 @@ namespace MyGame
 				world.EraseEnemyByKill(this);
 			}
 
-			healthBar.SetValue(healthPart);
+			if (healthBar) healthBar.SetValue(healthPart);
 		}
 		protected sealed override void NotSleepUpdate()
 		{

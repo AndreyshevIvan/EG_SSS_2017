@@ -13,20 +13,12 @@ namespace MyGame
 		public Image m_healthLine;
 		public bool m_isShip;
 
-		protected override void SetPosition(Vector3 worldPosition)
-		{
-			Vector3 screenPosition = Utils.WorldToCanvas(worldPosition);
-			transform.position = screenPosition;
-		}
 		protected override void OnAwakeEnd()
 		{
 			layout = GetComponent<HorizontalLayoutGroup>();
+			m_fadeElements = Utils.GetAllComponents<Graphic>(gameObject.transform);
 			maxValue = 1;
-		}
-		protected override void OnSetNewValue()
-		{
-			m_textField.text = value.ToString(PATTERN);
-			if (m_healthLine != null) m_healthLine.fillAmount = value;
+			SetFade(0, 0);
 		}
 		protected override void InitSizing()
 		{
@@ -45,8 +37,34 @@ namespace MyGame
 			int padding = (paddingByFactor >= 1) ? paddingByFactor : 1;
 			layout.padding = new RectOffset(padding, padding, padding, padding);
 		}
+		protected override void SetPosition(Vector3 worldPosition)
+		{
+			Vector3 screenPosition = Utils.WorldToCanvas(worldPosition);
+			transform.position = screenPosition;
+		}
+		protected override void OnSetNewValue()
+		{
+			m_textField.text = value.ToString(PATTERN);
+			if (m_healthLine != null) m_healthLine.fillAmount = value;
+			if (isFirstSetComplete)
+			{
+				SetFade(1, 0);
+			}
+		}
+		protected override void OnUpdate()
+		{
+			if (Utils.IsTimerReady(lastUpdateTimer, TIME_TO_BE_UNVISIBLE))
+			{
+				SetFade(0, FADE_TIME);
+			}
+		}
+
+		private List<Graphic> m_fadeElements;
 
 		private HorizontalLayoutGroup layout { get; set; }
+
+		private const float TIME_TO_BE_UNVISIBLE = 1;
+		private const float FADE_TIME = 0.3f;
 
 		private const float FONT_FACTOR = 0.03f;
 		private const float PLAYER_WIDTH = 0.12f;
@@ -54,5 +72,12 @@ namespace MyGame
 		private const float HEIGHT_FACTOR = 3.2f;
 		private const float PADDING_FACTOR = 0.0015f;
 		private const string PATTERN = "0%";
+
+		private void SetFade(float fade, float duration)
+		{
+			m_fadeElements.ForEach(element => {
+				element.CrossFadeAlpha(fade, duration, true);
+			});
+		}
 	}
 }

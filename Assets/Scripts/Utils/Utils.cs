@@ -94,8 +94,13 @@ namespace MyGame
 		}
 		public static List<T> GetChilds<T>(Component parent) where T : Component
 		{
-			List<T> list = ToList(parent.GetComponentsInChildren<T>());
+			List<T> list = GetAllComponents<T>(parent);
 			list.Remove(parent.GetComponent<T>());
+			return list;
+		}
+		public static List<T> GetAllComponents<T>(Component parent) where T : Component
+		{
+			List<T> list = ToList(parent.GetComponentsInChildren<T>());
 			return list;
 		}
 		public static int GetFromSreen(float factor)
