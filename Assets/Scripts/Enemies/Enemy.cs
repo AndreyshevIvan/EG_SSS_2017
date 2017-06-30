@@ -27,7 +27,11 @@ namespace MyGame
 			InitProperties();
 			InitGuns();
 
-			if (healthBar) healthBar.SetValue(healthPart);
+			if (healthBar)
+			{
+				healthBar.SetValue(healthPart);
+				healthBar.isFadable = true;
+			}
 		}
 		protected sealed override void DoAfterDemaged()
 		{
@@ -35,13 +39,10 @@ namespace MyGame
 			{
 				world.EraseEnemyByKill(this);
 			}
-
-			if (healthBar) healthBar.SetValue(healthPart);
 		}
 		protected sealed override void NotSleepUpdate()
 		{
-			guns.ForEach(gun =>
-			{
+			guns.ForEach(gun => {
 				if (gun == null) return;
 				gun.isTimerWork = !world.gameplay.isMapSleep;
 			});
@@ -51,8 +52,7 @@ namespace MyGame
 
 		internal sealed override void OnErase()
 		{
-			guns.ForEach(gun =>
-			{
+			guns.ForEach(gun => {
 				if (gun == null) return;
 				Destroy(gun);
 			});

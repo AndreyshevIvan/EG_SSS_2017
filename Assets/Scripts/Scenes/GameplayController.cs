@@ -83,8 +83,7 @@ namespace MyGame
 			m_interface.firstTouchEvents += () => {
 				ship.roadController.Play();
 			};
-			ship.roadController.OnEndReached.AddListener(T =>
-			{
+			ship.roadController.OnEndReached.AddListener(T => {
 				isMapStart = true;
 				OnMapStart();
 			});

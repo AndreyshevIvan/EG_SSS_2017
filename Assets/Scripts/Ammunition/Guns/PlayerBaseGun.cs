@@ -17,7 +17,7 @@ namespace MyGame
 			SimpleBullet bullet = Instantiate(m_ammo);
 			bullet.position = transform.position;
 			Vector3 target = transform.position + Vector3.forward;
-			bullet.Init(target, 20, 7);
+			bullet.Init(target, 30, 7);
 			bullet.StartAmmo();
 			world.AddAmmo(bullet);
 		}

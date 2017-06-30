@@ -80,6 +80,7 @@ namespace MyGame
 			{
 				DoBeforeDemaged();
 				addDemage = demage;
+				if (healthBar) healthBar.SetValue(healthPart);
 				DoAfterDemaged();
 			}
 		}

@@ -41,6 +41,7 @@ namespace MyGame.Hero
 		}
 		protected override void NotSleepUpdate()
 		{
+			healthBar.isFadable = maxHealth == health;
 		}
 		protected override void DoAfterDemaged()
 		{
