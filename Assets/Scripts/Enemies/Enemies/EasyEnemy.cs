@@ -17,9 +17,6 @@ namespace MyGame
 			speed = 7;
 			points = 57;
 		}
-		protected override void InitGuns()
-		{
-		}
 
 		private float speed { get; set; }
 	}

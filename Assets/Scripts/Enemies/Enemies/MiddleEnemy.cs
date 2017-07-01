@@ -18,13 +18,11 @@ namespace MyGame
 			starsCount = 7;
 			speed = 2;
 			points = 1527;
-		}
-		protected override void InitGuns()
-		{
+
 			m_rocketGun.isTimerWork = true;
 			m_rocketGun.speed = 10;
 			m_rocketGun.factor = 1;
-			m_rocketGun.Init(0, world, world.ship);
+			m_rocketGun.Init(world);
 
 			guns.Add(m_rocketGun);
 		}

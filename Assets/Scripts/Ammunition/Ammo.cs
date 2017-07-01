@@ -5,22 +5,15 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Ammo : Body
+	public abstract class Ammo : WorldObject
 	{
 		public int demage { set { touchDemage = value; } }
 
-		public abstract void StartAmmo();
-
-		protected sealed override void OnAwakeEnd()
-		{
-			isUseWorldSleep = false;
-		}
-
-		internal sealed override void OnExitFromWorld()
+		public sealed override void OnExitFromWorld()
 		{
 			world.EraseAmmo(this);
 		}
-		internal sealed override void OnErase()
+		public sealed override void OnErase()
 		{
 		}
 	}

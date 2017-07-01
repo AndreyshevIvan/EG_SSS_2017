@@ -73,12 +73,12 @@ namespace MyGame
 		private const float VISIBLE_TIME = 1;
 		private const float FADE_TIME = 0.3f;
 
-		private void Update()
+		private void FixedUpdate()
 		{
 			OnUpdate();
 			SetPosition(position);
 			UpdateFade();
-			lastUpdateTimer += Time.deltaTime;
+			lastUpdateTimer += Time.fixedDeltaTime;
 		}
 		private void UpdateFade()
 		{

@@ -66,7 +66,7 @@ namespace MyGame
 		}
 		public static bool GetDemage(ref int demage, Collider other)
 		{
-			Body body = other.GetComponent<Body>();
+			WorldObject body = other.GetComponent<WorldObject>();
 			if (body == null)
 			{
 				return false;
@@ -118,6 +118,10 @@ namespace MyGame
 			{
 				action();
 			}
+		}
+		public static void DestroyAll<T>(List<T> list) where T : Component
+		{
+			list.ForEach(element => { if (element) Component.Destroy(element); });
 		}
 	}
 }

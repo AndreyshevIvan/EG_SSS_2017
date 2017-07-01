@@ -96,19 +96,16 @@ namespace MyGame
 		private bool isFirstTouchCreated { get; set; }
 		private bool isSecondTouchCreated { get; set; }
 
-		private const float MAX_CURTAIN_TRANSPARENCY = 160;
+		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
 
 		private void Awake()
 		{
 			firstTouchEvents += () => { isFirstTouchCreated = true; };
 			OnStartNewGame();
 		}
-		private void Update()
-		{
-			UpdateCurtain();
-		}
 		private void FixedUpdate()
 		{
+			UpdateCurtain();
 			ControllInterface();
 
 			if (gameplay.isMapStart)
@@ -146,7 +143,7 @@ namespace MyGame
 		{
 			uncontrollEvents(isSlowMode);
 			float target = (isSlowMode) ? MAX_CURTAIN_TRANSPARENCY : 0;
-			m_slowmoCurtain.CrossFadeAlpha(target / 255, SLOWMO_CHANGE_TIME, true);
+			m_slowmoCurtain.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
 		}
 		private void OnStartNewGame()
 		{
@@ -170,8 +167,8 @@ namespace MyGame
 
 	public interface IBarsFactory
 	{
-		UIBar shipHealth { get; }
-		UIBar enemyHealth { get; }
+		HealthBar shipHealth { get; }
+		HealthBar enemyHealth { get; }
 	}
 
 	public interface IPlayerBar

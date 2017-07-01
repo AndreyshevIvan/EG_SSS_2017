@@ -7,6 +7,12 @@ using MyGame.Hero;
 
 namespace MyGame
 {
+	public struct TempPlayer
+	{
+		public int points { get; set; }
+		public int stars { get; set; }
+	}
+
 	[System.Serializable]
 	public struct BoundingBox
 	{
@@ -39,7 +45,9 @@ namespace MyGame
 		public Vector3 position;
 		public Enemy enemy;
 	}
-
+}
+namespace MyGame.Factory
+{
 	[System.Serializable]
 	public struct MapsFactory
 	{
@@ -47,20 +55,46 @@ namespace MyGame
 
 		public Map GetMap()
 		{
-			return Component.Instantiate(m_firstMap);
+			Map newMap = Component.Instantiate(m_firstMap);
+			newMap.Init(gameWorld);
+			return newMap;
 		}
+
+		internal GameWorld gameWorld;
 	}
 
 	[System.Serializable]
 	public struct EnemiesFactory
 	{
-		public EasyEnemy m_easyEnemy;
-		public MiddleEnemy m_middleEnemy;
-		public HardEnemy m_hardEnemy;
+		public Enemy m_easyEnemy;
+		public Enemy m_middleEnemy;
+		public Enemy m_hardEnemy;
 
-		public EasyEnemy easy { get { return Component.Instantiate(m_easyEnemy); } }
-		public MiddleEnemy middle { get { return Component.Instantiate(m_middleEnemy); } }
-		public HardEnemy hard { get { return Component.Instantiate(m_hardEnemy); } }
+		public Enemy Get(EnemyType type)
+		{
+			Enemy enemy = null;
+
+			switch (type)
+			{
+				case EnemyType.EASY:
+					enemy = m_easyEnemy;
+					break;
+
+				case EnemyType.NORMAL:
+					enemy = m_middleEnemy;
+					break;
+
+				case EnemyType.HARD:
+					enemy = m_hardEnemy;
+					break;
+			}
+
+			Enemy newEnemy = Component.Instantiate(enemy);
+			newEnemy.Init(gameWorld);
+			return newEnemy;
+		}
+
+		internal GameWorld gameWorld;
 	}
 
 	[System.Serializable]
@@ -105,31 +139,31 @@ namespace MyGame
 
 		public Bonus Get(BonusType type)
 		{
+			Bonus bonus = null;
+
 			switch (type)
 			{
 				case BonusType.STAR:
-					return star;
+					bonus = star;
+					break;
 
 				case BonusType.HEALTH:
-					return health;
+					bonus = health;
+					break;
 
 				case BonusType.AMMO_UP:
-					return ammo;
+					bonus = ammo;
+					break;
 			}
 
-			return star;
+			Bonus newBonus = Component.Instantiate(bonus);
+			newBonus.Init(gameWorld);
+			return newBonus;
 		}
+
+		internal GameWorld gameWorld;
 	}
 
-	public struct TempPlayer
-	{
-		public int points { get; set; }
-		public int stars { get; set; }
-	}
-}
-
-namespace MyGame.Hero
-{
 	[System.Serializable]
 	public struct ShipsFactory
 	{
@@ -157,8 +191,11 @@ namespace MyGame.Hero
 			}
 
 			Ship ship = Component.Instantiate(newShip);
+			ship.Init(gameWorld);
 			ship.mind.type = type;
 			return ship;
 		}
+
+		internal GameWorld gameWorld;
 	}
 }

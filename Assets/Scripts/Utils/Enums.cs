@@ -6,6 +6,14 @@ using System.Text;
 namespace MyGame
 {
 	[System.Serializable]
+	public enum EnemyType
+	{
+		EASY,
+		NORMAL,
+		HARD,
+	}
+
+	[System.Serializable]
 	public enum ShipType
 	{
 		VOYAGER,

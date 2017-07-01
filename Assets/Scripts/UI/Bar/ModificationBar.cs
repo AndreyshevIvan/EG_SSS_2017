@@ -30,7 +30,7 @@ namespace MyGame
 			m_planks.ForEach(element => Destroy(element));
 			m_planks.Clear();
 
-			Utils.DoAnyTimes(MapPhysics.MODIFICATION_COUNT, () =>
+			Utils.DoAnyTimes(GameWorld.MODIFICATION_COUNT, () =>
 			{
 				GameObject plank = Instantiate(m_plank, transform);
 				Image image = plank.GetComponentInChildren<Image>();

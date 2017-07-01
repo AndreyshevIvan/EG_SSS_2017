@@ -18,21 +18,21 @@ namespace MyGame.Hero
 		{
 		}
 
-		private IMapPhysics world { get; set; }
+		private IGameWorld world { get; set; }
 
 		private void Awake()
 		{
 		}
 		private void FixedUpdate()
 		{
-			m_firstGun.isTimerWork = !world.gameplay.isMapSleep;
+			//m_firstGun.isTimerWork = !world.gameplay.isMapStay;
 		}
 
-		internal void Init(IMapPhysics newWorld)
+		internal void Init(IGameWorld newWorld)
 		{
 			world = newWorld;
-			IShipProperties properties = GameData.LoadShip(type);
-			m_firstGun.Init(properties.firstGunLevel, world);
+			//IShipProperties properties = GameData.LoadShip(type);
+			m_firstGun.Init(world);//properties.firstGunLevel, world);
 
 			magnetic = 1;
 			magnetDistance = 5;

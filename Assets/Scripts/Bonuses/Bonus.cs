@@ -4,10 +4,18 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Bonus : Body
+	public abstract class Bonus : WorldObject
 	{
 		public bool isMagnetic { get; set; }
 		public bool explosionStart { get; set; }
+
+		public sealed override void OnExitFromWorld()
+		{
+			world.EraseBonus(this);
+		}
+		public sealed override void OnErase()
+		{
+		}
 
 		protected void Start()
 		{
@@ -22,7 +30,7 @@ namespace MyGame
 
 		protected sealed override void OnTrigger(Collider other)
 		{
-			if (other.gameObject.layer == MapPhysics.WORLD_BOX_LAYER)
+			if (other.gameObject.layer == GameWorld.WORLD_BOX_LAYER)
 			{
 				return;
 			}
@@ -30,17 +38,9 @@ namespace MyGame
 			OnRealize();
 			world.EraseBonus(this);
 		}
-		protected sealed override void WakeupUpdate()
+		protected sealed override void PlayingUpdate()
 		{
-			if (world.gameplay.isMapSleep)
-			{
-				return;
-			}
-
-			if (isMagnetic)
-			{
-				world.MoveToShip(this);
-			}
+			if (isMagnetic) world.MoveToShip(this);
 		}
 		protected abstract void OnRealize();
 
@@ -56,14 +56,6 @@ namespace MyGame
 		{
 			Vector3 rotation = Utils.RandomVect(-DELTA_ROTATION, DELTA_ROTATION);
 			physicsBody.AddTorque(rotation);
-		}
-
-		internal sealed override void OnErase()
-		{
-		}
-		internal sealed override void OnExitFromWorld()
-		{
-			world.EraseBonus(this);
 		}
 	}
 }

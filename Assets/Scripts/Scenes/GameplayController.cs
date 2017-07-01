@@ -3,15 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using MyGame.World;
 using MyGame.Hero;
+using MyGame.Factory;
 
 namespace MyGame
 {
 	public sealed class GameplayController : MonoBehaviour, IGameplay
 	{
-		public MapPhysics m_world;
+		public GameWorld m_world;
 		public GameplayUI m_interface;
+		public ScenesController m_scenesController;
 
 		private Ship ship { get; set; }
 		private Map map { get; set; }
@@ -19,51 +20,59 @@ namespace MyGame
 		private Factories factories { get; set; }
 
 		public bool isMapStart { get; private set; }
-		public bool isMapSleep { get; private set; }
+		public bool isMapStay { get; private set; }
 		public bool isPaused { get; private set; }
 		public bool isGameEnd { get; private set; }
 		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
 		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
 
+		private const int FRAME_RATE = 40;
+
 		private void Awake()
 		{
+			QualitySettings.vSyncCount = 0;
+			Application.targetFrameRate = FRAME_RATE;
+
 			isMapStart = false;
 			isPaused = false;
 			isGameEnd = false;
-			isMapSleep = true;
+			isMapStay = true;
 
 			InitFactories();
 			InitUser();
 			InitShip();
-			InitWorld();
 			InitMap();
+			InitWorld();
 		}
 		private void InitFactories()
 		{
 			factories = GetComponent<Factories>();
 			factories.bars = m_interface;
+
+			factories.enemies.gameWorld = m_world;
+			factories.ships.gameWorld = m_world;
+			factories.bonuses.gameWorld = m_world;
+			factories.maps.gameWorld = m_world;
 		}
 		private void InitUser()
 		{
-			user = GameData.LoadUser();
+			//user = GameData.LoadUser();
 		}
 		private void InitShip()
 		{
-			ship = factories.ships.Get(user.ship);
-			ship.Init(m_world);
+			ship = factories.ships.Get(ShipType.VOYAGER);
+		}
+		private void InitMap()
+		{
+			map = factories.maps.GetMap();
 		}
 		private void InitWorld()
 		{
 			m_world.factories = factories;
 			m_world.ship = ship;
-			m_world.playerBar = m_interface;
+			//m_world.playerBar = m_interface;
 			m_world.gameplay = this;
-		}
-		private void InitMap()
-		{
-			map = factories.maps.GetMap();
-			map.world = m_world;
-			map.gameplay = this;
+			m_world.map = map;
 		}
 
 		private void Start()
@@ -91,7 +100,7 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
-			isGameEnd = !m_world.isPlayerLive || map.isReached;
+			isGameEnd = !ship.isLive || map.isReached;
 
 			if (isGameEnd)
 			{
@@ -108,7 +117,7 @@ namespace MyGame
 		private void OnMapStart()
 		{
 			isMapStart = true;
-			isMapSleep = false;
+			isMapStay = false;
 			map.Play();
 			m_interface.OnMapStart();
 			Destroy(ship.roadController);
@@ -120,7 +129,8 @@ namespace MyGame
 		{
 			m_world.KillPlayer();
 			m_interface.GameOver();
-			isMapSleep = true;
+			isMapStay = true;
+			m_scenesController.SetScene("demoscene");
 		}
 	}
 
@@ -128,7 +138,7 @@ namespace MyGame
 	{
 		bool isMapStart { get; }
 		bool isPaused { get; }
-		bool isMapSleep { get; }
+		bool isMapStay { get; }
 		bool isGameEnd { get; }
 		bool isWin { get; }
 		bool isPlaying { get; }

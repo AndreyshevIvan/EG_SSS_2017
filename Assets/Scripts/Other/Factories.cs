@@ -6,7 +6,7 @@ using UnityEngine;
 using FluffyUnderware.Curvy;
 using MyGame.Hero;
 
-namespace MyGame
+namespace MyGame.Factory
 {
 	public class Factories : MonoBehaviour
 	{

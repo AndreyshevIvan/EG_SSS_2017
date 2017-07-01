@@ -6,17 +6,12 @@ using MyGame.World;
 
 namespace MyGame.Hero
 {
-	public sealed class Ship : Body
+	public sealed class Ship : WorldObject
 	{
 		public ShipMind mind { get; set; }
 
 		public void MoveTo(Vector3 newPosition)
 		{
-			if (world.gameplay.isMapSleep)
-			{
-				return;
-			}
-
 			Vector3 direction = (newPosition - position).normalized;
 			m_smoothDir = Vector3.MoveTowards(m_smoothDir, direction, SMOOTHING);
 			direction = m_smoothDir;
@@ -33,19 +28,17 @@ namespace MyGame.Hero
 		{
 			mind.Init(world);
 		}
-		protected override void WakeupUpdate()
+		protected override void PlayingUpdate()
 		{
 			UpdatePositionOnField();
 			UpdateRotation();
 			UpdateMoveingSpeed();
-		}
-		protected override void NotSleepUpdate()
-		{
-			healthBar.isFadable = maxHealth == health;
+
+			//healthBar.isFadable = maxHealth == health;
 		}
 		protected override void DoAfterDemaged()
 		{
-			healthBar.SetValue(healthPart);
+			//healthBar.SetValue(healthPart);
 		}
 
 		private Vector3 m_smoothDir;
@@ -63,13 +56,13 @@ namespace MyGame.Hero
 			healthBar = world.factories.bars.shipHealth;
 			healthBar.SetValue(healthPart);
 			touchDemage = int.MaxValue;
-			roadController.Spline = roads.Get(RoadType.PLAYER);
+			roadController.Spline = world.factories.roads.Get(RoadType.PLAYER);
 		}
 		private void UpdatePositionOnField()
 		{
-			transform.position = new Vector3(
+			position = new Vector3(
 				Mathf.Clamp(position.x, mapBox.xMin, mapBox.xMax),
-				MapPhysics.FLY_HEIGHT,
+				GameWorld.FLY_HEIGHT,
 				Mathf.Clamp(position.z, mapBox.zMin, mapBox.zMax)
 			);
 		} 
@@ -86,13 +79,6 @@ namespace MyGame.Hero
 			Vector3 velocity = physicsBody.velocity;
 			physicsBody.velocity = (m_isMoved) ? velocity : Vector3.zero;
 			m_isMoved = false;
-		}
-
-		internal sealed override void OnErase()
-		{
-		}
-		internal sealed override void OnExitFromWorld()
-		{
 		}
 	}
 }

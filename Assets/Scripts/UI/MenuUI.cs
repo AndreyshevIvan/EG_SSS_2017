@@ -13,14 +13,8 @@ namespace MyGame
 		public Image m_avatar;
 		public Image m_expDisc;
 
-		public uint stars
-		{
-			set { m_stars.text = Utils.ToMoney(value); }
-		}
-		public uint diamonds
-		{
-			set { m_diamonds.text = Utils.ToMoney(value); }
-		}
+		public uint stars { set { m_stars.text = Utils.ToMoney(value); } }
+		public uint diamonds { set { m_diamonds.text = Utils.ToMoney(value); } }
 
 		public void SetExpDisc(uint currentExp, ushort level)
 		{

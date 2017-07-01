@@ -23,10 +23,8 @@ namespace MyGame
 		{
 			SimpleBullet bullet = Instantiate(m_bullet);
 			Vector3 position = m_bulletsSpawn.position;
-			position.y = MapPhysics.FLY_HEIGHT;
+			position.y = GameWorld.FLY_HEIGHT;
 			bullet.position = position;
-			bullet.Init(world.ship.transform.position, speed, demage);
-			bullet.StartAmmo();
 			world.AddAmmo(bullet);
 		}
 	}

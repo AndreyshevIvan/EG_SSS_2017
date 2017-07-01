@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyGame.World;
+using System;
 
 namespace MyGame.World
 {
@@ -48,15 +49,17 @@ namespace MyGame.World
 		private byte m_passiveLevel = 1;
 	}
 
-	public abstract class ShipProperty : MonoBehaviour
+	public abstract class ShipProperty : MonoBehaviour, IGameplayObject
 	{
-		public void Init(byte newLevel, IMapPhysics map, Body target = null)
+		public void Init(IGameWorld gameWorld)
 		{
-			level = Utils.GetValidLevel(newLevel);
-			world = map;
+			level = Utils.GetValidLevel(0);
+			world = gameWorld;
 			isTimerWork = true;
-			this.target = target;
 			DoAfterInit();
+		}
+		public void OnWorldChange()
+		{
 		}
 		public virtual void Modify() { }
 		public void ResetTimer()
@@ -66,8 +69,7 @@ namespace MyGame.World
 
 		protected float coldown { get; set; }
 		protected byte level { get; set; }
-		protected IMapPhysics world { get; set; }
-		protected Body target { get; set; }
+		protected IGameWorld world { get; set; }
 		protected bool isTimerReady
 		{
 			get { return Utils.IsTimerReady(m_timer, coldown); }
@@ -76,10 +78,10 @@ namespace MyGame.World
 		protected abstract void DoAfterInit();
 		protected void FixedUpdate()
 		{
-			if (!world.gameplay.isPlaying || !isTimerWork)
-			{
-				return;
-			}
+			//if (!world.gameplay.isPlaying || !isTimerWork)
+			//{
+			//	return;
+			//}
 
 			Utils.UpdateTimer(ref m_timer, coldown, Time.fixedDeltaTime);
 		}

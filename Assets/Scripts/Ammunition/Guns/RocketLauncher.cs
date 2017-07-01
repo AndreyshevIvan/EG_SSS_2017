@@ -18,9 +18,7 @@ namespace MyGame
 		protected override void Shoot()
 		{
 			Rocket newRocket = Instantiate(m_rocket);
-			newRocket.Init(target, speed, demage, factor);
 			newRocket.position = transform.position;
-			newRocket.StartAmmo();
 			world.AddAmmo(newRocket);
 		}
 	}
