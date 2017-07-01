@@ -40,7 +40,7 @@ namespace MyGame
 		private IGameWorld world { get; set; }
 		private IGameplay gameplay { get; set; }
 		private Ship ship { get { return world.ship; } }
-		private Factories factories { get { return world.factories; } }
+		private Factories factories { get { return world.factory; } }
 		private List<FlySpawn> tempSkySpawns { get; set; }
 
 		private void Start()
@@ -94,7 +94,7 @@ namespace MyGame
 		{
 			m_groundSpawns.ForEach(spawn => {
 				Enemy enemy = Instantiate(spawn.enemy, m_groundObjects);
-				world.AddEnemy(enemy);
+				//world.AddEnemy(enemy);
 				enemy.position = spawn.position;
 			});
 		}

@@ -51,25 +51,18 @@ namespace MyGame.Factory
 	[System.Serializable]
 	public struct MapsFactory
 	{
-		public Map m_firstMap;
-
 		public Map GetMap()
 		{
-			Map newMap = Component.Instantiate(m_firstMap);
-			newMap.Init(gameWorld);
-			return newMap;
+			return Component.Instantiate(m_firstMap);
 		}
 
-		internal GameWorld gameWorld;
+		[SerializeField]
+		private Map m_firstMap;
 	}
 
 	[System.Serializable]
 	public struct EnemiesFactory
 	{
-		public Enemy m_easyEnemy;
-		public Enemy m_middleEnemy;
-		public Enemy m_hardEnemy;
-
 		public Enemy Get(EnemyType type)
 		{
 			Enemy enemy = null;
@@ -89,23 +82,20 @@ namespace MyGame.Factory
 					break;
 			}
 
-			Enemy newEnemy = Component.Instantiate(enemy);
-			newEnemy.Init(gameWorld);
-			return newEnemy;
+			return Component.Instantiate(enemy);
 		}
 
-		internal GameWorld gameWorld;
+		[SerializeField]
+		private Enemy m_easyEnemy;
+		[SerializeField]
+		private Enemy m_middleEnemy;
+		[SerializeField]
+		private Enemy m_hardEnemy;
 	}
 
 	[System.Serializable]
 	public struct RoadsFactory
 	{
-		public CurvySpline big;
-		public CurvySpline left;
-		public CurvySpline right;
-		public CurvySpline diff;
-		public CurvySpline player;
-
 		public CurvySpline Get(RoadType type)
 		{
 			switch (type)
@@ -128,15 +118,22 @@ namespace MyGame.Factory
 
 			return big;
 		}
+
+		[SerializeField]
+		private CurvySpline big;
+		[SerializeField]
+		private CurvySpline left;
+		[SerializeField]
+		private CurvySpline right;
+		[SerializeField]
+		private CurvySpline diff;
+		[SerializeField]
+		private CurvySpline player;
 	}
 
 	[System.Serializable]
 	public struct BonusesFactory
 	{
-		public Bonus star;
-		public Bonus health;
-		public Bonus ammo;
-
 		public Bonus Get(BonusType type)
 		{
 			Bonus bonus = null;
@@ -156,21 +153,20 @@ namespace MyGame.Factory
 					break;
 			}
 
-			Bonus newBonus = Component.Instantiate(bonus);
-			newBonus.Init(gameWorld);
-			return newBonus;
+			return Component.Instantiate(bonus);
 		}
 
-		internal GameWorld gameWorld;
+		[SerializeField]
+		private Bonus star;
+		[SerializeField]
+		private Bonus health;
+		[SerializeField]
+		private Bonus ammo;
 	}
 
 	[System.Serializable]
 	public struct ShipsFactory
 	{
-		public Ship m_modelFirst;
-		public Ship m_modelSecond;
-		public Ship m_modelThird;
-
 		public Ship Get(ShipType type)
 		{
 			Ship newShip = null;
@@ -191,11 +187,42 @@ namespace MyGame.Factory
 			}
 
 			Ship ship = Component.Instantiate(newShip);
-			ship.Init(gameWorld);
 			ship.mind.type = type;
 			return ship;
 		}
 
-		internal GameWorld gameWorld;
+		[SerializeField]
+		private Ship m_modelFirst;
+		[SerializeField]
+		private Ship m_modelSecond;
+		[SerializeField]
+		private Ship m_modelThird;
+	}
+
+	[System.Serializable]
+	public struct BarsFactory
+	{
+		public UIBar Get(BarType type)
+		{
+			UIBar newBar = null;
+
+			switch (type)
+			{
+				case BarType.ENEMY_HEALTH:
+					newBar = enemyHealth;
+					break;
+
+				case BarType.PLAYER_HEALTH:
+					newBar = playerHealth;
+					break;
+			}
+
+			return Component.Instantiate(newBar);
+		}
+
+		[SerializeField]
+		private UIBar playerHealth;
+		[SerializeField]
+		private UIBar enemyHealth;
 	}
 }

@@ -19,7 +19,7 @@ namespace MyGame
 		{
 			Rocket newRocket = Instantiate(m_rocket);
 			newRocket.position = transform.position;
-			world.AddAmmo(newRocket);
+			//world.AddAmmo(newRocket);
 		}
 	}
 }

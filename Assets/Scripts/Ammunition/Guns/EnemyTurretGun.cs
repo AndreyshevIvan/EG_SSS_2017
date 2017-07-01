@@ -21,11 +21,11 @@ namespace MyGame
 		}
 		protected override void Shoot()
 		{
-			SimpleBullet bullet = Instantiate(m_bullet);
+			//SimpleBullet bullet = Instantiate(m_bullet);
 			Vector3 position = m_bulletsSpawn.position;
 			position.y = GameWorld.FLY_HEIGHT;
-			bullet.position = position;
-			world.AddAmmo(bullet);
+			//bullet.position = position;
+			//world.AddAmmo(bullet);
 		}
 	}
 }

@@ -38,4 +38,11 @@ namespace MyGame
 		HEALTH,
 		AMMO_UP,
 	}
+
+	[System.Serializable]
+	public enum BarType
+	{
+		PLAYER_HEALTH,
+		ENEMY_HEALTH,
+	}
 }

@@ -11,10 +11,10 @@ namespace MyGame
 {
 	public partial class GameWorld : MonoBehaviour, IGameWorld, IGameplay, IGameplayObject
 	{
+		public IFactory factory { get; set; }
 		public Map map { get; set; }
 		public Ship ship { get; set; }
 		public ShipMind shipMind { get { return ship.mind; } }
-		public Factories factories { get; set; }
 
 		public IGameplay gameplay { protected get; set; }
 		public bool isMapStart { get { return gameplay.isMapStart; } }
@@ -39,7 +39,7 @@ namespace MyGame
 		public void AddEnemy(Enemy enemy)
 		{
 			if (!enemy) return;
-
+			Add(m_enemies, enemy);
 		}
 		public void AddAmmo(Ammo ammo)
 		{
@@ -48,19 +48,10 @@ namespace MyGame
 			ammo.transform.SetParent(map.m_skyObjects);
 			Add(m_ammo, ammo);
 		}
-		public void AddBonus(Bonus bonus, byte count, Vector3 position)
+		public void AddBonus(Bonus bonus)
 		{
 			if (!bonus) return;
-
-			position.y = FLY_HEIGHT;
-
-			while (count > 0)
-			{
-				Bonus newBonus = Instantiate(bonus, map.m_groundObjects);
-				newBonus.explosionStart = true;
-				newBonus.position = position;
-				count--;
-			}
+			Add(m_bonuses, bonus);
 		}
 
 		public void EraseEnemy(Enemy enemy)
@@ -155,7 +146,6 @@ namespace MyGame
 		private List<Ammo> m_ammo = new List<Ammo>();
 
 		private BoundingBox m_gameBox;
-		private TempPlayer m_player;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
 
@@ -220,24 +210,28 @@ namespace MyGame
 		}
 	}
 
-	public interface IGameWorld
+	public interface IGameWorld : IWorldContainer
 	{
+		IFactory factory { get; }
 		Ship ship { get; }
 		ShipMind shipMind { get; }
-
-		void AddEnemy(Enemy enemy);
-		void AddAmmo(Ammo ammo);
-		void AddBonus(Bonus bonus, byte count, Vector3 position);
-
-		void EraseEnemy(Enemy enemy);
-		void EraseAmmo(Ammo ammo);
-		void EraseBonus(Bonus bonus);
 
 		Vector3 GetNearestEnemy(Vector3 point);
 
 		void CreateExplosion(ParticleSystem explosion, Vector3 position);
 		void SubscribeToMove(WorldObject body);
 		void MoveToShip(WorldObject body, bool useShipMagnetic = true);
+	}
+
+	public interface IWorldContainer
+	{
+		void AddEnemy(Enemy enemy);
+		void AddAmmo(Ammo ammo);
+		void AddBonus(Bonus bonus);
+
+		void EraseEnemy(Enemy enemy);
+		void EraseAmmo(Ammo ammo);
+		void EraseBonus(Bonus bonus);
 	}
 
 	delegate float MyDelegate(float value);

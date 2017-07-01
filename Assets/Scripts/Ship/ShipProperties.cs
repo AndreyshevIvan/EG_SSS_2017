@@ -49,7 +49,7 @@ namespace MyGame.World
 		private byte m_passiveLevel = 1;
 	}
 
-	public abstract class ShipProperty : MonoBehaviour, IGameplayObject
+	public abstract class ShipProperty : MonoBehaviour
 	{
 		public void Init(IGameWorld gameWorld)
 		{
@@ -57,9 +57,6 @@ namespace MyGame.World
 			world = gameWorld;
 			isTimerWork = true;
 			DoAfterInit();
-		}
-		public void OnWorldChange()
-		{
 		}
 		public virtual void Modify() { }
 		public void ResetTimer()

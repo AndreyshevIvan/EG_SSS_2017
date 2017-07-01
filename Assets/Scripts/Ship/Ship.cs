@@ -53,10 +53,10 @@ namespace MyGame.Hero
 		private void Start()
 		{
 			health = maxHealth = 100;
-			healthBar = world.factories.bars.shipHealth;
+			//healthBar = world.factories.bars.shipHealth;
 			healthBar.SetValue(healthPart);
 			touchDemage = int.MaxValue;
-			roadController.Spline = world.factories.roads.Get(RoadType.PLAYER);
+			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);
 		}
 		private void UpdatePositionOnField()
 		{

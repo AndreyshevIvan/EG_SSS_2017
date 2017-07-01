@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace MyGame
 {
-	public class GameplayUI : MonoBehaviour, IBarsFactory, IPlayerBar
+	public class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer
 	{
 		public PointDelegate moveShip;
 		public BoolEventDelegate uncontrollEvents;
@@ -21,20 +22,20 @@ namespace MyGame
 		public PointsBar m_points;
 
 		public IGameplay gameplay { get; set; }
-		public UIBar shipHealth
+		public HealthBar shipHealth
 		{
 			get
 			{
-				UIBar bar = Instantiate(m_shipHealthBar, m_barsParent);
+				HealthBar bar = Instantiate(m_shipHealthBar, m_barsParent);
 				bar.transform.position = Vector3.one * float.MaxValue;
 				return bar;
 			}
 		}
-		public UIBar enemyHealth
+		public HealthBar enemyHealth
 		{
 			get
 			{
-				UIBar bar = Instantiate(m_enemyHealthBar, m_barsParent);
+				HealthBar bar = Instantiate(m_enemyHealthBar, m_barsParent);
 				bar.transform.position = Vector3.one * float.MaxValue;
 				return bar;
 			}
@@ -77,6 +78,9 @@ namespace MyGame
 			List<Component> toDelete = new List<Component>();
 			toDelete.AddRange(Utils.GetChilds<Component>(m_barsParent));
 			toDelete.ForEach(element => Destroy(element.gameObject));
+		}
+		public void AddBar(UIBar bar)
+		{
 		}
 
 		private bool m_isPlayerControll = false;
@@ -165,16 +169,15 @@ namespace MyGame
 	public delegate void BoolEventDelegate(bool isStartOrEnd);
 	public delegate void EventDelegate();
 
-	public interface IBarsFactory
-	{
-		HealthBar shipHealth { get; }
-		HealthBar enemyHealth { get; }
-	}
-
 	public interface IPlayerBar
 	{
 		int points { get; set; }
 		int modifications { get; set; }
 		int progress { get; set; }
+	}
+
+	public interface UIContainer
+	{
+		void AddBar(UIBar bar);
 	}
 }

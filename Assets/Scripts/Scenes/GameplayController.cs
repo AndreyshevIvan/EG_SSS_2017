@@ -10,14 +10,17 @@ namespace MyGame
 {
 	public sealed class GameplayController : MonoBehaviour, IGameplay
 	{
-		public GameWorld m_world;
-		public GameplayUI m_interface;
-		public ScenesController m_scenesController;
+		[SerializeField]
+		private GameWorld m_world;
+		[SerializeField]
+		private GameplayUI m_interface;
+		[SerializeField]
+		private ScenesController m_scenesController;
 
 		private Ship ship { get; set; }
 		private Map map { get; set; }
 		private User user { get; set; }
-		private Factories factories { get; set; }
+		private Factories factory { get; set; }
 
 		public bool isMapStart { get; private set; }
 		public bool isMapStay { get; private set; }
@@ -46,13 +49,8 @@ namespace MyGame
 		}
 		private void InitFactories()
 		{
-			factories = GetComponent<Factories>();
-			factories.bars = m_interface;
-
-			factories.enemies.gameWorld = m_world;
-			factories.ships.gameWorld = m_world;
-			factories.bonuses.gameWorld = m_world;
-			factories.maps.gameWorld = m_world;
+			factory = GetComponent<Factories>();
+			factory.Init(m_world, m_interface);
 		}
 		private void InitUser()
 		{
@@ -60,15 +58,15 @@ namespace MyGame
 		}
 		private void InitShip()
 		{
-			ship = factories.ships.Get(ShipType.VOYAGER);
+			ship = factory.GetShip(ShipType.VOYAGER);
 		}
 		private void InitMap()
 		{
-			map = factories.maps.GetMap();
+			//map = factories.maps.GetMap();
 		}
 		private void InitWorld()
 		{
-			m_world.factories = factories;
+			m_world.factory = factory;
 			m_world.ship = ship;
 			//m_world.playerBar = m_interface;
 			m_world.gameplay = this;
