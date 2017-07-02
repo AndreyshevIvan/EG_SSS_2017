@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FluffyUnderware.Curvy;
-using MyGame.World;
 using MyGame.Hero;
 
 namespace MyGame

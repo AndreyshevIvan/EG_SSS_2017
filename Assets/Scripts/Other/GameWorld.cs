@@ -9,7 +9,7 @@ using MyGame.Factory;
 
 namespace MyGame
 {
-	public class GameWorld : MonoBehaviour, IGameWorld, IGameplay, IGameplayObject
+	public class GameWorld : MonoBehaviour, IGameWorld, IGameplay
 	{
 		public IPlayerBar playerBar { get; set; }
 		public IFactory factory { get; set; }
@@ -17,6 +17,7 @@ namespace MyGame
 		public Ship ship { get; set; }
 		public WorldContainer container { get; private set; }
 
+		public IGameplay gameplay { get; set; }
 		public bool isMapStart { get { return gameplay.isMapStart; } }
 		public bool isPaused { get { return gameplay.isPaused; } }
 		public bool isMapStay { get { return gameplay.isMapStay; } }
@@ -29,16 +30,21 @@ namespace MyGame
 		public const int WORLD_BOX_LAYER = 31;
 		public const int MODIFICATION_COUNT = 7;
 
-		public void InitGameplay(IGameplay gameplay)
-		{
-			this.gameplay = gameplay;
-		}
 		public void OnGameplayChange()
 		{
 			ship.OnGameplayChange();
 			container.NotifyObjects();
 		}
-		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldObject
+		public void Add<T>(T obj) where T : IWorldEntity
+		{
+			if (obj.isWorldSet)
+			{
+				return;
+			}
+
+			container.Add(obj);
+		}
+		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity
 		{
 			container.Remove(obj, isOpenBeforeDelete);
 		}
@@ -100,11 +106,11 @@ namespace MyGame
 
 		public void OnTriggerExit(Collider other)
 		{
-			IWorldObject body = other.GetComponent<IWorldObject>();
+			WorldObject body = other.GetComponent<WorldObject>();
 			if (body == null) return;
 
 			container.Remove(body, false);
-			Destroy((body as WorldObject).gameObject);
+			Destroy(body.gameObject);
 		}
 
 		public void Cleanup()
@@ -114,8 +120,6 @@ namespace MyGame
 		private BoundingBox m_gameBox;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
-
-		private IGameplay gameplay { get; set; }
 
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;
@@ -159,7 +163,8 @@ namespace MyGame
 		IFactory factory { get; }
 		Ship ship { get; }
 
-		void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldObject;
+		void Add<T>(T obj) where T : IWorldEntity;
+		void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity;
 
 		Vector3 GetNearestEnemy(Vector3 point);
 
@@ -175,7 +180,7 @@ namespace MyGame
 			world = initWorld;
 		}
 
-		public void Add<T>(T obj) where T : IWorldObject
+		public void Add<T>(T obj) where T : IWorldEntity
 		{
 			if (obj is Enemy)
 			{
@@ -190,7 +195,7 @@ namespace MyGame
 				AddAmmo(obj as Ammo);
 			}
 		}
-		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldObject
+		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity
 		{
 			if (obj is Enemy)
 			{
@@ -215,6 +220,7 @@ namespace MyGame
 		private List<Enemy> m_enemies = new List<Enemy>();
 		private List<Bonus> m_bonuses = new List<Bonus>();
 		private List<Ammo> m_ammo = new List<Ammo>();
+		private List<Property> m_properties = new List<Property>();
 
 		private void AddEnemy(Enemy enemy)
 		{
@@ -245,20 +251,21 @@ namespace MyGame
 			EraseObject(m_bonuses, bonus);
 		}
 
-		private void AddObject<T>(List<T> list, T newObject) where T : WorldObject
+		private void AddObject<T>(List<T> list, T newObject) where T : IWorldEntity
 		{
-			if (list.Find(obj => obj == newObject))
+			if (list.Find(obj => obj.Equals(newObject)) != null)
 			{
 				return;
 			}
 
-			newObject.InitWorld(world);
+			newObject.Init(world);
 			list.Add(newObject);
 		}
-		private void EraseObject<T>(List<T> list, T eraseObject) where T : WorldObject
+		private void EraseObject<T>(List<T> list, T eraseObject) where T : IWorldEntity
 		{
 			list.Remove(eraseObject);
-			Component.Destroy(eraseObject.gameObject);
+			Component component = eraseObject as Component;
+			if (component) Component.Destroy(component.gameObject);
 		}
 
 		private IGameWorld world { get; set; }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public abstract class Enemy : WorldObject
+	public abstract class Enemy : Body
 	{
 		public Bonus bonus { get; set; }
 		public int points { get; set; }

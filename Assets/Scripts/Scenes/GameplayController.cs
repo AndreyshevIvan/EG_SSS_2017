@@ -5,15 +5,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using MyGame.Hero;
 using MyGame.Factory;
-using MyGame.World;
 
 namespace MyGame
 {
 	public sealed class GameplayController : MonoBehaviour, IGameplay
 	{
 		public bool isMapStart { get; private set; }
-		public bool isMapStay { get; private set; }
 		public bool isPaused { get; private set; }
+		public bool isMapStay { get { return map.isMoveing; } }
 		public bool isGameEnd { get { return !ship.isLive || map.isReached; } }
 		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
 		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
@@ -47,7 +46,6 @@ namespace MyGame
 
 			isMapStart = false;
 			isPaused = false;
-			isMapStay = true;
 		}
 		private void Start()
 		{
@@ -72,23 +70,23 @@ namespace MyGame
 		private void InitShip()
 		{
 			ship = m_factory.GetShip(ShipType.VOYAGER);
-			ship.InitWorld(m_world);
+			ship.Init(m_world);
 		}
 		private void InitMap()
 		{
 			map = m_factory.GetMap();
-			map.InitGameplay(this);
+			map.gameplay = this;
 		}
 		private void InitWorld()
 		{
 			m_world.ship = ship;
 			m_world.playerBar = m_interface;
 			m_world.map = map;
-			m_world.InitGameplay(this);
+			m_world.gameplay = this;
 		}
 		private void InitInterface()
 		{
-			m_interface.InitGameplay(this);
+			m_interface.gameplay = this;
 
 			m_interface.onPause += map.Pause;
 
@@ -131,7 +129,6 @@ namespace MyGame
 		private void OnMapStart()
 		{
 			isMapStart = true;
-			isMapStay = false;
 			map.Play();
 			m_interface.OnMapStart();
 			Destroy(ship.roadController);
@@ -143,7 +140,6 @@ namespace MyGame
 		{
 			m_world.KillPlayer();
 			m_interface.GameOver();
-			isMapStay = true;
 			m_scenesController.SetScene("DemoScene");
 		}
 

@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.World;
 
 namespace MyGame
 {
-	public abstract class Gun : ShipProperty
+	public abstract class Gun : Property
 	{
 		public int demage { get; set; }
 

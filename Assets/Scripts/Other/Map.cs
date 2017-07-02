@@ -8,19 +8,15 @@ using MyGame.Factory;
 
 namespace MyGame
 {
-	public sealed class Map : MonoBehaviour, IGameplayObject
+	public sealed class Map : MonoBehaviour
 	{
+		public IGameplay gameplay { get; set; }
 		public Transform groundObjects { get { return m_groundObjects; } }
 		public Transform skyObjects { get { return m_skyObjects; } }
 		public float offset { get; private set; }
 		public bool isReached { get; private set; }
 		public bool isMoveing { get; private set; }
 
-		public void InitGameplay(IGameplay gameplay)
-		{
-			this.gameplay = gameplay;
-			offset = 0;
-		}
 		public void OnGameplayChange()
 		{
 			if (gameplay.isMapStay)
@@ -53,12 +49,12 @@ namespace MyGame
 		[SerializeField]
 		private List<GroundSpawn> m_groundSpawns;
 
-		private IGameplay gameplay { get; set; }
 		private List<FlySpawn> tempSkySpawns { get; set; }
 
 		private void Awake()
 		{
 			isReached = false;
+			offset = 0;
 		}
 		private void FixedUpdate()
 		{

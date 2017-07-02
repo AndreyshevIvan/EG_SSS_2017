@@ -7,7 +7,7 @@ using System;
 
 namespace MyGame
 {
-	public class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer, IGameplayObject
+	public class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer
 	{
 		public PointDelegate moveShip;
 		public BoolEventDelegate uncontrollEvents;
@@ -15,6 +15,7 @@ namespace MyGame
 		public EventDelegate firstTouchEvents;
 		public EventDelegate onRestart;
 
+		public IGameplay gameplay { get; set; }
 		public int points
 		{
 			get { return (int)m_points.value; }
@@ -33,10 +34,6 @@ namespace MyGame
 
 		public const float SLOWMO_CHANGE_TIME = 0.3f;
 
-		public void InitGameplay(IGameplay gameplay)
-		{
-			this.gameplay = gameplay;
-		}
 		public void OnGameplayChange()
 		{
 		}
@@ -73,7 +70,6 @@ namespace MyGame
 		public PointsBar m_points;
 		private bool m_isPlayerControll = false;
 
-		private IGameplay gameplay { get; set; }
 		private bool isSlowMode
 		{
 			get

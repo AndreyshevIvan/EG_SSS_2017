@@ -2,17 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.World;
 
 namespace MyGame
 {
 	public sealed class SimpleBullet : Ammo
 	{
-		public override void OnDemageTaked()
+		protected override void OnDemageTaked()
 		{
 			world.Remove(this, false);
 		}
-
 		protected override void PlayingUpdate()
 		{
 			position += direction * speed * Time.fixedDeltaTime;

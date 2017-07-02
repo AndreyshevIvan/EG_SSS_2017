@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.World;
 
 namespace MyGame.Hero
 {
-	public sealed class Ship : WorldObject
+	public sealed class Ship : Body
 	{
 		public ShipMind mind { get; set; }
 

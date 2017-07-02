@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.World;
 
 namespace MyGame
 {
@@ -64,17 +63,10 @@ namespace MyGame
 		{
 			return Clamp(level, GameData.minModLevel, GameData.maxModLevel);
 		}
-		public static bool GetDemage(ref int demage, Collider other)
+		public static T GetOther<T>(Collider other) where T : Component
 		{
-			WorldObject body = other.GetComponent<WorldObject>();
-			if (body == null)
-			{
-				return false;
-			}
-
-			demage = body.touchDemage;
-			body.OnDemageTaked();
-			return true;
+			T otherBody = other.GetComponent<T>();
+			return otherBody;
 		}
 		public static Vector3 WorldToCanvas(Vector3 worldPosition)
 		{

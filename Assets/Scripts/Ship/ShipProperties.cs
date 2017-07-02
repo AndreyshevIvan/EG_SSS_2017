@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.World;
 using System;
 
-namespace MyGame.World
+namespace MyGame
 {
 	[System.Serializable]
 	public class ShipProperties : IShipProperties
@@ -49,15 +48,18 @@ namespace MyGame.World
 		private byte m_passiveLevel = 1;
 	}
 
-	public abstract class ShipProperty : MonoBehaviour
+	public abstract class Property : MonoBehaviour, IWorldEntity
 	{
 		public void Init(IGameWorld gameWorld)
 		{
+			Init(gameWorld as IGameplay);
 			level = Utils.GetValidLevel(0);
 			world = gameWorld;
 			isTimerWork = true;
 			DoAfterInit();
 		}
+		public void Init(IGameplay gameWorld) { }
+		public void OnGameplayChange() { }
 		public virtual void Modify() { }
 		public void ResetTimer()
 		{
