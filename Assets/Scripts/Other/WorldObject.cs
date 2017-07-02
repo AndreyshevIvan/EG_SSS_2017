@@ -18,15 +18,17 @@ namespace MyGame
 		public ParticleSystem explosion { get; set; }
 		public int erasePoints { get; set; }
 		public bool isWorldSet { get { return world != null; } }
+		public bool isExitAllowed { get; protected set; }
 
 		public void Init(IGameWorld gameWorld)
 		{
-			if (world != null)
+			if (world != null && world != gameWorld)
 			{
 				return;
 			}
 
-			world = gameWorld as GameWorld;
+			world = gameWorld;
+			gameplay = gameWorld as IGameplay;
 			OnInitEnd();
 		}
 		public void OnGameplayChange()
@@ -46,7 +48,7 @@ namespace MyGame
 			currentEvent = onMapMove;
 		}
 
-		protected IGameplay gameplay { get { return (IGameplay)world; } }
+		protected IGameplay gameplay { get; private set; }
 		protected IGameWorld world { get; set; }
 		protected BoundingBox mapBox { get; set; }
 		protected Rigidbody physicsBody { get; set; }
@@ -58,6 +60,7 @@ namespace MyGame
 			roadController = GetComponent<SplineController>();
 			particles = Utils.GetAllComponents<ParticleSystem>(this);
 			mapBox = GameData.mapBox;
+			isExitAllowed = true;
 
 			onPlaying += PlayingUpdate;
 			onPlaying += UpdateBars;
@@ -79,6 +82,15 @@ namespace MyGame
 			OnTrigger(other);
 		}
 		protected virtual void OnTrigger(Collider other) { }
+
+		protected void OnTriggerExit(Collider other)
+		{
+			if (other.gameObject.layer == GameWorld.WORLD_BOX_LAYER &&
+				isExitAllowed)
+			{
+				world.Remove(this, false);
+			}
+		}
 
 		protected void FixedUpdate()
 		{
@@ -115,5 +127,6 @@ namespace MyGame
 		void OnGameplayChange();
 
 		bool isWorldSet { get; }
+		bool isExitAllowed { get; }
 	}
 }

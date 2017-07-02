@@ -46,13 +46,14 @@ namespace MyGame
 
 			isMapStart = false;
 			isPaused = false;
-		}
-		private void Start()
-		{
+
 			InitUser();
 			InitFactory();
 			InitShip();
 			InitMap();
+		}
+		private void Start()
+		{
 			InitWorld();
 			InitInterface();
 

@@ -27,6 +27,7 @@ namespace MyGame.Factory
 		public Ship GetShip(ShipType type)
 		{
 			Ship newShip = m_ships.Get(type);
+			newShip.mind.type = type;
 			return newShip;
 		}
 		public CurvySpline GetRoad(RoadType type)

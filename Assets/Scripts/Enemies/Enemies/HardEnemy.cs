@@ -15,17 +15,10 @@ namespace MyGame
 			starsCount = 2;
 			points = 157;
 
-			//healthBar = world.factories.bars.enemyHealth;
-
-			world.SubscribeToMove(this);
-
-			m_turretGun = GetComponent<EnemyTurretGun>();
-			m_turretGun.Init(world);
-			m_turretGun.speed = 6;
-
-			guns.Add(m_turretGun);
+			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
 		}
-
-		private EnemyTurretGun m_turretGun;
+		protected override void Shoot()
+		{
+		}
 	}
 }

@@ -104,15 +104,6 @@ namespace MyGame
 			explosionObject.transform.SetParent(map.skyObjects);
 		}
 
-		public void OnTriggerExit(Collider other)
-		{
-			WorldObject body = other.GetComponent<WorldObject>();
-			if (body == null) return;
-
-			container.Remove(body, false);
-			Destroy(body.gameObject);
-		}
-
 		public void Cleanup()
 		{
 		}
@@ -220,7 +211,9 @@ namespace MyGame
 		private List<Enemy> m_enemies = new List<Enemy>();
 		private List<Bonus> m_bonuses = new List<Bonus>();
 		private List<Ammo> m_ammo = new List<Ammo>();
-		private List<Property> m_properties = new List<Property>();
+		private List<object> m_onErasing = new List<object>();
+
+		private IGameWorld world { get; set; }
 
 		private void AddEnemy(Enemy enemy)
 		{
@@ -253,7 +246,7 @@ namespace MyGame
 
 		private void AddObject<T>(List<T> list, T newObject) where T : IWorldEntity
 		{
-			if (list.Find(obj => obj.Equals(newObject)) != null)
+			if (list.Exists(obj => obj.Equals(newObject)))
 			{
 				return;
 			}
@@ -263,11 +256,17 @@ namespace MyGame
 		}
 		private void EraseObject<T>(List<T> list, T eraseObject) where T : IWorldEntity
 		{
+			if (m_onErasing.Exists(element => element.Equals(eraseObject)))
+			{
+				return;
+			}
+
+			m_onErasing.Add(eraseObject);
 			list.Remove(eraseObject);
 			Component component = eraseObject as Component;
 			if (component) Component.Destroy(component.gameObject);
+			m_onErasing.Remove(eraseObject);
+			m_onErasing.RemoveAll(element => element == null);
 		}
-
-		private IGameWorld world { get; set; }
 	}
 }

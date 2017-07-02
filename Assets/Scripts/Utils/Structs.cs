@@ -186,7 +186,7 @@ namespace MyGame.Factory
 			}
 
 			Ship ship = Component.Instantiate(newShip);
-			ship.mind.type = type;
+			//ship.mind.type = type;
 			return ship;
 		}
 

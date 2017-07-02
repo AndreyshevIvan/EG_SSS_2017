@@ -31,6 +31,12 @@ namespace MyGame
 			set { health = (health - value < 0) ? 0 : health - value; }
 		}
 
+		new protected void Awake()
+		{
+			base.Awake();
+			bonuses = new List<Bonus>();
+		}
+
 		protected sealed override void OnTrigger(Collider other)
 		{
 			if (!IsCanBeDemaged())

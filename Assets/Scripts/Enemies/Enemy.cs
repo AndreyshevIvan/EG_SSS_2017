@@ -8,24 +8,13 @@ namespace MyGame
 {
 	public abstract class Enemy : Body
 	{
-		public Bonus bonus { get; set; }
 		public int points { get; set; }
 		public byte starsCount { get; protected set; }
 
-		protected sealed override void OnExitFromWorld()
-		{
-		}
+		protected bool isTimerWork { get; set; }
+		protected bool isTimerReady { get; set; }
+		protected float coldown { get; set; }
 
-		protected List<Gun> guns { get; set; }
-
-		protected sealed override void OnAwakeEnd()
-		{
-			guns = new List<Gun>();
-			if (roadController) roadController.OnEndReached.AddListener((T) => {
-				Cleanup();
-				world.Remove(this, false);
-			});
-		}
 		protected sealed override void OnInitEnd()
 		{
 			InitProperties();
@@ -35,12 +24,35 @@ namespace MyGame
 				healthBar.SetValue(healthPart);
 				healthBar.isFadable = true;
 			}
+
+			if (roadController) roadController.OnEndReached.AddListener((T) =>
+			{
+				world.Remove(this, false);
+			});
 		}
-		protected sealed override void DoAfterDemaged()
+		protected sealed override void PlayingUpdate()
 		{
-			if (isLive) return;
-			world.Remove(this, false);
+			UpdateTimer();
+			TryShoot();
+		}
+		protected virtual void UpdateTimer()
+		{
+			if (isTimerWork)
+			{
+				Utils.UpdateTimer(ref m_timer, coldown, Time.fixedDeltaTime);
+			}
 		}
 		protected abstract void InitProperties();
+		protected abstract void Shoot();
+
+		private float m_timer = 0;
+
+		private void TryShoot()
+		{
+			if (isTimerWork && isTimerReady)
+			{
+				Shoot();
+			}
+		}
 	}
 }

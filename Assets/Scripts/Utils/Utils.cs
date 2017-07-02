@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public static class Utils
+	public struct Utils
 	{
 		public static void SetWidth(RectTransform rect, float width)
 		{

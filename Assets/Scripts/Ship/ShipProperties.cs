@@ -48,48 +48,6 @@ namespace MyGame
 		private byte m_passiveLevel = 1;
 	}
 
-	public abstract class Property : MonoBehaviour, IWorldEntity
-	{
-		public void Init(IGameWorld gameWorld)
-		{
-			Init(gameWorld as IGameplay);
-			level = Utils.GetValidLevel(0);
-			world = gameWorld;
-			isTimerWork = true;
-			DoAfterInit();
-		}
-		public void Init(IGameplay gameWorld) { }
-		public void OnGameplayChange() { }
-		public virtual void Modify() { }
-		public void ResetTimer()
-		{
-			m_timer = 0;
-		}
-
-		protected float coldown { get; set; }
-		protected byte level { get; set; }
-		protected IGameWorld world { get; set; }
-		protected bool isTimerReady
-		{
-			get { return Utils.IsTimerReady(m_timer, coldown); }
-		}
-
-		protected abstract void DoAfterInit();
-		protected void FixedUpdate()
-		{
-			//if (!world.gameplay.isPlaying || !isTimerWork)
-			//{
-			//	return;
-			//}
-
-			Utils.UpdateTimer(ref m_timer, coldown, Time.fixedDeltaTime);
-		}
-
-		private float m_timer = 0;
-
-		internal bool isTimerWork { get; set; }
-	}
-
 	public interface IShipProperties
 	{
 		byte firstGunLevel { get; }

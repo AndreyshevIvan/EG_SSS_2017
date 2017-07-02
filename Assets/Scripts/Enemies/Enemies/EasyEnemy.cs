@@ -13,10 +13,10 @@ namespace MyGame
 			health = maxHealth = 10;
 			touchDemage = 10;
 			starsCount = 5;
-			speed = 7;
 			points = 57;
 		}
-
-		private float speed { get; set; }
+		protected override void Shoot()
+		{
+		}
 	}
 }

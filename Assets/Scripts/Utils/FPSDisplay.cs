@@ -24,5 +24,7 @@ namespace MyGame
 
 		private float m_deltaTime = 0.0f;
 		private Text m_field;
+
+		
 	}
 }
