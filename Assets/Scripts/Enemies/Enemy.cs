@@ -12,15 +12,14 @@ namespace MyGame
 		public int points { get; set; }
 		public byte starsCount { get; protected set; }
 
-		public sealed override void OnWorldChange()
+		public sealed override void OnGameplayChange()
 		{
 			guns.ForEach(gun => {
 				if (gun) gun.isTimerWork = !gameplay.isPlaying;
 			});
 		}
-		public sealed override void OnExitFromWorld()
+		protected sealed override void OnExitFromWorld()
 		{
-			world.EraseEnemy(this);
 		}
 
 		protected List<Gun> guns { get; set; }
@@ -30,7 +29,7 @@ namespace MyGame
 			guns = new List<Gun>();
 			if (roadController) roadController.OnEndReached.AddListener((T) => {
 				Cleanup();
-				world.EraseEnemy(this);
+				world.Remove(this, false);
 			});
 		}
 		protected sealed override void OnInitEnd()
@@ -46,7 +45,7 @@ namespace MyGame
 		protected sealed override void DoAfterDemaged()
 		{
 			if (isLive) return;
-			world.EraseEnemy(this);
+			world.Remove(this, false);
 		}
 		protected abstract void InitProperties();
 	}

@@ -9,14 +9,14 @@ using MyGame.Factory;
 
 namespace MyGame
 {
-	public partial class GameWorld : MonoBehaviour, IGameWorld, IGameplay, IGameplayObject
+	public class GameWorld : MonoBehaviour, IGameWorld, IGameplay, IGameplayObject
 	{
+		public IPlayerBar playerBar { get; set; }
 		public IFactory factory { get; set; }
 		public Map map { get; set; }
 		public Ship ship { get; set; }
-		public ShipMind shipMind { get { return ship.mind; } }
+		public WorldContainer container { get; private set; }
 
-		public IGameplay gameplay { protected get; set; }
 		public bool isMapStart { get { return gameplay.isMapStart; } }
 		public bool isPaused { get { return gameplay.isPaused; } }
 		public bool isMapStay { get { return gameplay.isMapStay; } }
@@ -29,42 +29,16 @@ namespace MyGame
 		public const int WORLD_BOX_LAYER = 31;
 		public const int MODIFICATION_COUNT = 7;
 
-		public void Init(IGameWorld gameWorld)
+		public void InitGameplay(IGameplay gameplay)
+		{
+			this.gameplay = gameplay;
+		}
+		public void OnGameplayChange()
 		{
 		}
-		public void OnWorldChange()
+		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldObject
 		{
-		}
-
-		public void AddEnemy(Enemy enemy)
-		{
-			if (!enemy) return;
-			Add(m_enemies, enemy);
-		}
-		public void AddAmmo(Ammo ammo)
-		{
-			if (!ammo) return;
-
-			ammo.transform.SetParent(map.m_skyObjects);
-			Add(m_ammo, ammo);
-		}
-		public void AddBonus(Bonus bonus)
-		{
-			if (!bonus) return;
-			Add(m_bonuses, bonus);
-		}
-
-		public void EraseEnemy(Enemy enemy)
-		{
-			Erase(m_enemies, enemy);
-		}
-		public void EraseAmmo(Ammo ammo)
-		{
-			Erase(m_ammo, ammo);
-		}
-		public void EraseBonus(Bonus bonus)
-		{
-			Erase(m_bonuses, bonus);
+			container.Remove(obj, isOpenBeforeDelete);
 		}
 
 		public Vector3 GetNearestEnemy(Vector3 point)
@@ -92,13 +66,13 @@ namespace MyGame
 		public void MoveToShip(WorldObject body, bool useShipMagnetic = true)
 		{
 			float distance = Vector3.Distance(body.position, ship.position);
-			if (distance > shipMind.magnetDistance)
+			if (distance > ship.mind.magnetDistance)
 			{
 				return;
 			}
 
-			float factor = (useShipMagnetic) ? shipMind.magnetic : 1;
-			float distanceFactor = shipMind.magnetDistance / distance;
+			float factor = (useShipMagnetic) ? ship.mind.magnetic : 1;
+			float distanceFactor = ship.mind.magnetDistance / distance;
 			float movement = factor * distanceFactor * MAGNETIC_SPEED * Time.fixedDeltaTime;
 			body.position = Vector3.MoveTowards(
 				body.position,
@@ -124,30 +98,22 @@ namespace MyGame
 
 		public void OnTriggerExit(Collider other)
 		{
-			WorldObject body = other.GetComponent<WorldObject>();
-			if (!body) return;
+			IWorldObject body = other.GetComponent<IWorldObject>();
+			if (body == null) return;
 
-			body.OnExitFromWorld();
-			body.Cleanup();
-			Destroy(body.gameObject);
+			container.Remove(body, false);
+			Destroy((body as WorldObject).gameObject);
 		}
 
 		public void Cleanup()
 		{
-			List<Component> toDelete = new List<Component>();
-			toDelete.AddRange(Utils.GetChilds<Component>(map.m_skyObjects));
-			toDelete.AddRange(Utils.GetChilds<Component>(map.m_groundObjects));
-			toDelete.ForEach(element => Destroy(element.gameObject));
 		}
-
-		private List<WorldObject> m_toEarse = new List<WorldObject>();
-		private List<Enemy> m_enemies = new List<Enemy>();
-		private List<Bonus> m_bonuses = new List<Bonus>();
-		private List<Ammo> m_ammo = new List<Ammo>();
 
 		private BoundingBox m_gameBox;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
+
+		private IGameplay gameplay { get; set; }
 
 		private const float MAGNETIC_SPEED = 2;
 		private const float MAP_MOVE_SPEED = 1.7f;
@@ -160,6 +126,7 @@ namespace MyGame
 		private void Awake()
 		{
 			m_gameBox = GameData.mapBox;
+			container = new WorldContainer(this);
 		}
 		private void Dismantle(WorldObject dismantleObject)
 		{
@@ -183,38 +150,14 @@ namespace MyGame
 			});
 			*/
 		}
-
-		private void Add<T>(List<T> list, T newObject) where T : WorldObject
-		{
-			if (list.Find(obj => obj == newObject))
-			{
-				return;
-			}
-
-			newObject.Init(this);
-			list.Add(newObject);
-		}
-		private void Erase<T>(List<T> list, T eraseObject) where T : WorldObject
-		{
-			if (m_toEarse.Find(obj => obj == eraseObject) ||
-				!list.Find(obj => obj == eraseObject))
-			{
-				return;
-			}
-
-			m_toEarse.Add(eraseObject);
-			eraseObject.OnErase();
-			m_toEarse.Remove(eraseObject);
-			list.Remove(eraseObject);
-			Destroy(eraseObject.gameObject);
-		}
 	}
 
-	public interface IGameWorld : IWorldContainer
+	public interface IGameWorld
 	{
 		IFactory factory { get; }
 		Ship ship { get; }
-		ShipMind shipMind { get; }
+
+		void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldObject;
 
 		Vector3 GetNearestEnemy(Vector3 point);
 
@@ -223,16 +166,93 @@ namespace MyGame
 		void MoveToShip(WorldObject body, bool useShipMagnetic = true);
 	}
 
-	public interface IWorldContainer
+	public class WorldContainer
 	{
-		void AddEnemy(Enemy enemy);
-		void AddAmmo(Ammo ammo);
-		void AddBonus(Bonus bonus);
+		public WorldContainer(IGameWorld initWorld)
+		{
+			world = initWorld;
+		}
 
-		void EraseEnemy(Enemy enemy);
-		void EraseAmmo(Ammo ammo);
-		void EraseBonus(Bonus bonus);
+		public void Add<T>(T obj) where T : IWorldObject
+		{
+			if (obj is Enemy)
+			{
+				AddEnemy(obj as Enemy);
+			}
+			else if (obj is Bonus)
+			{
+				AddBonus(obj as Bonus);
+			}
+			else if (obj is Ammo)
+			{
+				AddAmmo(obj as Ammo);
+			}
+		}
+		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldObject
+		{
+			if (obj is Enemy)
+			{
+				EraseEnemy(obj as Enemy);
+			}
+			else if (obj is Bonus)
+			{
+				EraseBonus(obj as Bonus);
+			}
+			else if (obj is Ammo)
+			{
+				EraseAmmo(obj as Ammo);
+			}
+		}
+
+		private List<Enemy> m_enemies = new List<Enemy>();
+		private List<Bonus> m_bonuses = new List<Bonus>();
+		private List<Ammo> m_ammo = new List<Ammo>();
+
+		private void AddEnemy(Enemy enemy)
+		{
+			if (!enemy) return;
+			AddObject(m_enemies, enemy);
+		}
+		private void AddAmmo(Ammo ammo)
+		{
+			if (!ammo) return;
+			AddObject(m_ammo, ammo);
+		}
+		private void AddBonus(Bonus bonus)
+		{
+			if (!bonus) return;
+			AddObject(m_bonuses, bonus);
+		}
+
+		private void EraseEnemy(Enemy enemy)
+		{
+			EraseObject(m_enemies, enemy);
+		}
+		private void EraseAmmo(Ammo ammo)
+		{
+			EraseObject(m_ammo, ammo);
+		}
+		private void EraseBonus(Bonus bonus)
+		{
+			EraseObject(m_bonuses, bonus);
+		}
+
+		private void AddObject<T>(List<T> list, T newObject) where T : WorldObject
+		{
+			if (list.Find(obj => obj == newObject))
+			{
+				return;
+			}
+
+			newObject.InitWorld(world);
+			list.Add(newObject);
+		}
+		private void EraseObject<T>(List<T> list, T eraseObject) where T : WorldObject
+		{
+			list.Remove(eraseObject);
+			Component.Destroy(eraseObject.gameObject);
+		}
+
+		private IGameWorld world { get; set; }
 	}
-
-	delegate float MyDelegate(float value);
 }

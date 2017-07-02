@@ -19,13 +19,12 @@ namespace MyGame
 
 		public bool isReached { get; private set; }
 
-		public void Init(IGameWorld gameWorld)
+		public void InitGameplay(IGameplay gameplay)
 		{
-			world = gameWorld;
-			gameplay = gameWorld as IGameplay;
+			this.gameplay = gameplay;
 		}
 
-		public void OnWorldChange()
+		public void OnGameplayChange()
 		{
 		}
 		public void Play()
@@ -37,15 +36,11 @@ namespace MyGame
 		{
 		}
 
-		private IGameWorld world { get; set; }
 		private IGameplay gameplay { get; set; }
-		private Ship ship { get { return world.ship; } }
-		private Factories factories { get { return world.factory; } }
 		private List<FlySpawn> tempSkySpawns { get; set; }
 
-		private void Start()
+		private void Awake()
 		{
-			ship.transform.SetParent(transform);
 			isReached = false;
 		}
 		private void FixedUpdate()

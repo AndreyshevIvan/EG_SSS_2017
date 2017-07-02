@@ -22,12 +22,21 @@ namespace MyGame
 		public SplineController roadController { get; protected set; }
 		public ParticleSystem explosion { get; set; }
 		public List<Bonus> bonuses { get; set; }
+		public int erasePoints { get; set; }
 
-		public void Init(IGameWorld gameWorld)
+		public void InitWorld(IGameWorld gameWorld)
 		{
-			gameplay = gameWorld as IGameplay;
+			if (world != null)
+			{
+				return;
+			}
+
 			world = gameWorld;
+			InitGameplay(gameWorld as IGameplay);
 			OnInitEnd();
+		}
+		public void InitGameplay(IGameplay gameplay)
+		{
 		}
 		public virtual void Heal(int healCount)
 		{
@@ -38,19 +47,12 @@ namespace MyGame
 			}
 		}
 
-		public virtual void OnWorldChange() { }
+		public virtual void OnGameplayChange() { }
 		public virtual void OnDemageTaked() { }
-		public virtual void OnErase() { }
-		public virtual void OnExitFromWorld() { }
-		public void Cleanup()
-		{
-			Utils.DestroyAll(particles);
-			Utils.DestroyAll(bonuses);
-		}
 
-		protected IGameplay gameplay { get; set; }
+		protected IGameplay gameplay { get { return (IGameplay)world; } }
 		protected IGameWorld world { get; set; }
-		protected HealthBar healthBar { get; set; }
+		protected UIBar healthBar { get; set; }
 		protected BoundingBox mapBox { get; set; }
 		protected Rigidbody physicsBody { get; set; }
 		protected int maxHealth { get; set; }
@@ -96,6 +98,11 @@ namespace MyGame
 
 		protected void FixedUpdate()
 		{
+			if (world == null)
+			{
+				return;
+			}
+
 			if (gameplay.isPaused)
 			{
 				return;
@@ -121,20 +128,30 @@ namespace MyGame
 		protected virtual void PlayingUpdate() { }
 		protected virtual void StayingUpdate() { }
 		protected virtual void MoveingUpdate() { }
+
+		protected virtual void OnExitFromWorld() { }
+		protected void Cleanup()
+		{
+			Utils.DestroyAll(particles);
+			Utils.DestroyAll(bonuses);
+			erasePoints = 0;
+		}
+
+		private bool m_isStartExit = false;
 	}
 
 	public interface IWorldObject : IGameplayObject
 	{
 		ParticleSystem explosion { get; }
 		List<Bonus> bonuses { get; }
+		int erasePoints { get; }
 
-		void OnErase();
-		void OnExitFromWorld();
+		void InitWorld(IGameWorld gameWorld);
 	}
 
 	public interface IGameplayObject
 	{
-		void Init(IGameWorld gameWorld);
-		void OnWorldChange();
+		void InitGameplay(IGameplay gameplay);
+		void OnGameplayChange();
 	}
 }

@@ -8,12 +8,10 @@ namespace MyGame.Factory
 {
 	public class Factories : MonoBehaviour, IFactory
 	{
-		public void Init(IWorldContainer world, UIContainer gameInterface)
+		public void Init(WorldContainer world, UIContainer gameInterface)
 		{
 			m_world = world;
 			m_interface = gameInterface;
-
-			Start();
 		}
 
 		public Map GetMap()
@@ -24,7 +22,7 @@ namespace MyGame.Factory
 		public Enemy GetEnemy(EnemyType type)
 		{
 			Enemy newEnemy = m_enemies.Get(type);
-			m_world.AddEnemy(newEnemy);
+			m_world.Add(newEnemy);
 			return newEnemy;
 		}
 		public Ship GetShip(ShipType type)
@@ -40,13 +38,13 @@ namespace MyGame.Factory
 		public Bonus GetBonus(BonusType type)
 		{
 			Bonus newBonus = m_bonuses.Get(type);
-			m_world.AddBonus(newBonus);
+			m_world.Add(newBonus);
 			return newBonus;
 		}
 		public UIBar GetBar(BarType type)
 		{
 			UIBar newBar = m_bars.Get(type);
-			m_interface.AddBar(newBar);
+			m_interface.Add(newBar);
 			return newBar;
 		}
 
@@ -63,25 +61,13 @@ namespace MyGame.Factory
 		[SerializeField]
 		private BarsFactory m_bars;
 
-		private IWorldContainer m_world;
+		private WorldContainer m_world;
 		private UIContainer m_interface;
-
-		private void Start()
-		{
-			if (m_world == null)
-			{
-				throw new Exception("Factory: world not init");
-			}
-			if (m_interface == null)
-			{
-				throw new Exception("Factory: interface not init");
-			}
-		}
 	}
 
 	public interface IFactory
 	{
-		void Init(IWorldContainer world, UIContainer gameInterface);
+		void Init(WorldContainer world, UIContainer gameInterface);
 
 		Map GetMap();
 		Enemy GetEnemy(EnemyType type);

@@ -10,7 +10,7 @@ namespace MyGame
 	{
 		public override void OnDemageTaked()
 		{
-			world.EraseAmmo(this);
+			world.Remove(this, false);
 		}
 
 		protected override void PlayingUpdate()

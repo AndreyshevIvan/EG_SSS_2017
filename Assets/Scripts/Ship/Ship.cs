@@ -27,6 +27,11 @@ namespace MyGame.Hero
 		protected override void OnInitEnd()
 		{
 			mind.Init(world);
+			health = maxHealth = 100;
+			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
+			healthBar.SetValue(healthPart);
+			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);
+			touchDemage = int.MaxValue;
 		}
 		protected override void PlayingUpdate()
 		{
@@ -34,11 +39,11 @@ namespace MyGame.Hero
 			UpdateRotation();
 			UpdateMoveingSpeed();
 
-			//healthBar.isFadable = maxHealth == health;
+			healthBar.isFadable = maxHealth == health;
 		}
 		protected override void DoAfterDemaged()
 		{
-			//healthBar.SetValue(healthPart);
+			healthBar.SetValue(healthPart);
 		}
 
 		private Vector3 m_smoothDir;
@@ -50,14 +55,6 @@ namespace MyGame.Hero
 		private const float X_ANGLE = 180;
 		private const float MAX_VELOCITY_ANGLE = 80;
 
-		private void Start()
-		{
-			health = maxHealth = 100;
-			//healthBar = world.factories.bars.shipHealth;
-			healthBar.SetValue(healthPart);
-			touchDemage = int.MaxValue;
-			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);
-		}
 		private void UpdatePositionOnField()
 		{
 			position = new Vector3(

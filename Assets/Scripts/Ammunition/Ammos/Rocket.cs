@@ -11,14 +11,14 @@ namespace MyGame
 	{
 		public override void OnDemageTaked()
 		{
-			world.EraseAmmo(this);
+			world.Remove(this, false);
 		}
 
 		protected override void PlayingUpdate()
 		{
 			if (!target)
 			{
-				world.EraseAmmo(this);
+				world.Remove(this, false);
 			}
 
 			Vector3 direction = Vector3.Normalize(target.position - position);

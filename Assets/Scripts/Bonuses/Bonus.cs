@@ -9,14 +9,6 @@ namespace MyGame
 		public bool isMagnetic { get; set; }
 		public bool explosionStart { get; set; }
 
-		public sealed override void OnExitFromWorld()
-		{
-			world.EraseBonus(this);
-		}
-		public sealed override void OnErase()
-		{
-		}
-
 		protected void Start()
 		{
 			world.SubscribeToMove(this);
@@ -28,6 +20,9 @@ namespace MyGame
 			}
 		}
 
+		protected sealed override void OnExitFromWorld()
+		{
+		}
 		protected sealed override void OnTrigger(Collider other)
 		{
 			if (other.gameObject.layer == GameWorld.WORLD_BOX_LAYER)
@@ -36,7 +31,7 @@ namespace MyGame
 			}
 
 			OnRealize();
-			world.EraseBonus(this);
+			world.Remove(this, true);
 		}
 		protected sealed override void PlayingUpdate()
 		{
