@@ -451,21 +451,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1246978305475510
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4891414314083922}
-  m_Layer: 15
-  m_Name: Gun
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1250213691451958
 GameObject:
   m_ObjectHideFlags: 1
@@ -1832,7 +1817,6 @@ Transform:
   - {fileID: 4417634341649494}
   - {fileID: 4717607627391416}
   - {fileID: 4123414590416220}
-  - {fileID: 4891414314083922}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2166,19 +2150,6 @@ Transform:
   m_Children:
   - {fileID: 4689032778236110}
   m_Father: {fileID: 4417634341649494}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4891414314083922
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1246978305475510}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 4, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4468251489076792}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4899751308279282
@@ -4483,8 +4454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705ca24eb3867b24f98cf32979d9bcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_deathExplosion: {fileID: 198403414197330982, guid: 63da5de75246a7942869e5742830751d,
-    type: 2}
+  m_explosion: {fileID: 0}
 --- !u!114 &114735616801059042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4496,5 +4466,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd56dc30522eb014799a7012e26a8e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_bulletsSpawn: {fileID: 4891414314083922}
+  <roadController>k__BackingField: {fileID: 0}
+  <explosion>k__BackingField: {fileID: 0}
+  <erasePoints>k__BackingField: 0
+  <isExitAllowed>k__BackingField: 0
+  <mapBox>k__BackingField:
+    xMin: 0
+    xMax: 0
+    zMin: 0
+    zMax: 0
+  <physicsBody>k__BackingField: {fileID: 0}
+  <particles>k__BackingField: []
+  m_isStartExit: 0
+  <demage>k__BackingField: 0
+  <coldown>k__BackingField: 0
+  <isTimerWork>k__BackingField: 0
+  m_timer: 0
+  m_bulletsSpawn: {fileID: 0}
   m_bullet: {fileID: 114913540811696196, guid: 0af1860afc4830e48bfb7f69c0c87d3a, type: 2}
+  <speed>k__BackingField: 0

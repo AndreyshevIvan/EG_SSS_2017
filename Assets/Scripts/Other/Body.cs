@@ -26,6 +26,7 @@ namespace MyGame
 
 		protected UIBar healthBar { get; set; }
 		protected int maxHealth { get; set; }
+		protected bool isEraseOnDeath { get; set; }
 		protected int addDemage
 		{
 			set { health = (health - value < 0) ? 0 : health - value; }
@@ -33,8 +34,9 @@ namespace MyGame
 
 		new protected void Awake()
 		{
-			base.Awake();
 			bonuses = new List<Bonus>();
+			isEraseOnDeath = true;
+			base.Awake();
 		}
 
 		protected sealed override void OnTrigger(Collider other)
@@ -52,11 +54,18 @@ namespace MyGame
 			otherBody.OnDemageTaked();
 			DoAfterDemaged();
 
-			if (!isLive) world.Remove(this, true);
+			if (!isLive && isEraseOnDeath)
+			{
+				world.CreateExplosion(explosion, position);
+				world.Remove(this, true);
+				return;
+			}
+
 			if (healthBar) healthBar.SetValue(healthPart);
 		}
 		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
 		protected virtual void DoBeforeDemaged() { }
 		protected virtual void DoAfterDemaged() { }
+		protected virtual void OnDemageTaked() { }
 	}
 }

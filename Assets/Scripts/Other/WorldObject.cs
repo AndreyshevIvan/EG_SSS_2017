@@ -15,7 +15,7 @@ namespace MyGame
 			set { transform.position = value; }
 		}
 		public SplineController roadController { get; protected set; }
-		public ParticleSystem explosion { get; set; }
+		public ParticleSystem explosion { get { return m_explosion; } }
 		public int erasePoints { get; set; }
 		public bool isWorldSet { get { return world != null; } }
 		public bool isExitAllowed { get; protected set; }
@@ -75,7 +75,6 @@ namespace MyGame
 		}
 		protected virtual void OnAwakeEnd() { }
 		protected virtual void OnInitEnd() { }
-		protected virtual void OnDemageTaked() { }
 
 		protected void OnTriggerEnter(Collider other)
 		{
@@ -113,6 +112,8 @@ namespace MyGame
 			erasePoints = 0;
 		}
 
+		[SerializeField]
+		private ParticleSystem m_explosion;
 		private bool m_isStartExit = false;
 
 		private EventDelegate currentEvent { get; set; }

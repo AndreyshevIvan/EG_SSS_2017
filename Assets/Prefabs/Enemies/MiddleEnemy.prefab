@@ -87,22 +87,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1441474078804758
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4820151547301254}
-  - component: {fileID: 114688271120845028}
-  m_Layer: 10
-  m_Name: RocketGun
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1712442998012052
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,34 +158,20 @@ Transform:
   m_Father: {fileID: 4831768551027148}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!4 &4820151547301254
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1441474078804758}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4831768551027148}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4831768551027148
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1292985229978794}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 240, y: 400, z: 0}
   m_LocalScale: {x: 0.17, y: 0.17, z: 0.17}
   m_Children:
   - {fileID: 4652943684825954}
   - {fileID: 4102827063922894}
   - {fileID: 4566445081995712}
   - {fileID: 4002121742673048}
-  - {fileID: 4820151547301254}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -447,7 +417,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 13, y: 4, z: 11}
-  m_Center: {x: 0, y: 0.5, z: -4}
+  m_Center: {x: 0, y: 0.5, z: 4}
 --- !u!65 &65235338448718386
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -507,9 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11b948d29c65344b8f596785cc1db35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_deathExplosion: {fileID: 198403414197330982, guid: 63da5de75246a7942869e5742830751d,
-    type: 2}
-  m_rocketGun: {fileID: 114688271120845028}
+  m_explosion: {fileID: 0}
 --- !u!114 &114558323566588958
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -605,15 +573,3 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: FluffyUnderware.Curvy.CurvySplineMoveEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114688271120845028
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1441474078804758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d7a22da0a39a04488f519513de9e263, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_rocket: {fileID: 114071630511965582, guid: 2dda08b9bb82ccc44bf8e3542237880c, type: 2}

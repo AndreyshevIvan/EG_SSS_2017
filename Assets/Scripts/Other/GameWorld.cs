@@ -59,13 +59,13 @@ namespace MyGame
 
 			if (isModeOn != m_lastModeType)
 			{
-				Time.fixedDeltaTime = (isModeOn) ? SLOWMO_DT : NORMAL_DT;
 				m_deltaScale = Mathf.Abs(targetScale - Time.timeScale);
 				m_lastModeType = isModeOn;
 			}
 
 			float step = Time.fixedDeltaTime / GameplayUI.SLOWMO_CHANGE_TIME * m_deltaScale;
 			Time.timeScale = Mathf.MoveTowards(Time.timeScale, targetScale, step);
+			Time.fixedDeltaTime = (Time.timeScale != 1) ? SLOWMO_DT : NORMAL_DT;
 		}
 		public void SubscribeToMove(WorldObject body)
 		{
@@ -113,7 +113,6 @@ namespace MyGame
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
 
 		private const float MAGNETIC_SPEED = 2;
-		private const float MAP_MOVE_SPEED = 1.7f;
 		private const float SLOW_TIMESCALE = 0.2f;
 		private const float DISMANTLE_FORCE = 300;
 		private const float NORMAL_DT = 0.02f;
@@ -124,6 +123,10 @@ namespace MyGame
 		{
 			m_gameBox = GameData.mapBox;
 			container = new WorldContainer(this);
+		}
+		private void FixedUpdate()
+		{
+			//Debug.Log(container.ToString());
 		}
 		private void Dismantle(WorldObject dismantleObject)
 		{
@@ -181,9 +184,9 @@ namespace MyGame
 			{
 				AddBonus(obj as Bonus);
 			}
-			else if (obj is Ammo)
+			else
 			{
-				AddAmmo(obj as Ammo);
+				AddOther(obj as WorldObject);
 			}
 		}
 		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity
@@ -196,21 +199,32 @@ namespace MyGame
 			{
 				EraseBonus(obj as Bonus);
 			}
-			else if (obj is Ammo)
+			else
 			{
-				EraseAmmo(obj as Ammo);
+				EraseOther(obj as WorldObject);
 			}
 		}
 		public void NotifyObjects()
 		{
 			m_enemies.ForEach(element => element.OnGameplayChange());
 			m_bonuses.ForEach(element => element.OnGameplayChange());
-			m_ammo.ForEach(element => element.OnGameplayChange());
+			m_other.ForEach(element => element.OnGameplayChange());
+		}
+		public override string ToString()
+		{
+			string result = "";
+
+			result += "Enemies: " + m_enemies.Count + "\n";
+			result += "Bonuses: " + m_bonuses.Count + "\n";
+			result += "Other: " + m_other.Count + "\n";
+			result += "Erase list: " + m_onErasing.Count;
+
+			return result;
 		}
 
 		private List<Enemy> m_enemies = new List<Enemy>();
 		private List<Bonus> m_bonuses = new List<Bonus>();
-		private List<Ammo> m_ammo = new List<Ammo>();
+		private List<WorldObject> m_other = new List<WorldObject>();
 		private List<object> m_onErasing = new List<object>();
 
 		private IGameWorld world { get; set; }
@@ -220,28 +234,28 @@ namespace MyGame
 			if (!enemy) return;
 			AddObject(m_enemies, enemy);
 		}
-		private void AddAmmo(Ammo ammo)
-		{
-			if (!ammo) return;
-			AddObject(m_ammo, ammo);
-		}
 		private void AddBonus(Bonus bonus)
 		{
 			if (!bonus) return;
 			AddObject(m_bonuses, bonus);
+		}
+		private void AddOther(WorldObject other)
+		{
+			if (!other) return;
+			AddObject(m_other, other);
 		}
 
 		private void EraseEnemy(Enemy enemy)
 		{
 			EraseObject(m_enemies, enemy);
 		}
-		private void EraseAmmo(Ammo ammo)
-		{
-			EraseObject(m_ammo, ammo);
-		}
 		private void EraseBonus(Bonus bonus)
 		{
 			EraseObject(m_bonuses, bonus);
+		}
+		private void EraseOther(WorldObject other)
+		{
+			EraseObject(m_other, other);
 		}
 
 		private void AddObject<T>(List<T> list, T newObject) where T : IWorldEntity

@@ -75,11 +75,9 @@ namespace MyGame
 			get
 			{
 				return
-					gameplay.isMapStart &&
 					isFirstTouchCreated &&
-					!m_isPlayerControll &&
-					!gameplay.isGameEnd &&
-					isSecondTouchCreated;
+					isSecondTouchCreated &&
+					!m_isPlayerControll;
 			}
 		}
 		private bool isFirstTouchCreated { get; set; }

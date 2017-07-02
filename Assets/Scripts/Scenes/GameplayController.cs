@@ -46,14 +46,13 @@ namespace MyGame
 
 			isMapStart = false;
 			isPaused = false;
-
+		}
+		private void Start()
+		{
 			InitUser();
 			InitFactory();
 			InitShip();
 			InitMap();
-		}
-		private void Start()
-		{
 			InitWorld();
 			InitInterface();
 
@@ -71,12 +70,13 @@ namespace MyGame
 		private void InitShip()
 		{
 			ship = m_factory.GetShip(ShipType.VOYAGER);
-			ship.Init(m_world);
+			m_world.Add(ship);
 		}
 		private void InitMap()
 		{
 			map = m_factory.GetMap();
 			map.gameplay = this;
+			map.factory = m_factory;
 		}
 		private void InitWorld()
 		{

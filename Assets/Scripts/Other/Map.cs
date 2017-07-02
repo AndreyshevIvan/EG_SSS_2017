@@ -11,6 +11,7 @@ namespace MyGame
 	public sealed class Map : MonoBehaviour
 	{
 		public IGameplay gameplay { get; set; }
+		public IFactory factory { get; set; }
 		public Transform groundObjects { get { return m_groundObjects; } }
 		public Transform skyObjects { get { return m_skyObjects; } }
 		public float offset { get; private set; }
@@ -37,6 +38,8 @@ namespace MyGame
 		}
 
 		[SerializeField]
+		private float m_maxOffset;
+		[SerializeField]
 		private ParticleSystem m_windParticles;
 		[SerializeField]
 		private Transform m_groundObjects;
@@ -50,6 +53,8 @@ namespace MyGame
 		private List<GroundSpawn> m_groundSpawns;
 
 		private List<FlySpawn> tempSkySpawns { get; set; }
+
+		private const float MOVE_SPEED = 1.7f;
 
 		private void Awake()
 		{
@@ -68,34 +73,40 @@ namespace MyGame
 		}
 		private void MoveGround()
 		{
+			if (offset >= m_maxOffset)
+			{
+				return;
+			}
 
+			float movement = MOVE_SPEED * Time.fixedDeltaTime;
+			m_ground.transform.Translate(new Vector3(0, 0, -movement));
+			offset += movement;
 		}
 		private void SpawnFlyInits()
 		{
-			/*
-			FlySpawn spawn = tempSkySpawns.Find(x => x.offset <= world.offset);
+			FlySpawn spawn = tempSkySpawns.Find(x => x.offset <= offset);
 			if (spawn == null)
 			{
 				return;
 			}
 
-			CurvySpline road = factories.roads.Get(spawn.road);
+			CurvySpline road = factory.GetRoad(spawn.road);
 			for (int i = 0; i < spawn.count; i++)
 			{
-				Enemy enemy = Instantiate(spawn.enemy, m_skyObjects);
-				world.AddEnemy(enemy);
+				Enemy enemy = factory.GetEnemy(spawn.enemy);
+				enemy.transform.SetParent(m_skyObjects);
 				enemy.roadController.Spline = road;
 				float spawnPosition = GameWorld.SPAWN_OFFSET * i / road.Length;
 				enemy.roadController.InitialPosition = spawnPosition;
 				enemy.roadController.Speed = spawn.speed;
 			}
-			tempSkySpawns.Remove(spawn);*/
+			tempSkySpawns.Remove(spawn);
 		}
 		private void SpawnGroundUnits()
 		{
 			m_groundSpawns.ForEach(spawn => {
-				Enemy enemy = Instantiate(spawn.enemy, m_groundObjects);
-				//world.AddEnemy(enemy);
+				Enemy enemy = factory.GetEnemy(spawn.enemy);
+				enemy.transform.SetParent(m_groundObjects);
 				enemy.position = spawn.position;
 			});
 		}

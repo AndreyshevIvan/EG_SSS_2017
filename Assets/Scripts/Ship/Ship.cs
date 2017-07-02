@@ -25,12 +25,13 @@ namespace MyGame.Hero
 		}
 		protected override void OnInitEnd()
 		{
-			mind.Init(world);
+			world.Add(mind);
 			health = maxHealth = 100;
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
 			healthBar.SetValue(healthPart);
 			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);
 			touchDemage = int.MaxValue;
+			isEraseOnDeath = false;
 		}
 		protected override void PlayingUpdate()
 		{
@@ -61,7 +62,7 @@ namespace MyGame.Hero
 				GameWorld.FLY_HEIGHT,
 				Mathf.Clamp(position.z, mapBox.zMin, mapBox.zMax)
 			);
-		} 
+		}
 		private void UpdateRotation()
 		{
 			float zEuler = physicsBody.velocity.x * -TILT;

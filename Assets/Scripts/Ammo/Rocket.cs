@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MyGame
 {
-	public class Rocket : Ammo
+	public class Rocket : Body
 	{
 		protected override void OnDemageTaked()
 		{

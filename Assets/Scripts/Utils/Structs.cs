@@ -33,7 +33,7 @@ namespace MyGame
 	public class FlySpawn
 	{
 		public RoadType road;
-		public Enemy enemy;
+		public EnemyType enemy;
 		public float offset;
 		public float speed;
 		public int count;
@@ -42,7 +42,7 @@ namespace MyGame
 	public class GroundSpawn
 	{
 		public Vector3 position;
-		public Enemy enemy;
+		public EnemyType enemy;
 	}
 }
 namespace MyGame.Factory
