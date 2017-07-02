@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy.Controllers;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -46,8 +47,28 @@ namespace MyGame
 				health = maxHealth;
 			}
 		}
+		public void OnGameplayChange()
+		{
+			subObjects.ForEach(obj => obj.OnGameplayChange());
 
-		public virtual void OnGameplayChange() { }
+			if (!gameplay.isPlaying)
+			{
+				Debug.Log("Not playing");
+				currentEvent = () => { };
+				return;
+			}
+
+			if (gameplay.isMapStay)
+			{
+				Debug.Log("staying");
+				currentEvent = onMapStay;
+			}
+			else
+			{
+				Debug.Log("moveing");
+				currentEvent = onMapMove;
+			}
+		}
 		public virtual void OnDemageTaked() { }
 
 		protected IGameplay gameplay { get { return (IGameplay)world; } }
@@ -61,13 +82,29 @@ namespace MyGame
 			set { health = (health - value < 0) ? 0 : health - value; }
 		}
 		protected List<ParticleSystem> particles { get; set; }
+		protected List<IGameplayObject> subObjects { get; private set; }
 
 		protected void Awake()
 		{
 			physicsBody = GetComponent<Rigidbody>();
 			roadController = GetComponent<SplineController>();
 			particles = Utils.GetAllComponents<ParticleSystem>(this);
+			subObjects = new List<IGameplayObject>();
 			mapBox = GameData.mapBox;
+
+			onPlaying += PlayingUpdate;
+			onPlaying += CheckLife;
+			onPlaying += UpdateBars;
+			onPlaying += () => { Debug.Log("Playing"); };
+
+			onMapStay += onPlaying;
+			onMapStay += StayingUpdate;
+			onMapStay += () => { Debug.Log("Staying"); };
+
+			onMapMove += onPlaying;
+			onMapMove += MoveingUpdate;
+			onMapMove += () => { Debug.Log("Moveing"); };
+
 			OnAwakeEnd();
 		}
 		protected virtual void OnAwakeEnd() { }
@@ -103,28 +140,8 @@ namespace MyGame
 				return;
 			}
 
-			if (gameplay.isPaused)
-			{
-				return;
-			}
-
-			PermanentUpdate();
-
-			if (!gameplay.isPlaying)
-			{
-				return;
-			}
-
-			PlayingUpdate();
-
-			if (gameplay.isMapStay)
-			{
-				StayingUpdate();
-			}
-
-			MoveingUpdate();
+			if (currentEvent != null) currentEvent();
 		}
-		protected virtual void PermanentUpdate() { }
 		protected virtual void PlayingUpdate() { }
 		protected virtual void StayingUpdate() { }
 		protected virtual void MoveingUpdate() { }
@@ -138,7 +155,26 @@ namespace MyGame
 		}
 
 		private bool m_isStartExit = false;
-	}
+
+		private EventDelegate currentEvent { get; set; }
+		private EventDelegate onPlaying { get; set; }
+		private EventDelegate onMapStay { get; set; }
+		private EventDelegate onMapMove { get; set; }
+
+		private void CheckLife()
+		{
+			Debug.Log("Check Life");
+			if (!isLive)
+			{
+				world.Remove(this, true);
+			}
+		}
+		private void UpdateBars()
+		{
+			Debug.Log("Update bars");
+			if (healthBar) healthBar.position = position;
+		}
+}
 
 	public interface IWorldObject : IGameplayObject
 	{

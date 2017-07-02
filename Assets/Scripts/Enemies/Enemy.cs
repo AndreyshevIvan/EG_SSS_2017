@@ -12,12 +12,6 @@ namespace MyGame
 		public int points { get; set; }
 		public byte starsCount { get; protected set; }
 
-		public sealed override void OnGameplayChange()
-		{
-			guns.ForEach(gun => {
-				if (gun) gun.isTimerWork = !gameplay.isPlaying;
-			});
-		}
 		protected sealed override void OnExitFromWorld()
 		{
 		}

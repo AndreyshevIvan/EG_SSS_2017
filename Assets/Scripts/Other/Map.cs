@@ -10,22 +10,26 @@ namespace MyGame
 {
 	public sealed class Map : MonoBehaviour, IGameplayObject
 	{
-		public ParticleSystem m_windParticles;
-		public Transform m_groundObjects;
-		public Transform m_skyObjects;
-		public Transform m_ground;
-		public List<FlySpawn> m_flySpawns;
-		public List<GroundSpawn> m_groundSpawns;
-
+		public Transform groundObjects { get { return m_groundObjects; } }
+		public Transform skyObjects { get { return m_skyObjects; } }
+		public float offset { get; private set; }
 		public bool isReached { get; private set; }
+		public bool isMoveing { get; private set; }
 
 		public void InitGameplay(IGameplay gameplay)
 		{
 			this.gameplay = gameplay;
+			offset = 0;
 		}
-
 		public void OnGameplayChange()
 		{
+			if (gameplay.isMapStay)
+			{
+				m_windParticles.Pause();
+				return;
+			}
+
+			m_windParticles.Play();
 		}
 		public void Play()
 		{
@@ -36,6 +40,19 @@ namespace MyGame
 		{
 		}
 
+		[SerializeField]
+		private ParticleSystem m_windParticles;
+		[SerializeField]
+		private Transform m_groundObjects;
+		[SerializeField]
+		private Transform m_skyObjects;
+		[SerializeField]
+		private Transform m_ground;
+		[SerializeField]
+		private List<FlySpawn> m_flySpawns;
+		[SerializeField]
+		private List<GroundSpawn> m_groundSpawns;
+
 		private IGameplay gameplay { get; set; }
 		private List<FlySpawn> tempSkySpawns { get; set; }
 
@@ -45,24 +62,17 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
-			UpdateGameSleep();
-
 			if (!gameplay.isPlaying)
 			{
 				return;
 			}
 
+			MoveGround();
 			SpawnFlyInits();
 		}
-		private void UpdateGameSleep()
+		private void MoveGround()
 		{
-			if (gameplay.isMapStay)
-			{
-				m_windParticles.Pause();
-				return;
-			}
 
-			m_windParticles.Play();
 		}
 		private void SpawnFlyInits()
 		{

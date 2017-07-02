@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using MyGame.Hero;
 using MyGame.Factory;
+using MyGame.World;
 
 namespace MyGame
 {
@@ -13,7 +14,7 @@ namespace MyGame
 		public bool isMapStart { get; private set; }
 		public bool isMapStay { get; private set; }
 		public bool isPaused { get; private set; }
-		public bool isGameEnd { get; private set; }
+		public bool isGameEnd { get { return !ship.isLive || map.isReached; } }
 		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
 		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
 
@@ -25,6 +26,13 @@ namespace MyGame
 		private ScenesController m_scenesController;
 		[SerializeField]
 		private Factories m_factory;
+
+		private bool m_isMapStart;
+		private bool m_isMapStay;
+		private bool m_isPaused;
+		private bool m_isGameEnd;
+		private bool m_isWin;
+		private bool m_isPlaying;
 
 		private Ship ship { get; set; }
 		private Map map { get; set; }
@@ -39,7 +47,6 @@ namespace MyGame
 
 			isMapStart = false;
 			isPaused = false;
-			isGameEnd = false;
 			isMapStay = true;
 		}
 		private void Start()
@@ -50,6 +57,8 @@ namespace MyGame
 			InitMap();
 			InitWorld();
 			InitInterface();
+
+			UpdateChanges();
 		}
 		private void InitUser()
 		{
@@ -98,21 +107,25 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
-			isGameEnd = !ship.isLive || map.isReached;
-
-			Debug.Log(ship.isLive + " " + map.isReached + " at " + Time.realtimeSinceStartup);
-
-
-			if (isGameEnd)
+			if (!IsAnyChange())
 			{
-				if (isWin)
-				{
-					OnMapReached();
-					return;
-				}
-
-				OnGameOver();
+				return;
 			}
+
+			UpdateChanges();
+
+			if (!isGameEnd)
+			{
+				return;
+			}
+
+			if (isWin)
+			{
+				OnMapReached();
+				return;
+			}
+
+			OnGameOver();
 		}
 
 		private void OnMapStart()
@@ -131,8 +144,31 @@ namespace MyGame
 			m_world.KillPlayer();
 			m_interface.GameOver();
 			isMapStay = true;
-			m_scenesController.SetScene("demoscene");
+			m_scenesController.SetScene("DemoScene");
 		}
+
+		private bool IsAnyChange()
+		{
+			return (
+				m_isMapStart != isMapStart ||
+				m_isMapStay != isMapStay ||
+				m_isPaused != isPaused ||
+				m_isGameEnd != isGameEnd ||
+				m_isWin != isWin ||
+				m_isPlaying != isPlaying);
+		}
+		private void UpdateChanges()
+		{
+			m_isMapStart = isMapStart;
+			m_isMapStay = isMapStay;
+			m_isPaused = isPaused;
+			m_isGameEnd = isGameEnd;
+			m_isWin = isWin;
+			m_isPlaying = isPlaying;
+
+			m_world.OnGameplayChange();
+			m_interface.OnGameplayChange();
+		} 
 	}
 
 	public interface IGameplay

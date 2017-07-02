@@ -45,4 +45,12 @@ namespace MyGame
 		PLAYER_HEALTH,
 		ENEMY_HEALTH,
 	}
+
+	[System.Serializable]
+	public enum AmmoType
+	{
+		PLAYER_BASE,
+		ENEMY_BASE,
+		ENEMY_ROCKET,
+	}
 }

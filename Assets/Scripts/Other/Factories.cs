@@ -2,7 +2,7 @@
 using FluffyUnderware.Curvy;
 using UnityEditor;
 using MyGame.Hero;
-using System;
+using MyGame.World;
 
 namespace MyGame.Factory
 {

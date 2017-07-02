@@ -35,6 +35,8 @@ namespace MyGame
 		}
 		public void OnGameplayChange()
 		{
+			ship.OnGameplayChange();
+			container.NotifyObjects();
 		}
 		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldObject
 		{
@@ -61,7 +63,7 @@ namespace MyGame
 		}
 		public void SubscribeToMove(WorldObject body)
 		{
-			body.transform.SetParent(map.m_groundObjects);
+			body.transform.SetParent(map.groundObjects);
 		}
 		public void MoveToShip(WorldObject body, bool useShipMagnetic = true)
 		{
@@ -93,7 +95,7 @@ namespace MyGame
 
 			ParticleSystem explosionObject = Instantiate(explosion);
 			explosionObject.transform.position = position;
-			explosionObject.transform.SetParent(map.m_skyObjects);
+			explosionObject.transform.SetParent(map.skyObjects);
 		}
 
 		public void OnTriggerExit(Collider other)
@@ -202,6 +204,12 @@ namespace MyGame
 			{
 				EraseAmmo(obj as Ammo);
 			}
+		}
+		public void NotifyObjects()
+		{
+			m_enemies.ForEach(element => element.OnGameplayChange());
+			m_bonuses.ForEach(element => element.OnGameplayChange());
+			m_ammo.ForEach(element => element.OnGameplayChange());
 		}
 
 		private List<Enemy> m_enemies = new List<Enemy>();
