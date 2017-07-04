@@ -8,6 +8,14 @@ namespace MyGame.Hero
 	public sealed class Ship : Body
 	{
 		public ShipMind mind { get; set; }
+		public ShipProperties properties
+		{
+			set
+			{
+				mind.properties = value;
+				health = maxHealth = value.health;
+			}
+		}
 
 		public void MoveTo(Vector3 newPosition)
 		{
@@ -25,8 +33,6 @@ namespace MyGame.Hero
 		}
 		protected override void OnInitEnd()
 		{
-			world.Add(mind);
-			health = maxHealth = 100;
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
 			healthBar.SetValue(healthPart);
 			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);

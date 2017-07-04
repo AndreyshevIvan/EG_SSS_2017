@@ -52,18 +52,17 @@ namespace MyGame
 		public static void SaveShip(ShipProperties properties)
 		{
 			BinaryFormatter formatter = new BinaryFormatter();
-			string fileName = SHIPS_PATH + properties.shipName + FTYPE;
-			FileStream stream = new FileStream(fileName, FileMode.Create);
+			FileStream stream = new FileStream(SHIPS_PROPERTIES_PATH, FileMode.Create);
 			formatter.Serialize(stream, properties);
 			stream.Close();
 		}
 		public static ShipProperties LoadShip(ShipType type)
 		{
-			string file = SHIPS_PATH + ShipProperties.ToName(type) + FTYPE;
+			string file = SHIPS_PROPERTIES_PATH;
 
 			if (!File.Exists(file))
 			{
-				ShipProperties newShip = new ShipProperties(type);
+				ShipProperties newShip = new ShipProperties();
 				SaveShip(newShip);
 			}
 
@@ -81,6 +80,6 @@ namespace MyGame
 		static string FTYPE = ".txt";
 		static string USER_FILE_NAME = "user" + FTYPE;
 		static string USER_FILE = RESOURCES_PATH + USER_FILE_NAME;
-		static string SHIPS_PATH = RESOURCES_PATH + "ships/";
+		static string SHIPS_PROPERTIES_PATH = RESOURCES_PATH + "ShipProperties";
 	}
 }

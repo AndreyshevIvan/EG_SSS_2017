@@ -17,6 +17,10 @@ namespace MyGame
 		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
 		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
 
+		private Ship ship { get; set; }
+		private Map map { get; set; }
+		private User user { get; set; }
+
 		[SerializeField]
 		private GameWorld m_world;
 		[SerializeField]
@@ -25,6 +29,7 @@ namespace MyGame
 		private ScenesController m_scenesController;
 		[SerializeField]
 		private Factories m_factory;
+		private ShipProperties m_shipProperties = new ShipProperties();
 
 		private bool m_isMapStart;
 		private bool m_isMapStay;
@@ -32,10 +37,6 @@ namespace MyGame
 		private bool m_isGameEnd;
 		private bool m_isWin;
 		private bool m_isPlaying;
-
-		private Ship ship { get; set; }
-		private Map map { get; set; }
-		private User user { get; set; }
 
 		private const int FRAME_RATE = 40;
 
@@ -49,28 +50,20 @@ namespace MyGame
 		}
 		private void Start()
 		{
-			InitUser();
+			m_world.gameplay = this;
+
 			InitFactory();
-			InitShip();
 			InitMap();
+			InitShip();
 			InitWorld();
 			InitInterface();
 
 			UpdateChanges();
 		}
-		private void InitUser()
-		{
-			//user = GameData.LoadUser();
-		}
 		private void InitFactory()
 		{
 			m_factory.Init(m_world.container, m_interface);
 			m_world.factory = m_factory;
-		}
-		private void InitShip()
-		{
-			ship = m_factory.GetShip(ShipType.VOYAGER);
-			m_world.Add(ship);
 		}
 		private void InitMap()
 		{
@@ -78,12 +71,16 @@ namespace MyGame
 			map.gameplay = this;
 			map.factory = m_factory;
 		}
+		private void InitShip()
+		{
+			ship = m_factory.GetShip(ShipType.VOYAGER);
+			ship.properties = m_shipProperties;
+		}
 		private void InitWorld()
 		{
+			m_world.map = map;
 			m_world.ship = ship;
 			m_world.playerBar = m_interface;
-			m_world.map = map;
-			m_world.gameplay = this;
 		}
 		private void InitInterface()
 		{

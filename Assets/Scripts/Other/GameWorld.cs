@@ -14,7 +14,16 @@ namespace MyGame
 		public IPlayerBar playerBar { get; set; }
 		public IFactory factory { get; set; }
 		public Map map { get; set; }
-		public Ship ship { get; set; }
+		public Ship ship
+		{
+			get { return m_ship; }
+			set
+			{
+				m_ship = value;
+				Add(m_ship);
+				Add(m_ship.mind);
+			}
+		}
 		public WorldContainer container { get; private set; }
 
 		public IGameplay gameplay { get; set; }
@@ -24,6 +33,9 @@ namespace MyGame
 		public bool isGameEnd { get { return gameplay.isGameEnd; } }
 		public bool isWin { get { return gameplay.isWin; } }
 		public bool isPlaying { get { return gameplay.isPlaying; } }
+
+		public Transform sky { get { return map.skyObjects; } }
+		public Transform ground { get { return map.groundObjects; } }
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
@@ -108,6 +120,7 @@ namespace MyGame
 		{
 		}
 
+		private Ship m_ship;
 		private BoundingBox m_gameBox;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
@@ -156,6 +169,8 @@ namespace MyGame
 	{
 		IFactory factory { get; }
 		Ship ship { get; }
+		Transform sky { get; }
+		Transform ground { get; }
 
 		void Add<T>(T obj) where T : IWorldEntity;
 		void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity;
@@ -258,7 +273,7 @@ namespace MyGame
 			EraseObject(m_other, other);
 		}
 
-		private void AddObject<T>(List<T> list, T newObject) where T : IWorldEntity
+		private void AddObject<T>(List<T> list, T newObject) where T : WorldObject
 		{
 			if (list.Exists(obj => obj.Equals(newObject)))
 			{
@@ -268,7 +283,7 @@ namespace MyGame
 			newObject.Init(world);
 			list.Add(newObject);
 		}
-		private void EraseObject<T>(List<T> list, T eraseObject) where T : IWorldEntity
+		private void EraseObject<T>(List<T> list, T eraseObject) where T : WorldObject
 		{
 			if (m_onErasing.Exists(element => element.Equals(eraseObject)))
 			{

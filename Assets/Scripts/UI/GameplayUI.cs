@@ -128,7 +128,7 @@ namespace MyGame
 		}
 		private void UpdateCurtain()
 		{
-			uncontrollEvents(isSlowMode);
+			if (uncontrollEvents != null) uncontrollEvents(isSlowMode);
 			float target = (isSlowMode) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			m_slowmoCurtain.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
 		}

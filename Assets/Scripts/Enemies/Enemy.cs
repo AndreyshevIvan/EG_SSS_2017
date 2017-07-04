@@ -12,7 +12,6 @@ namespace MyGame
 		public byte starsCount { get; protected set; }
 
 		protected bool isTimerWork { get; set; }
-		protected bool isTimerReady { get; set; }
 		protected float coldown { get; set; }
 
 		protected sealed override void OnInitEnd()
@@ -32,15 +31,7 @@ namespace MyGame
 		}
 		protected sealed override void PlayingUpdate()
 		{
-			UpdateTimer();
 			TryShoot();
-		}
-		protected virtual void UpdateTimer()
-		{
-			if (isTimerWork)
-			{
-				Utils.UpdateTimer(ref m_timer, coldown, Time.fixedDeltaTime);
-			}
 		}
 		protected abstract void InitProperties();
 		protected abstract void Shoot();
@@ -49,7 +40,7 @@ namespace MyGame
 
 		private void TryShoot()
 		{
-			if (isTimerWork && isTimerReady)
+			if (isTimerWork && Utils.UpdateTimer(ref m_timer, coldown))
 			{
 				Shoot();
 			}

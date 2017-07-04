@@ -7,7 +7,18 @@ namespace MyGame.Hero
 {
 	public class ShipMind : WorldObject
 	{
-		public ShipType type { get; internal set; }
+		public ShipType type { get; set; }
+		public ShipProperties properties
+		{
+			set
+			{
+				m_bullet.data = value.gunData;
+				gunColdown = value.gunColdown;
+
+				magnetic = value.magnet;
+			}
+		}
+
 		public float magnetic { get; protected set; }
 		public float magnetDistance { get; protected set; }
 
@@ -15,41 +26,34 @@ namespace MyGame.Hero
 		{
 		}
 
+		protected float gunColdown { get; set; }
+
 		protected override void OnInitEnd()
 		{
-			magnetic = 1;
 			magnetDistance = 5;
 		}
 		protected override void PlayingUpdate()
 		{
-			UpdateColdowns();
 			ShootByBaseGun();
 		}
 
 		[SerializeField]
-		private SimpleBullet m_bullet;
-		private float m_baseTimer = 0;
-		private float m_baseColdown = 0.5f;
-
-		private bool isBaseReady { get; set; }
+		private Bullet m_bullet;
+		private float m_gunTimer = 0;
 
 		private void ShootByBaseGun()
 		{
-			Debug.Log("try shoot");
-			if (!isBaseReady)
+			if (!Utils.UpdateTimer(ref m_gunTimer, gunColdown))
 			{
-				Debug.Log("Not now");
 				return;
 			}
 
-			SimpleBullet bullet = Instantiate(m_bullet);
-			bullet.direction = Vector3.forward;
-			bullet.speed = 10;
+			Bullet bullet = m_bullet.copy;
 			world.Add(bullet);
+			bullet.Shoot(position, Vector3.forward);
 		}
 		private void UpdateColdowns()
 		{
-			isBaseReady = Utils.UpdateTimer(ref m_baseTimer, m_baseColdown, Time.fixedDeltaTime);
-		} 
+		}
 	}
 }

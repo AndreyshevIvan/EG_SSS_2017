@@ -20,16 +20,17 @@ namespace MyGame
 		public bool isWorldSet { get { return world != null; } }
 		public bool isExitAllowed { get; protected set; }
 
-		public void Init(IGameWorld gameWorld)
+		public void Init(IGameWorld newWorld)
 		{
-			if (world != null && world != gameWorld)
+			if (world != null && world != newWorld)
 			{
 				return;
 			}
 
-			world = gameWorld;
-			gameplay = gameWorld as IGameplay;
+			world = newWorld;
+			gameplay = (IGameplay)newWorld;
 			OnInitEnd();
+			if (world != null) OnGameplayChange();
 		}
 		public void OnGameplayChange()
 		{
@@ -46,6 +47,14 @@ namespace MyGame
 			}
 
 			currentEvent = onMapMove;
+		}
+		public void MoveToGround()
+		{
+			transform.SetParent(world.ground);
+		}
+		public void MoveToSky()
+		{
+			transform.SetParent(world.sky);
 		}
 
 		protected IGameplay gameplay { get; private set; }

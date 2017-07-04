@@ -31,10 +31,12 @@ namespace MyGame
 			uint mod = value % 1000;
 			return kCount.ToString() + '.' + mod.ToString()[0] + " k";
 		}
-		public static bool UpdateTimer(ref float timer, float coldown, float delta)
+		public static bool UpdateTimer(ref float timer, float coldown)
 		{
-			timer += delta;
-			return IsTimerReady(timer, coldown);
+			timer += Time.fixedDeltaTime;
+			bool isReady = IsTimerReady(timer, coldown);
+			timer = (isReady) ? 0 : timer;
+			return isReady;
 		}
 		public static bool IsTimerReady(float timer, float coldown)
 		{
