@@ -56,92 +56,19 @@ namespace MyGame
 		public TValue value;
 	}
 
-	[System.Serializable]
-	public class EnemiesPair : Pair<UnitType, Enemy> {}
-	[System.Serializable]
-	public class BonusPair : Pair<BonusType, Bonus> {}
-	[System.Serializable]
-	public class SplinePair : Pair<RoadType, CurvySpline> {}
-	[System.Serializable]
-	public class ShipPair : Pair<ShipType, Ship> {}
-	[System.Serializable]
-	public class BarsPair : Pair<BarType, UIBar> {}
 }
 namespace MyGame.Factory
 {
 	[System.Serializable]
-	public struct MapsFactory
-	{
-		public Map GetMap()
-		{
-			return Component.Instantiate(m_firstMap);
-		}
-
-		[SerializeField]
-		private Map m_firstMap;
-	}
-
+	public class MapPair : Pair<MapType, Map> { }
 	[System.Serializable]
-	public struct EnemiesFactory
-	{
-		public Enemy Get(UnitType type)
-		{
-			Enemy enemy = m_list.Find(pair => pair.key == type).value;
-			return Component.Instantiate(enemy);
-		}
-
-		[SerializeField]
-		private List<EnemiesPair> m_list;
-	}
-
+	public class EnemiesPair : Pair<UnitType, Enemy> { }
 	[System.Serializable]
-	public struct RoadsFactory
-	{
-		public CurvySpline Get(RoadType type)
-		{
-			return m_list.Find(pair => pair.key == type).value;
-		}
-
-		[SerializeField]
-		private List<SplinePair> m_list;
-	}
-
+	public class BonusPair : Pair<BonusType, Bonus> { }
 	[System.Serializable]
-	public struct BonusesFactory
-	{
-		public Bonus Get(BonusType type)
-		{
-			Bonus bonus = m_list.Find(pair => pair.key == type).value;
-			return Component.Instantiate(bonus);
-		}
-
-		[SerializeField]
-		private List<BonusPair> m_list;
-	}
-
+	public class SplinePair : Pair<RoadType, CurvySpline> { }
 	[System.Serializable]
-	public struct ShipsFactory
-	{
-		public Ship Get(ShipType type)
-		{
-			Ship ship = m_list.Find(pair => pair.key == type).value;
-			return Component.Instantiate(ship);
-		}
-
-		[SerializeField]
-		private List<ShipPair> m_list;
-	}
-
+	public class ShipPair : Pair<ShipType, Ship> { }
 	[System.Serializable]
-	public struct BarsFactory
-	{
-		public UIBar Get(BarType type)
-		{
-			UIBar newBar = m_list.Find(pair => pair.key == type).value;
-			return Component.Instantiate(newBar);
-		}
-
-		[SerializeField]
-		private List<BarsPair> m_list;
-	}
+	public class BarsPair : Pair<BarType, UIBar> { }
 }

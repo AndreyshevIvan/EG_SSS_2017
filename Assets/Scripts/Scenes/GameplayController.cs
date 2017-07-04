@@ -67,7 +67,7 @@ namespace MyGame
 		}
 		private void InitMap()
 		{
-			map = m_factory.GetMap();
+			map = m_factory.GetMap(MapType.FIRST);
 			map.gameplay = this;
 			map.factory = m_factory;
 		}

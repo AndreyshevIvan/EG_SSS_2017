@@ -48,7 +48,7 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public enum Maps
+	public enum MapType
 	{
 		FIRST,
 		SECOND,

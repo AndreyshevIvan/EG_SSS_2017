@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using FluffyUnderware.Curvy;
-using UnityEditor;
 using MyGame.Hero;
 using MyGame.Enemies;
 
@@ -14,52 +14,56 @@ namespace MyGame.Factory
 			m_interface = gameInterface;
 		}
 
-		public Map GetMap()
+		public Map GetMap(MapType key)
 		{
-			Map newMap = m_maps.GetMap();
-			return newMap;
+			Map map = m_maps.Find(pair => pair.key.Equals(key)).value;
+			return Component.Instantiate(map);
 		}
+
 		public Enemy GetEnemy(UnitType type)
 		{
-			Enemy newEnemy = m_enemies.Get(type);
-			m_world.Add(newEnemy);
-			return newEnemy;
+			Enemy enemy = Instantiate(m_enemies.Find(pair => pair.key == type).value);
+			m_world.Add(enemy);
+			return enemy;
 		}
-		public Ship GetShip(ShipType type)
-		{
-			Ship newShip = m_ships.Get(type);
-			return newShip;
-		}
+
 		public CurvySpline GetRoad(RoadType type)
 		{
-			CurvySpline newRoad = m_roads.Get(type);
-			return newRoad;
+			return m_roads.Find(pair => pair.key == type).value;
 		}
+
+		public Ship GetShip(ShipType type)
+		{
+			Ship ship = Instantiate(m_ships.Find(pair => pair.key == type).value);
+			return ship;
+		}
+
 		public Bonus GetBonus(BonusType type)
 		{
-			Bonus newBonus = m_bonuses.Get(type);
-			m_world.Add(newBonus);
-			return newBonus;
+			Bonus bonus = Instantiate(m_bonuses.Find(pair => pair.key == type).value);
+			m_world.Add(bonus);
+			return bonus;
 		}
+
 		public UIBar GetBar(BarType type)
 		{
-			UIBar newBar = m_bars.Get(type);
-			m_interface.Add(newBar);
-			return newBar;
+			UIBar bar = Instantiate(m_bars.Find(pair => pair.key == type).value);
+			m_interface.Add(bar);
+			return bar;
 		}
 
 		[SerializeField]
-		private MapsFactory m_maps;
+		private List<MapPair> m_maps;
 		[SerializeField]
-		private EnemiesFactory m_enemies;
+		private List<EnemiesPair> m_enemies;
 		[SerializeField]
-		private ShipsFactory m_ships;
+		private List<SplinePair> m_roads;
 		[SerializeField]
-		private RoadsFactory m_roads;
+		private List<ShipPair> m_ships;
 		[SerializeField]
-		private BonusesFactory m_bonuses;
+		private List<BonusPair> m_bonuses;
 		[SerializeField]
-		private BarsFactory m_bars;
+		private List<BarsPair> m_bars;
 
 		private WorldContainer m_world;
 		private UIContainer m_interface;
@@ -69,12 +73,11 @@ namespace MyGame.Factory
 	{
 		void Init(WorldContainer world, UIContainer gameInterface);
 
-		Map GetMap();
+		Map GetMap(MapType type);
 		Enemy GetEnemy(UnitType type);
 		Ship GetShip(ShipType type);
 		CurvySpline GetRoad(RoadType type);
 		Bonus GetBonus(BonusType type);
 		UIBar GetBar(BarType type);
-		T GetAmmo<T>(UnitType unit) where T : Body;
 	}
 }
