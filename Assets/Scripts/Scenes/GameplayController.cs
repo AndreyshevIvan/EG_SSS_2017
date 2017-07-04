@@ -73,7 +73,7 @@ namespace MyGame
 		}
 		private void InitShip()
 		{
-			ship = m_factory.GetShip(ShipType.VOYAGER);
+			ship = m_factory.GetShip(ShipType.STANDART);
 			ship.properties = m_shipProperties;
 		}
 		private void InitWorld()

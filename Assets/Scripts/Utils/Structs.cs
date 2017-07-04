@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using FluffyUnderware.Curvy;
 using MyGame.Hero;
+using MyGame.Enemies;
+using System;
 
 namespace MyGame
 {
@@ -33,7 +35,7 @@ namespace MyGame
 	public class FlySpawn
 	{
 		public RoadType road;
-		public EnemyType enemy;
+		public UnitType enemy;
 		public float offset;
 		public float speed;
 		public int count;
@@ -42,8 +44,28 @@ namespace MyGame
 	public class GroundSpawn
 	{
 		public Vector3 position;
-		public EnemyType enemy;
+		public UnitType enemy;
 	}
+
+	[System.Serializable]
+	public class Pair<TKey, TValue>
+	{
+		[SerializeField]
+		public TKey key;
+		[SerializeField]
+		public TValue value;
+	}
+
+	[System.Serializable]
+	public class EnemiesPair : Pair<UnitType, Enemy> {}
+	[System.Serializable]
+	public class BonusPair : Pair<BonusType, Bonus> {}
+	[System.Serializable]
+	public class SplinePair : Pair<RoadType, CurvySpline> {}
+	[System.Serializable]
+	public class ShipPair : Pair<ShipType, Ship> {}
+	[System.Serializable]
+	public class BarsPair : Pair<BarType, UIBar> {}
 }
 namespace MyGame.Factory
 {
@@ -62,34 +84,14 @@ namespace MyGame.Factory
 	[System.Serializable]
 	public struct EnemiesFactory
 	{
-		public Enemy Get(EnemyType type)
+		public Enemy Get(UnitType type)
 		{
-			Enemy enemy = null;
-
-			switch (type)
-			{
-				case EnemyType.EASY:
-					enemy = m_easyEnemy;
-					break;
-
-				case EnemyType.NORMAL:
-					enemy = m_middleEnemy;
-					break;
-
-				case EnemyType.HARD:
-					enemy = m_hardEnemy;
-					break;
-			}
-
+			Enemy enemy = m_list.Find(pair => pair.key == type).value;
 			return Component.Instantiate(enemy);
 		}
 
 		[SerializeField]
-		private Enemy m_easyEnemy;
-		[SerializeField]
-		private Enemy m_middleEnemy;
-		[SerializeField]
-		private Enemy m_hardEnemy;
+		private List<EnemiesPair> m_list;
 	}
 
 	[System.Serializable]
@@ -97,37 +99,11 @@ namespace MyGame.Factory
 	{
 		public CurvySpline Get(RoadType type)
 		{
-			switch (type)
-			{
-				case RoadType.BIG:
-					return big;
-
-				case RoadType.LEFT:
-					return left;
-
-				case RoadType.RIGHT:
-					return right;
-
-				case RoadType.DIFF:
-					return diff;
-
-				case RoadType.PLAYER:
-					return player;
-			}
-
-			return big;
+			return m_list.Find(pair => pair.key == type).value;
 		}
 
 		[SerializeField]
-		private CurvySpline big;
-		[SerializeField]
-		private CurvySpline left;
-		[SerializeField]
-		private CurvySpline right;
-		[SerializeField]
-		private CurvySpline diff;
-		[SerializeField]
-		private CurvySpline player;
+		private List<SplinePair> m_list;
 	}
 
 	[System.Serializable]
@@ -135,32 +111,12 @@ namespace MyGame.Factory
 	{
 		public Bonus Get(BonusType type)
 		{
-			Bonus bonus = null;
-
-			switch (type)
-			{
-				case BonusType.STAR:
-					bonus = star;
-					break;
-
-				case BonusType.HEALTH:
-					bonus = health;
-					break;
-
-				case BonusType.AMMO_UP:
-					bonus = ammo;
-					break;
-			}
-
+			Bonus bonus = m_list.Find(pair => pair.key == type).value;
 			return Component.Instantiate(bonus);
 		}
 
 		[SerializeField]
-		private Bonus star;
-		[SerializeField]
-		private Bonus health;
-		[SerializeField]
-		private Bonus ammo;
+		private List<BonusPair> m_list;
 	}
 
 	[System.Serializable]
@@ -168,34 +124,12 @@ namespace MyGame.Factory
 	{
 		public Ship Get(ShipType type)
 		{
-			Ship newShip = null;
-
-			switch (type)
-			{
-				case ShipType.VOYAGER:
-					newShip = m_modelFirst;
-					break;
-
-				case ShipType.DESTENY:
-					newShip = m_modelSecond;
-					break;
-
-				case ShipType.SPLASH:
-					newShip = m_modelThird;
-					break;
-			}
-
-			Ship ship = Component.Instantiate(newShip);
-			//ship.mind.type = type;
-			return ship;
+			Ship ship = m_list.Find(pair => pair.key == type).value;
+			return Component.Instantiate(ship);
 		}
 
 		[SerializeField]
-		private Ship m_modelFirst;
-		[SerializeField]
-		private Ship m_modelSecond;
-		[SerializeField]
-		private Ship m_modelThird;
+		private List<ShipPair> m_list;
 	}
 
 	[System.Serializable]
@@ -203,25 +137,11 @@ namespace MyGame.Factory
 	{
 		public UIBar Get(BarType type)
 		{
-			UIBar newBar = null;
-
-			switch (type)
-			{
-				case BarType.ENEMY_HEALTH:
-					newBar = enemyHealth;
-					break;
-
-				case BarType.PLAYER_HEALTH:
-					newBar = playerHealth;
-					break;
-			}
-
+			UIBar newBar = m_list.Find(pair => pair.key == type).value;
 			return Component.Instantiate(newBar);
 		}
 
 		[SerializeField]
-		private UIBar playerHealth;
-		[SerializeField]
-		private UIBar enemyHealth;
+		private List<BarsPair> m_list;
 	}
 }

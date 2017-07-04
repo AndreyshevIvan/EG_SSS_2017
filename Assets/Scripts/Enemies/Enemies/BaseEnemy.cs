@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace MyGame
+namespace MyGame.Enemies
 {
-	public sealed class EasyEnemy : Enemy
+	public sealed class BaseEnemy : Enemy
 	{
 		protected override void InitProperties()
 		{

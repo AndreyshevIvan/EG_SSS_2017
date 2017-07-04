@@ -4,18 +4,16 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace MyGame
+namespace MyGame.Enemies
 {
-	public class HardEnemy : Enemy
+	public sealed class RocketCopter : Enemy
 	{
 		protected override void InitProperties()
 		{
-			health = maxHealth = 100;
+			health = maxHealth = 50;
 			touchDemage = 100;
-			starsCount = 2;
-			points = 157;
-
-			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
+			starsCount = 7;
+			points = 1527;
 		}
 		protected override void Shoot()
 		{

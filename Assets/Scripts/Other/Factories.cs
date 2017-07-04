@@ -2,6 +2,7 @@
 using FluffyUnderware.Curvy;
 using UnityEditor;
 using MyGame.Hero;
+using MyGame.Enemies;
 
 namespace MyGame.Factory
 {
@@ -18,7 +19,7 @@ namespace MyGame.Factory
 			Map newMap = m_maps.GetMap();
 			return newMap;
 		}
-		public Enemy GetEnemy(EnemyType type)
+		public Enemy GetEnemy(UnitType type)
 		{
 			Enemy newEnemy = m_enemies.Get(type);
 			m_world.Add(newEnemy);
@@ -27,7 +28,6 @@ namespace MyGame.Factory
 		public Ship GetShip(ShipType type)
 		{
 			Ship newShip = m_ships.Get(type);
-			//newShip.mind.type = type;
 			return newShip;
 		}
 		public CurvySpline GetRoad(RoadType type)
@@ -70,10 +70,11 @@ namespace MyGame.Factory
 		void Init(WorldContainer world, UIContainer gameInterface);
 
 		Map GetMap();
-		Enemy GetEnemy(EnemyType type);
+		Enemy GetEnemy(UnitType type);
 		Ship GetShip(ShipType type);
 		CurvySpline GetRoad(RoadType type);
 		Bonus GetBonus(BonusType type);
 		UIBar GetBar(BarType type);
+		T GetAmmo<T>(UnitType unit) where T : Body;
 	}
 }

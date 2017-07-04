@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace MyGame
+namespace MyGame.Enemies
 {
 	public abstract class Enemy : Body
 	{
-		public int points { get; set; }
 		public byte starsCount { get; protected set; }
-
 		protected bool isTimerWork { get; set; }
 		protected float coldown { get; set; }
 

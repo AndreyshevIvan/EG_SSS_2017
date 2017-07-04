@@ -13,7 +13,6 @@ namespace MyGame
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
 		public int touchDemage { get; protected set; }
-		public List<Bonus> bonuses { get; set; }
 
 		public virtual void Heal(int healCount)
 		{
@@ -34,7 +33,6 @@ namespace MyGame
 
 		new protected void Awake()
 		{
-			bonuses = new List<Bonus>();
 			isEraseOnDeath = true;
 			base.Awake();
 		}

@@ -6,19 +6,20 @@ using System.Text;
 namespace MyGame
 {
 	[System.Serializable]
-	public enum EnemyType
+	public enum UnitType
 	{
-		EASY,
-		NORMAL,
-		HARD,
+		BASE_ENEMY,
+		ROCKET_COPTER,
+		TARGET_TURRET,
+		CIRCLE_TURRET,
 	}
 
 	[System.Serializable]
 	public enum ShipType
 	{
-		VOYAGER,
-		DESTENY,
-		SPLASH,
+		STANDART,
+		TANK,
+		DEMAGER,
 	}
 
 	[System.Serializable]
@@ -47,10 +48,10 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public enum AmmoType
+	public enum Maps
 	{
-		PLAYER_BASE,
-		ENEMY_BASE,
-		ENEMY_ROCKET,
+		FIRST,
+		SECOND,
+		THIRD,
 	}
 }

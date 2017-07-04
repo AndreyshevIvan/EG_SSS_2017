@@ -5,6 +5,7 @@ using UnityEngine;
 using FluffyUnderware.Curvy;
 using MyGame.Hero;
 using MyGame.Factory;
+using MyGame.Enemies;
 
 namespace MyGame
 {

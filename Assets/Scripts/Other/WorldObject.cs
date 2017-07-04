@@ -16,9 +16,9 @@ namespace MyGame
 		}
 		public SplineController roadController { get; protected set; }
 		public ParticleSystem explosion { get { return m_explosion; } }
-		public int erasePoints { get; set; }
 		public bool isWorldSet { get { return world != null; } }
 		public bool isExitAllowed { get; protected set; }
+		public int points { get; set; }
 
 		public void Init(IGameWorld newWorld)
 		{
@@ -118,7 +118,7 @@ namespace MyGame
 		protected void Cleanup()
 		{
 			Utils.DestroyAll(particles);
-			erasePoints = 0;
+			points = 0;
 		}
 
 		[SerializeField]
