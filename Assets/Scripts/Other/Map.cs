@@ -16,23 +16,23 @@ namespace MyGame
 		public Transform groundObjects { get { return m_groundObjects; } }
 		public Transform skyObjects { get { return m_skyObjects; } }
 		public float offset { get; private set; }
-		public bool isReached { get; private set; }
+		public bool isReached
+		{
+			get
+			{
+				return m_isMapEnd &&
+				tempSkySpawns.Count == 0;
+			}
+		}
 		public bool isMoveing { get; private set; }
 
 		public void OnGameplayChange()
 		{
-			if (gameplay.isMapStay)
-			{
-				m_windParticles.Pause();
-				return;
-			}
-
-			m_windParticles.Play();
 		}
 		public void Play()
 		{
 			tempSkySpawns = new List<FlySpawn>(m_flySpawns);
-			SpawnGroundUnits();
+			SpawnAllGroundUnits();
 		}
 		public void Pause(bool isPause)
 		{
@@ -55,11 +55,13 @@ namespace MyGame
 
 		private List<FlySpawn> tempSkySpawns { get; set; }
 
-		private const float MOVE_SPEED = 1.7f;
+		private float m_enemiesCount = 0;
+		private bool m_isMapEnd = false;
+
+		private const float MOVE_SPEED = 1.6f;
 
 		private void Awake()
 		{
-			isReached = false;
 			offset = 0;
 		}
 		private void FixedUpdate()
@@ -76,6 +78,7 @@ namespace MyGame
 		{
 			if (offset >= m_maxOffset)
 			{
+				m_isMapEnd = true;
 				return;
 			}
 
@@ -103,7 +106,7 @@ namespace MyGame
 			}
 			tempSkySpawns.Remove(spawn);
 		}
-		private void SpawnGroundUnits()
+		private void SpawnAllGroundUnits()
 		{
 			m_groundSpawns.ForEach(spawn => {
 				Enemy enemy = factory.GetEnemy(spawn.enemy);

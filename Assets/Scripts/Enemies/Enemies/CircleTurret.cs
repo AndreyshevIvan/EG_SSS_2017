@@ -14,6 +14,7 @@ namespace MyGame.Enemies
 
 		protected override void Shoot()
 		{
+			
 		}
 	}
 }

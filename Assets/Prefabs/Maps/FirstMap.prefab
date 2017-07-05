@@ -481,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da27aff00407cb428786135e1448c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxOffset: 100
+  m_maxOffset: 30
   m_windParticles: {fileID: 198917089717585566}
   m_groundObjects: {fileID: 4967626015242824}
   m_skyObjects: {fileID: 4304714994984520}
@@ -494,26 +494,15 @@ MonoBehaviour:
     count: 6
   - road: 1
     enemy: 0
-    offset: 15
+    offset: 10
     speed: 3
-    count: 1
+    count: 3
   - road: 2
     enemy: 0
-    offset: 20
+    offset: 15
     speed: 10
     count: 4
-  - road: 3
-    enemy: 0
-    offset: 30
-    speed: 4
-    count: 1
-  m_groundSpawns:
-  - position: {x: -3, y: 0, z: 20}
-    enemy: 0
-  - position: {x: 4, y: 0, z: 35}
-    enemy: 0
-  - position: {x: -4, y: 0, z: 40}
-    enemy: 0
+  m_groundSpawns: []
 --- !u!198 &198917089717585566
 ParticleSystem:
   m_ObjectHideFlags: 1

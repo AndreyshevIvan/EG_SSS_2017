@@ -16,18 +16,27 @@ namespace MyGame.Hero
 				UpdateProperties();
 			}
 		}
+		public IPlayerBar bar { get; set; }
 
 		public float magnetFactor { get { return m_properties.magnetFactor; } }
 		public float magnetDistance { get { return m_properties.magnetDistance; } }
 
-		public void Modificate(byte modNumber)
+		public void ModificateByOne()
 		{
-		}
+			if (modification >= GameWorld.MODIFICATION_COUNT)
+			{
+				return;
+			}
 
-		protected float gunColdown { get; set; }
+			modification++;
+			bar.modifications = modification;
+
+			m_properties.gunColdown -= GUN_COLDOWN_STEP;
+		}
 
 		protected override void OnInitEnd()
 		{
+			modification = 0;
 		}
 		protected override void PlayingUpdate()
 		{
@@ -39,7 +48,7 @@ namespace MyGame.Hero
 
 		private void ShootByBaseGun()
 		{
-			if (!Utils.UpdateTimer(ref m_gunTimer, gunColdown))
+			if (!Utils.UpdateTimer(ref m_gunTimer, m_properties.gunColdown))
 			{
 				return;
 			}
@@ -50,7 +59,7 @@ namespace MyGame.Hero
 		}
 		private void UpdateProperties()
 		{
-			gunColdown = 0.6f;//m_properties.gunColdown;
+			m_properties.gunColdown = 0.7f;
 
 			m_properties.gunData = new BulletData();
 			m_properties.gunData.speed = 30;
@@ -60,5 +69,9 @@ namespace MyGame.Hero
 		protected override void OnExitFromWorld()
 		{
 		}
+
+		private byte modification { get; set; }
+
+		private const float GUN_COLDOWN_STEP = 0.05f;
 	}
 }

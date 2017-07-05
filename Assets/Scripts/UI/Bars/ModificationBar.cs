@@ -18,7 +18,15 @@ namespace MyGame
 		}
 		protected override void OnSetNewValue()
 		{
-			throw new NotImplementedException();
+			m_planks.ForEach(plank =>
+			{
+				plank.color = m_inactive;
+
+				if (m_planks.IndexOf(plank) <= value)
+				{
+					plank.color = m_active;
+				}
+			});
 		}
 
 		private List<Image> m_planks = new List<Image>();

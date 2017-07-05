@@ -35,24 +35,31 @@ namespace MyGame
 			world = newWorld;
 			gameplay = (IGameplay)newWorld;
 			OnInitEnd();
-			if (world != null) OnGameplayChange();
+			GameplayChange();
 		}
-		public void OnGameplayChange()
+		public void GameplayChange()
 		{
-			if (!gameplay.isPlaying)
+			OnChangeGameplay();
+			currentEvent = () => { };
+
+			if (gameplay.isStop)
 			{
-				currentEvent = () => { };
 				return;
 			}
-
-			if (gameplay.isMapStay)
+			else if (gameplay.isPlaying)
 			{
-				currentEvent = onMapStay;
+				OnPlaying();
+				currentEvent = onPlaying;
 				return;
 			}
-
-			currentEvent = onMapMove;
+			else if (gameplay.isGameEnd)
+			{
+				OnEnd();
+				currentEvent = onGameEnd;
+				return;
+			}
 		}
+
 		public void MoveToGround()
 		{
 			transform.SetParent(world.ground);
@@ -82,19 +89,23 @@ namespace MyGame
 			openAllowed = false;
 			distmantleAllowed = false;
 
+			onGameStart += SmartPlayingUpdate;
+
 			onPlaying += PlayingUpdate;
 			onPlaying += UpdateBars;
+			onPlaying += onGameStart;
 
-			onMapStay += onPlaying;
-			onMapStay += StayingUpdate;
-
-			onMapMove += onPlaying;
-			onMapMove += MoveingUpdate;
+			onGameEnd += AfterMatchUpdate;
+			onGameEnd += onGameStart;
 
 			OnAwakeEnd();
 		}
 		protected virtual void OnAwakeEnd() { }
 		protected virtual void OnInitEnd() { }
+
+		protected virtual void OnChangeGameplay() { }
+		protected virtual void OnPlaying() { }
+		protected virtual void OnEnd() { }
 
 		protected void OnTriggerEnter(Collider other)
 		{
@@ -112,8 +123,8 @@ namespace MyGame
 			if (currentEvent != null) currentEvent();
 		}
 		protected virtual void PlayingUpdate() { }
-		protected virtual void StayingUpdate() { }
-		protected virtual void MoveingUpdate() { }
+		protected virtual void SmartPlayingUpdate() { }
+		protected virtual void AfterMatchUpdate() { }
 		protected virtual void UpdateBars() { }
 
 		protected abstract void OnExitFromWorld();
@@ -144,16 +155,13 @@ namespace MyGame
 
 		private EventDelegate currentEvent { get; set; }
 		private EventDelegate onPlaying { get; set; }
-		private EventDelegate onMapStay { get; set; }
-		private EventDelegate onMapMove { get; set; }
+		private EventDelegate onGameEnd { get; set; }
+		private EventDelegate onGameStart { get; set; }
 }
 
 	public interface IWorldEntity
 	{
 		void Init(IGameWorld gameWorld);
-		void OnGameplayChange();
-
-		bool isWorldSet { get; }
-		bool exitAllowed { get; }
+		void GameplayChange();
 	}
 }

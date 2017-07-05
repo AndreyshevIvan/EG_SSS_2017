@@ -59,10 +59,6 @@ namespace MyGame
 		{
 			return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
 		}
-		public static byte GetValidLevel(byte level)
-		{
-			return Clamp(level, GameData.minModLevel, GameData.maxModLevel);
-		}
 		public static T GetOther<T>(Collider other) where T : Component
 		{
 			T otherBody = other.GetComponent<T>();

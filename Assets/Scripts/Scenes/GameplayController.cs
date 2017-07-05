@@ -12,14 +12,13 @@ namespace MyGame
 	{
 		public bool isMapStart { get; private set; }
 		public bool isPaused { get; private set; }
-		public bool isMapStay { get { return map.isMoveing; } }
-		public bool isGameEnd { get { return !ship.isLive || map.isReached; } }
+		public bool isStop { get; private set; }
+		public bool isGameEnd { get { return !ship.isLive || (map.isReached && m_world.isAllEnemiesKilled); } }
 		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
 		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
 
 		private Ship ship { get; set; }
 		private Map map { get; set; }
-		private User user { get; set; }
 
 		[SerializeField]
 		private GameWorld m_world;
@@ -29,15 +28,18 @@ namespace MyGame
 		private ScenesController m_scenesController;
 		[SerializeField]
 		private Factories m_factory;
+		[SerializeField]
+		private Results m_resultsUI;
 		private ShipProperties m_shipProperties = new ShipProperties();
 
 		private bool m_isMapStart;
-		private bool m_isMapStay;
 		private bool m_isPaused;
 		private bool m_isGameEnd;
 		private bool m_isWin;
 		private bool m_isPlaying;
+		private bool m_isStop;
 
+		public const float ENDING_TIME = 1.5f;
 		private const int FRAME_RATE = 40;
 
 		private void Awake()
@@ -47,6 +49,7 @@ namespace MyGame
 
 			isMapStart = false;
 			isPaused = false;
+			isStop = false;
 		}
 		private void Start()
 		{
@@ -75,16 +78,17 @@ namespace MyGame
 		{
 			ship = m_factory.GetShip(ShipType.STANDART);
 			ship.properties = m_shipProperties;
+			ship.bar = m_interface;
 		}
 		private void InitWorld()
 		{
 			m_world.map = map;
 			m_world.ship = ship;
-			m_world.playerBar = m_interface;
+			m_world.playerInterface = m_interface;
 		}
 		private void InitInterface()
 		{
-			m_interface.gameplay = this;
+			m_interface.Init(m_world);
 
 			m_interface.onPause += map.Pause;
 
@@ -103,25 +107,12 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
-			if (!IsAnyChange())
+			if (!CheckUpdateChanges() || !isGameEnd)
 			{
 				return;
 			}
 
-			UpdateChanges();
-
-			if (!isGameEnd)
-			{
-				return;
-			}
-
-			if (isWin)
-			{
-				OnMapReached();
-				return;
-			}
-
-			OnGameOver();
+			StartCoroutine(OnMapReached(isWin));
 		}
 
 		private void OnMapStart()
@@ -131,37 +122,45 @@ namespace MyGame
 			m_interface.OnMapStart();
 			Destroy(ship.roadController);
 		}
-		private void OnMapReached()
+		private IEnumerator OnMapReached(bool isWin)
 		{
-		}
-		private void OnGameOver()
-		{
-			m_world.KillPlayer();
-			m_interface.GameOver();
-			m_scenesController.SetScene("DemoScene");
+			User user = GameData.LoadUser();
+			User oldUser = (User)user.Clone();
+			user.AddNew(m_world.player);
+			User newUser = (User)user.Clone();
+			GameData.SaveUser(user);
+
+			yield return new WaitForSeconds(ENDING_TIME);
+			m_interface.Ending();
+			yield return new WaitForSeconds(GameplayUI.ENDING_FADE_TIME);
+			isStop = true;
+			m_resultsUI.Open(oldUser, newUser, m_world.player, isWin);
 		}
 
-		private bool IsAnyChange()
+		private bool CheckUpdateChanges()
 		{
-			return (
+			bool isChange = (
 				m_isMapStart != isMapStart ||
-				m_isMapStay != isMapStay ||
 				m_isPaused != isPaused ||
 				m_isGameEnd != isGameEnd ||
 				m_isWin != isWin ||
-				m_isPlaying != isPlaying);
+				m_isPlaying != isPlaying) ||
+				m_isStop != isStop;
+
+			if (isChange) UpdateChanges();
+			return isChange;
 		}
 		private void UpdateChanges()
 		{
 			m_isMapStart = isMapStart;
-			m_isMapStay = isMapStay;
 			m_isPaused = isPaused;
 			m_isGameEnd = isGameEnd;
 			m_isWin = isWin;
 			m_isPlaying = isPlaying;
+			m_isStop = isStop;
 
-			m_world.OnGameplayChange();
-			m_interface.OnGameplayChange();
+			m_world.GameplayChange();
+			m_interface.GameplayChange();
 		} 
 	}
 
@@ -169,9 +168,9 @@ namespace MyGame
 	{
 		bool isMapStart { get; }
 		bool isPaused { get; }
-		bool isMapStay { get; }
 		bool isGameEnd { get; }
 		bool isWin { get; }
 		bool isPlaying { get; }
+		bool isStop { get; }
 	}
 }

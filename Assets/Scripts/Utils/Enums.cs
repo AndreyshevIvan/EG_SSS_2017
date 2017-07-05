@@ -63,4 +63,11 @@ namespace MyGame
 		QIRCLE_TURRET,
 		COPTER_ROCKET,
 	}
+
+	[System.Serializable]
+	public enum ResType
+	{
+		LOCALE,
+		LEVEL_PRICE,
+	}
 }

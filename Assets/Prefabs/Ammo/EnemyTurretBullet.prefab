@@ -90,11 +90,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1649258015650082}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6ae4db3f9b52224ea932db23c7beec3, type: 3}
+  m_Script: {fileID: 11500000, guid: f5764c8ca74824f44a4ef3e0745516dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_deathExplosion: {fileID: 0}
-  m_destroyParticles: []
+  m_explosion: {fileID: 0}
 --- !u!135 &135163173924390746
 SphereCollider:
   m_ObjectHideFlags: 1

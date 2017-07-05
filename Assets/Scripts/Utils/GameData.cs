@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
@@ -17,12 +18,11 @@ namespace MyGame
 				return LOCALE_PATH + localeName + LOCALE_FILE_NAME;
 			}
 		}
-		public static byte minModLevel { get { return 0; } }
-		public static byte maxModLevel { get { return 5; } }
 		public static BoundingBox mapBox
 		{
 			get { return new BoundingBox(-10, 10, -25, 25); }
 		}
+		public static string LEVELS_PATH = RESOURCES_PATH + "levels/levels";
 
 		public static void SaveUser(User user)
 		{
@@ -43,6 +43,7 @@ namespace MyGame
 			FileStream stream = new FileStream(USER_FILE, FileMode.Open);
 			User user = formatter.Deserialize(stream) as User;
 			stream.Close();
+
 			return user;
 		}
 		public static uint GetNeededExp(ushort level)
@@ -76,10 +77,14 @@ namespace MyGame
 		static string LOCALE_FILE_NAME = "_locale";
 		static string LOCALE_PATH = "locales/";
 		static string LOCALE_KEY = "locale";
+
 		static string RESOURCES_PATH = Application.dataPath + "/Resources/";
 		static string FTYPE = ".txt";
+
 		static string USER_FILE_NAME = "user" + FTYPE;
 		static string USER_FILE = RESOURCES_PATH + USER_FILE_NAME;
+
 		static string SHIPS_PROPERTIES_PATH = RESOURCES_PATH + "ShipProperties";
+
 	}
 }

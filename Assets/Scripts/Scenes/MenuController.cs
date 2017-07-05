@@ -14,8 +14,6 @@ namespace MyGame
 		{
 			m_user = GameData.LoadUser();
 			m_menuUI.stars = m_user.stars;
-			m_menuUI.diamonds = m_user.diamonds;
-			m_menuUI.SetExpDisc(m_user.experience, m_user.level);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace MyGame
 		{
 			Exit();
 		}
-		protected override void PlayingUpdate()
+		protected override void SmartPlayingUpdate()
 		{
 			if (!target)
 			{

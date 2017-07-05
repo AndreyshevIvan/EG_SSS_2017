@@ -10,9 +10,9 @@ using MyGame.Enemies;
 
 namespace MyGame
 {
-	public class GameWorld : MonoBehaviour, IGameWorld, IGameplay
+	public class GameWorld : MonoBehaviour, IGameWorld, IGameplay, IWorldEntity
 	{
-		public IPlayerBar playerBar { get; set; }
+		public IPlayerBar playerInterface { get; set; }
 		public IFactory factory { get; set; }
 		public Map map { get; set; }
 		public Ship ship
@@ -26,29 +26,34 @@ namespace MyGame
 			}
 		}
 		public WorldContainer container { get; private set; }
+		public TempPlayer player { get { return m_player; } }
 
 		public IGameplay gameplay { get; set; }
 		public bool isMapStart { get { return gameplay.isMapStart; } }
 		public bool isPaused { get { return gameplay.isPaused; } }
-		public bool isMapStay { get { return gameplay.isMapStay; } }
 		public bool isGameEnd { get { return gameplay.isGameEnd; } }
 		public bool isWin { get { return gameplay.isWin; } }
 		public bool isPlaying { get { return gameplay.isPlaying; } }
+		public bool isStop { get { return gameplay.isStop; } }
 
 		public Transform sky { get { return map.skyObjects; } }
 		public Transform ground { get { return map.groundObjects; } }
 		public BoundingBox box { get; private set; }
 		public float visiblePosition { get; private set; }
+		public bool isAllEnemiesKilled { get { return container.isEnemiesEmpty; } }
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
 		public const int WORLD_BOX_LAYER = 31;
 		public const int MODIFICATION_COUNT = 7;
 
-		public void OnGameplayChange()
+		public void Init(IGameWorld gameWorld)
 		{
-			ship.OnGameplayChange();
-			container.NotifyObjects();
+		}
+		public void GameplayChange()
+		{
+			ship.GameplayChange();
+			container.GameplayChange();
 		}
 		public void Add<T>(T obj) where T : WorldObject
 		{
@@ -61,9 +66,9 @@ namespace MyGame
 		}
 		public void Remove<T>(T obj) where T : WorldObject
 		{
+			container.Remove(obj);
 			if (obj.openAllowed) OpenObject(obj);
 			if (obj.distmantleAllowed) Dismantle(obj);
-			container.Remove(obj);
 			Destroy(obj.gameObject);
 		}
 
@@ -126,6 +131,7 @@ namespace MyGame
 		}
 
 		private Ship m_ship;
+		private TempPlayer m_player;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
 
@@ -139,8 +145,21 @@ namespace MyGame
 		private void Awake()
 		{
 			box = GameData.mapBox;
-			container = new WorldContainer(this);
+			container = new WorldContainer();
+			container.Init(this);
 		}
+
+		private void Start()
+		{
+			InitTempPlayer();
+		}
+		private void InitTempPlayer()
+		{
+			m_player = new TempPlayer(playerInterface);
+			m_player.onDemaged = () => { Debug.Log("Demaged"); };
+			m_player.onLossEnemy = () => { Debug.Log("LOSS"); };
+		}
+
 		private void FixedUpdate()
 		{
 			//Debug.Log(container.ToString());
@@ -160,7 +179,8 @@ namespace MyGame
 		}
 		private void OpenObject(WorldObject obj)
 		{
-			playerBar.points += obj.points;
+			player.AddPoints(obj.points);
+
 			obj.bonuses.ForEach(bonus =>
 			{
 				Utils.DoAnyTimes(bonus.value, () =>
@@ -193,11 +213,12 @@ namespace MyGame
 
 	public interface IGameWorld
 	{
-		BoundingBox box { get; }
 		IFactory factory { get; }
+		TempPlayer player { get; }
 		Ship ship { get; }
 		Transform sky { get; }
 		Transform ground { get; }
+		BoundingBox box { get; }
 		float visiblePosition { get; }
 
 		void Add<T>(T obj) where T : WorldObject;
@@ -210,13 +231,20 @@ namespace MyGame
 		void MoveToShip(WorldObject body, bool useShipMagnetic = true);
 	}
 
-	public class WorldContainer
+	public class WorldContainer : IWorldEntity
 	{
-		public WorldContainer(IGameWorld initWorld)
-		{
-			world = initWorld;
-		}
+		public bool isEnemiesEmpty { get { return m_enemies.Count == 0; } }
 
+		public void Init(IGameWorld gameWorld)
+		{
+			world = gameWorld;
+		}
+		public void GameplayChange()
+		{
+			m_enemies.ForEach(element => element.GameplayChange());
+			m_bonuses.ForEach(element => element.GameplayChange());
+			m_other.ForEach(element => element.GameplayChange());
+		}
 		public void Add<T>(T obj) where T : IWorldEntity
 		{
 			if (obj is Enemy)
@@ -247,12 +275,7 @@ namespace MyGame
 				EraseOther(obj as WorldObject);
 			}
 		}
-		public void NotifyObjects()
-		{
-			m_enemies.ForEach(element => element.OnGameplayChange());
-			m_bonuses.ForEach(element => element.OnGameplayChange());
-			m_other.ForEach(element => element.OnGameplayChange());
-		}
+
 		public override string ToString()
 		{
 			string result = "";
@@ -320,8 +343,8 @@ namespace MyGame
 
 			m_onErasing.Add(eraseObject);
 			list.Remove(eraseObject);
+			list.RemoveAll(element => element == null);
 			m_onErasing.Remove(eraseObject);
-			m_onErasing.RemoveAll(element => element == null);
 		}
 	}
 }

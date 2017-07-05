@@ -7,7 +7,7 @@ using System;
 
 namespace MyGame
 {
-	public class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer
+	public class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer, IWorldEntity
 	{
 		public PointDelegate moveShip;
 		public BoolEventDelegate uncontrollEvents;
@@ -15,26 +15,17 @@ namespace MyGame
 		public EventDelegate firstTouchEvents;
 		public EventDelegate onRestart;
 
-		public IGameplay gameplay { get; set; }
-		public int points
-		{
-			get { return (int)m_points.value; }
-			set { m_points.SetValue(value); }
-		}
-		public int modifications
-		{
-			get;
-			set;
-		}
-		public int progress
-		{
-			get;
-			set;
-		}
+		public int points { set { m_points.SetValue(value); } }
+		public int modifications { set { m_modsBar.SetValue(value); } }
 
+		public const float ENDING_FADE_TIME = 0.4f;
 		public const float SLOWMO_CHANGE_TIME = 0.3f;
 
-		public void OnGameplayChange()
+		public void Init(IGameWorld gameWorld)
+		{
+			gameplay = gameWorld as IGameplay;
+		}
+		public void GameplayChange()
 		{
 		}
 		public void OnMapStart()
@@ -45,12 +36,9 @@ namespace MyGame
 			onPause(isPause);
 			OpenPauseInterface(isPause);
 		}
-		public void GameOver()
+		public void Ending()
 		{
-		}
-		public void Restart()
-		{
-			SceneManager.LoadScene("DemoScene");
+			m_slowmoCurtain.CrossFadeAlpha(1, ENDING_FADE_TIME, true);
 		}
 		public void Cleanup()
 		{
@@ -73,9 +61,12 @@ namespace MyGame
 		private Transform m_barsParent;
 		[SerializeField]
 		private PointsBar m_points;
+		[SerializeField]
+		private ModificationBar m_modsBar;
 
 		private bool m_isPlayerControll = false;
 
+		private IGameplay gameplay { get; set; }
 		private bool isSlowMode
 		{
 			get
@@ -96,13 +87,14 @@ namespace MyGame
 			firstTouchEvents += () => { isFirstTouchCreated = true; };
 			OnStartNewGame();
 		}
+
 		private void FixedUpdate()
 		{
-			UpdateCurtain();
 			ControllInterface();
 
-			if (gameplay.isMapStart)
+			if (gameplay.isPlaying)
 			{
+				UpdateCurtain();
 				ControllShip();
 			}
 		}
@@ -138,12 +130,14 @@ namespace MyGame
 			float target = (isSlowMode) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			m_slowmoCurtain.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
 		}
+
 		private void OnStartNewGame()
 		{
 			isFirstTouchCreated = false;
 			m_isPlayerControll = false;
 			m_slowmoCurtain.CrossFadeAlpha(0, 0, true);
 		}
+
 		private void OpenPauseInterface(bool isPause)
 		{
 		}
@@ -160,9 +154,8 @@ namespace MyGame
 
 	public interface IPlayerBar
 	{
-		int points { get; set; }
-		int modifications { get; set; }
-		int progress { get; set; }
+		int points { set; }
+		int modifications { set; }
 	}
 
 	public interface UIContainer

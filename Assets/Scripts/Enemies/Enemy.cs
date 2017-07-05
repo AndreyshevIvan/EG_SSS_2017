@@ -26,15 +26,20 @@ namespace MyGame.Enemies
 				healthBar.SetValue(healthPart);
 				healthBar.isFadable = true;
 			}
-
 			if (roadController) roadController.OnEndReached.AddListener((T) =>
 			{
+				world.player.LossEnemy();
 				Exit();
 			});
 		}
 		protected sealed override void PlayingUpdate()
 		{
 			TryShoot();
+		}
+		protected sealed override void OnExitFromWorld()
+		{
+			base.OnExitFromWorld();
+			world.player.LossEnemy();
 		}
 		protected abstract void InitProperties();
 		protected abstract void Shoot();

@@ -8,10 +8,55 @@ using System;
 
 namespace MyGame
 {
-	public struct TempPlayer
+	[System.Serializable]
+	public class TempPlayer
 	{
-		public int points { get; set; }
-		public int stars { get; set; }
+		public TempPlayer(IPlayerBar bar)
+		{
+			m_points = 0;
+			playerBar = bar;
+		}
+
+		public EventDelegate onDemaged;
+		public EventDelegate onLossEnemy;
+
+		public bool isDemaged { get; private set; }
+		public bool isLossEnemy { get; private set; }
+
+		public void AddPoints(int pointsCount)
+		{
+			m_points = Mathf.Clamp(pointsCount + m_points, MIN_POINTS, MAX_POINTS);
+			playerBar.points = m_points;
+		}
+		public void Demaged()
+		{
+			if (isDemaged)
+			{
+				return;
+			}
+
+			if (onDemaged != null) onDemaged();
+			onDemaged = null;
+			isDemaged = true;
+		}
+		public void LossEnemy()
+		{
+			if (isLossEnemy)
+			{
+				return;
+			}
+
+			if (onLossEnemy != null) onLossEnemy();
+			onLossEnemy = null;
+			isLossEnemy = true;
+		}
+
+		private int m_points;
+
+		private const int MIN_POINTS = 0;
+		private const int MAX_POINTS = 999999999;
+
+		private IPlayerBar playerBar;
 	}
 
 	[System.Serializable]
@@ -63,7 +108,6 @@ namespace MyGame
 		[SerializeField]
 		public TValue value;
 	}
-
 }
 namespace MyGame.Factory
 {

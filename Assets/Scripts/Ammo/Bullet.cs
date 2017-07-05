@@ -27,7 +27,7 @@ namespace MyGame
 		protected override void OnDemageTaked()
 		{
 		}
-		protected override void PlayingUpdate()
+		protected override void SmartPlayingUpdate()
 		{
 			position += direction * Time.fixedDeltaTime * data.speed;
 		}

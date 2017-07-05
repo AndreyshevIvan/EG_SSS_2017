@@ -16,7 +16,6 @@ namespace MyGame
 		protected override void OnAwakeEnd()
 		{
 			layout = GetComponent<HorizontalLayoutGroup>();
-			maxValue = 1;
 			SetFade(0, 0);
 		}
 		protected override void InitSizing()

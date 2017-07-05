@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,16 +22,7 @@ namespace MyGame
 				return;
 			}
 
-			if (newValue >= minValue && newValue <= maxValue)
-			{
-				value = newValue;
-			}
-			else
-			{
-				value = (newValue < minValue) ? minValue : maxValue;
-			}
-
-
+			value = newValue;
 			OnSetNewValue();
 			lastUpdateTimer = 0;
 			if (isFadable && isFirstSetComplete) SetFade(1, 0);
@@ -43,8 +35,6 @@ namespace MyGame
 		}
 
 		protected float lastUpdateTimer { get; private set; }
-		protected float minValue { get; set; }
-		protected float maxValue { get; set; }
 		protected Vector2 offset { get; set; }
 		protected RectTransform rect { get; set; }
 		protected bool isFirstSetComplete { get; private set; }
@@ -55,8 +45,6 @@ namespace MyGame
 			rect = GetComponent<RectTransform>();
 			isFirstSetComplete = false;
 			lastUpdateTimer = 0;
-			minValue = 0;
-			maxValue = float.MaxValue;
 			OnAwakeEnd();
 			InitSizing();
 		}
@@ -75,6 +63,7 @@ namespace MyGame
 
 		private List<Graphic> m_fadeElements;
 
+		private const float CLOSE_FADE_TIME = 0.15f;
 		private const float VISIBLE_TIME = 1;
 		private const float FADE_TIME = 0.3f;
 
@@ -95,4 +84,6 @@ namespace MyGame
 			SetFade(0, FADE_TIME);
 		}
 	}
+
+	public delegate void CloseEvent<IEnumerator>();
 }
