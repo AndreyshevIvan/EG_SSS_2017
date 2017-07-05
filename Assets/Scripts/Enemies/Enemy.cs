@@ -14,6 +14,11 @@ namespace MyGame.Enemies
 
 		protected sealed override void OnInitEnd()
 		{
+			isTimerWork = false;
+			exitAllowed = true;
+			openAllowed = true;
+			distmantleAllowed = true;
+
 			InitProperties();
 
 			if (healthBar)
@@ -24,7 +29,7 @@ namespace MyGame.Enemies
 
 			if (roadController) roadController.OnEndReached.AddListener((T) =>
 			{
-				world.Remove(this, false);
+				Exit();
 			});
 		}
 		protected sealed override void PlayingUpdate()

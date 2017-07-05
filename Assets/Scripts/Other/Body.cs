@@ -55,7 +55,7 @@ namespace MyGame
 			if (!isLive && isEraseOnDeath)
 			{
 				world.CreateExplosion(explosion, position);
-				world.Remove(this, true);
+				world.Remove(this);
 				return;
 			}
 
@@ -73,8 +73,10 @@ namespace MyGame
 
 		protected void OnDestroy()
 		{
-			Debug.Log("Close bar");
 			if (healthBar) healthBar.Close();
+		}
+		protected override void OnExitFromWorld()
+		{
 		}
 	}
 }

@@ -11,6 +11,7 @@ namespace MyGame
 
 		protected void Start()
 		{
+			exitAllowed = true;
 			world.SubscribeToMove(this);
 			SetRandomRotation();
 
@@ -31,11 +32,12 @@ namespace MyGame
 			}
 
 			OnRealize();
-			world.Remove(this, true);
+			Exit();
 		}
 		protected sealed override void PlayingUpdate()
 		{
 			if (isMagnetic) world.MoveToShip(this);
+			UpdatePositionOnField();
 		}
 		protected abstract void OnRealize();
 

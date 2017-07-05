@@ -14,7 +14,9 @@ namespace MyGame
 		{
 			touchDemage = data.demage;
 
+			shootPosition.y = GameWorld.FLY_HEIGHT;
 			position = shootPosition;
+			shootDirection.y = 0;
 			direction = shootDirection;
 		}
 
@@ -24,7 +26,6 @@ namespace MyGame
 		}
 		protected override void OnDemageTaked()
 		{
-			world.Remove(this, false);
 		}
 		protected override void PlayingUpdate()
 		{

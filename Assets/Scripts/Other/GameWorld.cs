@@ -37,6 +37,8 @@ namespace MyGame
 
 		public Transform sky { get { return map.skyObjects; } }
 		public Transform ground { get { return map.groundObjects; } }
+		public BoundingBox box { get; private set; }
+		public float visiblePosition { get; private set; }
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
@@ -57,10 +59,12 @@ namespace MyGame
 
 			container.Add(obj);
 		}
-		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : WorldObject
+		public void Remove<T>(T obj) where T : WorldObject
 		{
-			if (isOpenBeforeDelete) OpenObject(obj);
+			if (obj.openAllowed) OpenObject(obj);
+			if (obj.distmantleAllowed) Dismantle(obj);
 			container.Remove(obj);
+			Destroy(obj.gameObject);
 		}
 
 		public Vector3 GetNearestEnemy(Vector3 point)
@@ -121,12 +125,7 @@ namespace MyGame
 		{
 		}
 
-		protected void OnTriggerExit(Collider other)
-		{
-		}
-
 		private Ship m_ship;
-		private BoundingBox m_gameBox;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
 
@@ -139,12 +138,25 @@ namespace MyGame
 
 		private void Awake()
 		{
-			m_gameBox = GameData.mapBox;
+			box = GameData.mapBox;
 			container = new WorldContainer(this);
 		}
 		private void FixedUpdate()
 		{
 			//Debug.Log(container.ToString());
+		}
+
+		private void OnTriggerExit(Collider other)
+		{
+			WorldObject obj = other.GetComponent<WorldObject>();
+			if (obj && !obj.roadController && obj.exitAllowed)
+			{
+				obj.ExitFromWorld();
+				Remove(obj);
+				return;
+			}
+
+			Destroy(other.gameObject);
 		}
 		private void OpenObject(WorldObject obj)
 		{
@@ -161,7 +173,6 @@ namespace MyGame
 		}
 		private void Dismantle(WorldObject dismantleObject)
 		{
-			/*
 			if (!dismantleObject)
 			{
 				return;
@@ -171,27 +182,26 @@ namespace MyGame
 			List<Rigidbody> bodies = Utils.GetChilds<Rigidbody>(dismantleObject);
 			bodies.ForEach(body =>
 			{
-				body.transform.SetParent(groundObjects);
+				body.transform.SetParent(ground);
 				body.useGravity = true;
 				body.isKinematic = false;
 				body.gameObject.layer = GARBAGE_LAYER;
 				body.AddForce(Utils.RandomVect(-DISMANTLE_FORCE, DISMANTLE_FORCE));
-				Renderer renderer = body.GetComponentInChildren<Renderer>();
-				if (renderer != null) renderer.material = m_garbageMaterial;
 			});
-			*/
 		}
 	}
 
 	public interface IGameWorld
 	{
+		BoundingBox box { get; }
 		IFactory factory { get; }
 		Ship ship { get; }
 		Transform sky { get; }
 		Transform ground { get; }
+		float visiblePosition { get; }
 
 		void Add<T>(T obj) where T : WorldObject;
-		void Remove<T>(T obj, bool isOpenBeforeDelete) where T : WorldObject;
+		void Remove<T>(T obj) where T : WorldObject;
 
 		Vector3 GetNearestEnemy(Vector3 point);
 
@@ -310,8 +320,6 @@ namespace MyGame
 
 			m_onErasing.Add(eraseObject);
 			list.Remove(eraseObject);
-			Component component = eraseObject as Component;
-			if (component) Component.Destroy(component.gameObject);
 			m_onErasing.Remove(eraseObject);
 			m_onErasing.RemoveAll(element => element == null);
 		}

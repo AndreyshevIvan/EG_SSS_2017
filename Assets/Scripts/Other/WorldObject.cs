@@ -16,8 +16,12 @@ namespace MyGame
 		}
 		public SplineController roadController { get; protected set; }
 		public ParticleSystem explosion { get { return m_explosion; } }
+
+		public bool exitAllowed { get; protected set; }
+		public bool openAllowed { get; protected set; }
+		public bool distmantleAllowed { get; protected set; }
+
 		public bool isWorldSet { get { return world != null; } }
-		public bool isExitAllowed { get; protected set; }
 		public int points { get; protected set; }
 		public List<Pair<BonusType, int>> bonuses { get; protected set; }
 
@@ -57,10 +61,13 @@ namespace MyGame
 		{
 			transform.SetParent(world.sky);
 		}
+		public void ExitFromWorld()
+		{
+			OnExitFromWorld();
+		}
 
 		protected IGameplay gameplay { get; private set; }
 		protected IGameWorld world { get; private set; }
-		protected BoundingBox mapBox { get; private set; }
 		protected Rigidbody physicsBody { get; private set; }
 		protected List<ParticleSystem> particles { get; set; }
 
@@ -70,8 +77,10 @@ namespace MyGame
 			roadController = GetComponent<SplineController>();
 			particles = Utils.GetAllComponents<ParticleSystem>(this);
 			bonuses = new List<Pair<BonusType, int>>();
-			mapBox = GameData.mapBox;
-			isExitAllowed = true;
+
+			exitAllowed = true;
+			openAllowed = false;
+			distmantleAllowed = false;
 
 			onPlaying += PlayingUpdate;
 			onPlaying += UpdateBars;
@@ -93,15 +102,6 @@ namespace MyGame
 		}
 		protected virtual void OnTrigger(Collider other) { }
 
-		protected void OnTriggerExit(Collider other)
-		{
-			if (other.gameObject.layer == GameWorld.WORLD_BOX_LAYER &&
-				isExitAllowed)
-			{
-				world.Remove(this, false);
-			}
-		}
-
 		protected void FixedUpdate()
 		{
 			if (world == null)
@@ -116,7 +116,22 @@ namespace MyGame
 		protected virtual void MoveingUpdate() { }
 		protected virtual void UpdateBars() { }
 
-		protected virtual void OnExitFromWorld() { }
+		protected abstract void OnExitFromWorld();
+		protected void UpdatePositionOnField()
+		{
+			position = new Vector3(
+				Mathf.Clamp(position.x, world.box.xMin, world.box.xMax),
+				GameWorld.FLY_HEIGHT,
+				Mathf.Clamp(position.z, world.box.zMin, world.box.zMax)
+			);
+		}
+
+		protected void Exit()
+		{
+			openAllowed = false;
+			distmantleAllowed = false;
+			world.Remove(this);
+		}
 		protected void Cleanup()
 		{
 			Utils.DestroyAll(particles);
@@ -139,6 +154,6 @@ namespace MyGame
 		void OnGameplayChange();
 
 		bool isWorldSet { get; }
-		bool isExitAllowed { get; }
+		bool exitAllowed { get; }
 	}
 }

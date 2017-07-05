@@ -61,14 +61,6 @@ namespace MyGame.Hero
 		private const float X_ANGLE = 180;
 		private const float MAX_VELOCITY_ANGLE = 80;
 
-		private void UpdatePositionOnField()
-		{
-			position = new Vector3(
-				Mathf.Clamp(position.x, mapBox.xMin, mapBox.xMax),
-				GameWorld.FLY_HEIGHT,
-				Mathf.Clamp(position.z, mapBox.zMin, mapBox.zMax)
-			);
-		}
 		private void UpdateRotation()
 		{
 			float zEuler = physicsBody.velocity.x * -TILT;

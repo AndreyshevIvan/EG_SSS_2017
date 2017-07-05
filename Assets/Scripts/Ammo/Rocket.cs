@@ -10,13 +10,13 @@ namespace MyGame
 	{
 		protected override void OnDemageTaked()
 		{
-			world.Remove(this, false);
+			Exit();
 		}
 		protected override void PlayingUpdate()
 		{
 			if (!target)
 			{
-				world.Remove(this, false);
+				Exit();
 			}
 
 			Vector3 direction = Vector3.Normalize(target.position - position);

@@ -56,5 +56,9 @@ namespace MyGame.Hero
 			m_properties.gunData.speed = 30;
 			m_properties.gunData.demage = 10;
 		}
+
+		protected override void OnExitFromWorld()
+		{
+		}
 	}
 }
