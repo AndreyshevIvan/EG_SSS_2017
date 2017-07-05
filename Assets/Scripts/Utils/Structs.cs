@@ -50,6 +50,14 @@ namespace MyGame
 	[System.Serializable]
 	public class Pair<TKey, TValue>
 	{
+		public static Pair<TKey, TValue> Create(TKey key, TValue value)
+		{
+			Pair<TKey, TValue> newPair = new Pair<TKey, TValue>();
+			newPair.key = key;
+			newPair.value = value;
+			return newPair;
+		}
+
 		[SerializeField]
 		public TKey key;
 		[SerializeField]
@@ -71,4 +79,6 @@ namespace MyGame.Factory
 	public class ShipPair : Pair<ShipType, Ship> { }
 	[System.Serializable]
 	public class BarsPair : Pair<BarType, UIBar> { }
+	[System.Serializable]
+	public class AmmoPair : Pair<AmmoType, Body> { }
 }

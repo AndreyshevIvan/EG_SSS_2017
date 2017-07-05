@@ -14,6 +14,7 @@ namespace MyGame.Enemies
 			touchDemage = 100;
 			starsCount = 7;
 			points = 1527;
+			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
 		}
 		protected override void Shoot()
 		{

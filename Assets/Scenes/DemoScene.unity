@@ -818,7 +818,7 @@ GameObject:
   - component: {fileID: 355664181}
   - component: {fileID: 355664182}
   m_Layer: 0
-  m_Name: Curvy Spline
+  m_Name: PlayerSpline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1163,7 +1163,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 501718768}
-  m_LocalRotation: {x: 0.17124467, y: 0.9728916, z: 0.026943296, w: 0.15307283}
+  m_LocalRotation: {x: 0.17124093, y: 0.9728923, z: 0.026942708, w: 0.15307294}
   m_LocalPosition: {x: -7, y: 0, z: -3.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1352,7 +1352,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 605988203}
-  m_LocalRotation: {x: 0.021351581, y: 0.1221565, z: 0.1708494, w: 0.97746223}
+  m_LocalRotation: {x: 0.021352133, y: 0.12215962, z: 0.17084937, w: 0.9774618}
   m_LocalPosition: {x: 7, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1643,7 +1643,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 762135193}
-  m_LocalRotation: {x: -1.3691313e-10, y: -0.003999396, z: 0.000000034233178, w: 0.999992}
+  m_LocalRotation: {x: 8.8662505e-10, y: -0.003999396, z: -0.00000022168797, w: 0.999992}
   m_LocalPosition: {x: 7, y: 0, z: 16.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1679,10 +1679,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_slowmoCurtain: {fileID: 1608219557}
   m_barsParent: {fileID: 1468949817}
-  m_shipHealthBar: {fileID: 114852878645861338, guid: 5929bce498fa6eb47b9674d6a67ee647,
-    type: 2}
-  m_enemyHealthBar: {fileID: 114852878645861338, guid: c9b2a3f7316d31641937fc8d1dad6e5d,
-    type: 2}
   m_points: {fileID: 621844412}
 --- !u!4 &788524046
 Transform:
@@ -2217,6 +2213,7 @@ MonoBehaviour:
   m_interface: {fileID: 788524045}
   m_scenesController: {fileID: 114658897189983652, guid: ddaec572f4cec6644818030871d24073,
     type: 2}
+  m_factory: {fileID: 1423890042}
 --- !u!4 &1423890041
 Transform:
   m_ObjectHideFlags: 0
@@ -2241,33 +2238,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ce75c6db94fa9498f1dce6920b25d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maps:
-    m_firstMap: {fileID: 114607863792255784, guid: 727c283eb3386324abbf3dcfc59567a1,
-      type: 2}
-  enemies:
-    m_easyEnemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534,
-      type: 2}
-    m_middleEnemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8,
-      type: 2}
-    m_hardEnemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e,
-      type: 2}
-  ships:
-    m_modelFirst: {fileID: 114297464834780986, guid: 6551714bcf9b79748bcd60e272224076,
-      type: 2}
-    m_modelSecond: {fileID: 114297464834780986, guid: 6551714bcf9b79748bcd60e272224076,
-      type: 2}
-    m_modelThird: {fileID: 114297464834780986, guid: 6551714bcf9b79748bcd60e272224076,
-      type: 2}
-  roads:
-    big: {fileID: 1418591656}
-    left: {fileID: 87805736}
-    right: {fileID: 1967377008}
-    diff: {fileID: 662317853}
-    player: {fileID: 355664182}
-  bonuses:
-    star: {fileID: 114738346425312792, guid: 349377e0b98518744bddd8b0f05afc25, type: 2}
-    health: {fileID: 114168178720628476, guid: 8c56189723b4b2a4c8f84b6549ae4401, type: 2}
-    ammo: {fileID: 114330962138482488, guid: 34fe1acd9da7f8843be878e0d7c91165, type: 2}
+  m_maps:
+  - key: 0
+    value: {fileID: 114607863792255784, guid: 727c283eb3386324abbf3dcfc59567a1, type: 2}
+  - key: 1
+    value: {fileID: 0}
+  - key: 2
+    value: {fileID: 0}
+  m_enemies:
+  - key: 0
+    value: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
+  - key: 1
+    value: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
+  - key: 2
+    value: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
+  - key: 3
+    value: {fileID: 0}
+  m_roads:
+  - key: 0
+    value: {fileID: 1418591656}
+  - key: 1
+    value: {fileID: 87805736}
+  - key: 2
+    value: {fileID: 1967377008}
+  - key: 3
+    value: {fileID: 662317853}
+  - key: 4
+    value: {fileID: 355664182}
+  m_ships:
+  - key: 0
+    value: {fileID: 114297464834780986, guid: 6551714bcf9b79748bcd60e272224076, type: 2}
+  m_bonuses:
+  - key: 0
+    value: {fileID: 114738346425312792, guid: 349377e0b98518744bddd8b0f05afc25, type: 2}
+  m_bars:
+  - key: 0
+    value: {fileID: 114852878645861338, guid: 5929bce498fa6eb47b9674d6a67ee647, type: 2}
+  - key: 1
+    value: {fileID: 114852878645861338, guid: c9b2a3f7316d31641937fc8d1dad6e5d, type: 2}
+  m_ammo:
+  - key: 0
+    value: {fileID: 114552388259447474, guid: 8cdab1d20f3211e40a0280182141389a, type: 2}
 --- !u!1001 &1443147253
 Prefab:
   m_ObjectHideFlags: 0
@@ -2490,7 +2501,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1515814495}
-  m_LocalRotation: {x: -0.03712703, y: -0.8513717, z: 0.022796357, w: 0.52275056}
+  m_LocalRotation: {x: -0.037127025, y: -0.8513717, z: 0.022796355, w: 0.52275056}
   m_LocalPosition: {x: -3.82, y: 0, z: 8.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -3388,7 +3399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c04e611f89cf28848ae41ab5c4b2aba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_garbageMaterial: {fileID: 2100000, guid: f63b1b24a573ec942a1f80b815e3c53d, type: 2}
 --- !u!4 &1979910486
 Transform:
   m_ObjectHideFlags: 0

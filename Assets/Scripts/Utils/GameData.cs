@@ -68,7 +68,7 @@ namespace MyGame
 
 			BinaryFormatter formatter = new BinaryFormatter();
 			FileStream stream = new FileStream(file, FileMode.Open);
-			ShipProperties ship = formatter.Deserialize(stream) as ShipProperties;
+			ShipProperties ship = (ShipProperties)formatter.Deserialize(stream);
 			stream.Close();
 			return ship;
 		}

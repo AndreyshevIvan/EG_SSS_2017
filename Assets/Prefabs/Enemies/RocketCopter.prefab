@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 114082033760199608}
   - component: {fileID: 114558323566588958}
   m_Layer: 10
-  m_Name: MiddleEnemy
+  m_Name: RocketCopter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

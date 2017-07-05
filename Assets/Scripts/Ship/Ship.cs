@@ -13,7 +13,7 @@ namespace MyGame.Hero
 			set
 			{
 				mind.properties = value;
-				health = maxHealth = value.health;
+				health = maxHealth = 100;//value.health;
 			}
 		}
 
@@ -33,9 +33,9 @@ namespace MyGame.Hero
 		}
 		protected override void OnInitEnd()
 		{
+			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
 			healthBar.SetValue(healthPart);
-			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);
 			touchDemage = int.MaxValue;
 			isEraseOnDeath = false;
 		}

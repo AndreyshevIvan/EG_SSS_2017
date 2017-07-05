@@ -1068,10 +1068,9 @@ GameObject:
   - component: {fileID: 54990424370749922}
   - component: {fileID: 65158693807080602}
   - component: {fileID: 114523728639798248}
-  - component: {fileID: 114735616801059042}
   - component: {fileID: 23010651232987142}
   m_Layer: 15
-  m_Name: HardEnemy
+  m_Name: TargetTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4455,33 +4454,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_explosion: {fileID: 0}
---- !u!114 &114735616801059042
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1880791473525610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd56dc30522eb014799a7012e26a8e3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <roadController>k__BackingField: {fileID: 0}
-  <explosion>k__BackingField: {fileID: 0}
-  <erasePoints>k__BackingField: 0
-  <isExitAllowed>k__BackingField: 0
-  <mapBox>k__BackingField:
-    xMin: 0
-    xMax: 0
-    zMin: 0
-    zMax: 0
-  <physicsBody>k__BackingField: {fileID: 0}
-  <particles>k__BackingField: []
-  m_isStartExit: 0
-  <demage>k__BackingField: 0
-  <coldown>k__BackingField: 0
-  <isTimerWork>k__BackingField: 0
-  m_timer: 0
-  m_bulletsSpawn: {fileID: 0}
-  m_bullet: {fileID: 114913540811696196, guid: 0af1860afc4830e48bfb7f69c0c87d3a, type: 2}
-  <speed>k__BackingField: 0
+  m_bullet: {fileID: 0}

@@ -18,7 +18,8 @@ namespace MyGame
 		public ParticleSystem explosion { get { return m_explosion; } }
 		public bool isWorldSet { get { return world != null; } }
 		public bool isExitAllowed { get; protected set; }
-		public int points { get; set; }
+		public int points { get; protected set; }
+		public List<Pair<BonusType, int>> bonuses { get; protected set; }
 
 		public void Init(IGameWorld newWorld)
 		{
@@ -58,9 +59,9 @@ namespace MyGame
 		}
 
 		protected IGameplay gameplay { get; private set; }
-		protected IGameWorld world { get; set; }
-		protected BoundingBox mapBox { get; set; }
-		protected Rigidbody physicsBody { get; set; }
+		protected IGameWorld world { get; private set; }
+		protected BoundingBox mapBox { get; private set; }
+		protected Rigidbody physicsBody { get; private set; }
 		protected List<ParticleSystem> particles { get; set; }
 
 		protected void Awake()
@@ -68,6 +69,7 @@ namespace MyGame
 			physicsBody = GetComponent<Rigidbody>();
 			roadController = GetComponent<SplineController>();
 			particles = Utils.GetAllComponents<ParticleSystem>(this);
+			bonuses = new List<Pair<BonusType, int>>();
 			mapBox = GameData.mapBox;
 			isExitAllowed = true;
 

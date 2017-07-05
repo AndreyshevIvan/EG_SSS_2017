@@ -65,5 +65,16 @@ namespace MyGame
 		protected virtual void DoBeforeDemaged() { }
 		protected virtual void DoAfterDemaged() { }
 		protected virtual void OnDemageTaked() { }
+
+		protected sealed override void UpdateBars()
+		{
+			if (healthBar) healthBar.position = position;
+		}
+
+		protected void OnDestroy()
+		{
+			Debug.Log("Close bar");
+			if (healthBar) healthBar.Close();
+		}
 	}
 }

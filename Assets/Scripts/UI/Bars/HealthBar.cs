@@ -17,6 +17,7 @@ namespace MyGame
 		{
 			layout = GetComponent<HorizontalLayoutGroup>();
 			maxValue = 1;
+			SetFade(0, 0);
 		}
 		protected override void InitSizing()
 		{

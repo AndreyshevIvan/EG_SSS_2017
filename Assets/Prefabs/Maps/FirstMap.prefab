@@ -481,38 +481,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da27aff00407cb428786135e1448c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_maxOffset: 100
   m_windParticles: {fileID: 198917089717585566}
   m_groundObjects: {fileID: 4967626015242824}
   m_skyObjects: {fileID: 4304714994984520}
   m_ground: {fileID: 4496978326847128}
   m_flySpawns:
   - road: 0
-    enemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
+    enemy: 0
     offset: 3
     speed: 10
     count: 6
   - road: 1
-    enemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
+    enemy: 0
     offset: 15
     speed: 3
     count: 1
   - road: 2
-    enemy: {fileID: 114781273794686490, guid: 10bbcaa7ec230d04e80d682981785534, type: 2}
+    enemy: 0
     offset: 20
     speed: 10
     count: 4
   - road: 3
-    enemy: {fileID: 114082033760199608, guid: b60ad3e63ccc678449870d13c01adbb8, type: 2}
+    enemy: 0
     offset: 30
     speed: 4
     count: 1
   m_groundSpawns:
   - position: {x: -3, y: 0, z: 20}
-    enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
+    enemy: 0
   - position: {x: 4, y: 0, z: 35}
-    enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
+    enemy: 0
   - position: {x: -4, y: 0, z: 40}
-    enemy: {fileID: 114523728639798248, guid: ea1f5a552b63f8c44921e3f0f46a027e, type: 2}
+    enemy: 0
 --- !u!198 &198917089717585566
 ParticleSystem:
   m_ObjectHideFlags: 1

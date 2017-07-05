@@ -19,12 +19,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4999183962033628}
-  - component: {fileID: 33500203308957676}
-  - component: {fileID: 23676764907884898}
-  - component: {fileID: 114913540811696196}
   - component: {fileID: 136073002685371128}
+  - component: {fileID: 114552388259447474}
+  - component: {fileID: 54779199361020902}
+  - component: {fileID: 23978292466717648}
+  - component: {fileID: 33316816832583734}
   m_Layer: 8
-  m_Name: PlayerSimpleBullet
+  m_Name: PlayerGunBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,13 +38,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1649258015650082}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -5.7893343, y: -4.08092, z: -0.8100542}
+  m_LocalPosition: {x: -5.7893343, y: 1.807, z: 0.349}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!23 &23676764907884898
+--- !u!23 &23978292466717648
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -75,14 +76,29 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33500203308957676
+--- !u!33 &33316816832583734
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1649258015650082}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114913540811696196
+--- !u!54 &54779199361020902
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649258015650082}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &114552388259447474
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -90,11 +106,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1649258015650082}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6ae4db3f9b52224ea932db23c7beec3, type: 3}
+  m_Script: {fileID: 11500000, guid: f5764c8ca74824f44a4ef3e0745516dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_deathExplosion: {fileID: 0}
-  m_destroyParticles: []
+  m_explosion: {fileID: 0}
 --- !u!136 &136073002685371128
 CapsuleCollider:
   m_ObjectHideFlags: 1

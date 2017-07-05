@@ -54,4 +54,13 @@ namespace MyGame
 		SECOND,
 		THIRD,
 	}
+
+	[System.Serializable]
+	public enum AmmoType
+	{
+		PLAYER_BULLET,
+		TARGET_TURRET,
+		QIRCLE_TURRET,
+		COPTER_ROCKET,
+	}
 }

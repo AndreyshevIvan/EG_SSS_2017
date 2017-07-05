@@ -60,14 +60,20 @@ namespace MyGame
 		}
 		public void Add(UIBar bar)
 		{
+			bar.transform.SetParent(m_barsParent);
+			bar.controller = this;
+		}
+		public void Erase(UIBar bar)
+		{
 		}
 
 		[SerializeField]
-		public Image m_slowmoCurtain;
+		private Image m_slowmoCurtain;
 		[SerializeField]
-		public Transform m_barsParent;
+		private Transform m_barsParent;
 		[SerializeField]
-		public PointsBar m_points;
+		private PointsBar m_points;
+
 		private bool m_isPlayerControll = false;
 
 		private bool isSlowMode
@@ -162,5 +168,6 @@ namespace MyGame
 	public interface UIContainer
 	{
 		void Add(UIBar bar);
+		void Erase(UIBar bar);
 	}
 }

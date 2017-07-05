@@ -19,15 +19,6 @@ namespace MyGame.Enemies
 		}
 		protected override void Shoot()
 		{
-			float distance = Vector3.Distance(position, world.ship.position);
-			Debug.Log(distance);
-			if (distance < SHOOT_DISTANCE)
-			{
-				Bullet newBullet = m_bullet.copy;
-				world.Add(newBullet);
-				Vector3 direction = Vector3.Normalize(world.ship.position - position);
-				newBullet.Shoot(position, direction);
-			}
 		}
 
 		[SerializeField]

@@ -12,6 +12,7 @@ namespace MyGame
 		public float value { get; protected set; }
 		public Vector3 position { get; set; }
 		public bool isFadable { get; set; }
+		public UIContainer controller { get; set; }
 
 		public void SetValue(float newValue)
 		{
@@ -35,6 +36,11 @@ namespace MyGame
 			if (isFadable && isFirstSetComplete) SetFade(1, 0);
 			if (!isFirstSetComplete) isFirstSetComplete = true;
 		}
+		public void Close()
+		{
+			controller.Erase(this);
+			Destroy(gameObject);
+		}
 
 		protected float lastUpdateTimer { get; private set; }
 		protected float minValue { get; set; }
@@ -53,7 +59,6 @@ namespace MyGame
 			maxValue = float.MaxValue;
 			OnAwakeEnd();
 			InitSizing();
-			SetFade(0, 0);
 		}
 		protected virtual void OnAwakeEnd() { }
 		protected virtual void InitSizing() { }
@@ -77,10 +82,10 @@ namespace MyGame
 		{
 			OnUpdate();
 			SetPosition(position);
-			UpdateFade();
+			UpdateFading();
 			lastUpdateTimer += Time.fixedDeltaTime;
 		}
-		private void UpdateFade()
+		private void UpdateFading()
 		{
 			if (!isFadable || !Utils.IsTimerReady(lastUpdateTimer, VISIBLE_TIME))
 			{

@@ -52,6 +52,13 @@ namespace MyGame.Factory
 			return bar;
 		}
 
+		public T GetAmmo<T>(AmmoType type) where T : Body
+		{
+			T ammo = Instantiate(m_ammo.Find(pair => pair.key == type).value as T);
+			m_world.Add(ammo);
+			return ammo;
+		}
+
 		[SerializeField]
 		private List<MapPair> m_maps;
 		[SerializeField]
@@ -64,6 +71,8 @@ namespace MyGame.Factory
 		private List<BonusPair> m_bonuses;
 		[SerializeField]
 		private List<BarsPair> m_bars;
+		[SerializeField]
+		private List<AmmoPair> m_ammo;
 
 		private WorldContainer m_world;
 		private UIContainer m_interface;
@@ -79,5 +88,6 @@ namespace MyGame.Factory
 		CurvySpline GetRoad(RoadType type);
 		Bonus GetBonus(BonusType type);
 		UIBar GetBar(BarType type);
+		T GetAmmo<T>(AmmoType type) where T : Body;
 	}
 }

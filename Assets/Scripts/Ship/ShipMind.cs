@@ -12,15 +12,13 @@ namespace MyGame.Hero
 		{
 			set
 			{
-				m_bullet.data = value.gunData;
-				gunColdown = value.gunColdown;
-
-				magnetic = value.magnet;
+				m_properties = value;
+				UpdateProperties();
 			}
 		}
 
-		public float magnetic { get; protected set; }
-		public float magnetDistance { get; protected set; }
+		public float magnetFactor { get { return m_properties.magnetFactor; } }
+		public float magnetDistance { get { return m_properties.magnetDistance; } }
 
 		public void Modificate(byte modNumber)
 		{
@@ -30,15 +28,13 @@ namespace MyGame.Hero
 
 		protected override void OnInitEnd()
 		{
-			magnetDistance = 5;
 		}
 		protected override void PlayingUpdate()
 		{
 			ShootByBaseGun();
 		}
 
-		[SerializeField]
-		private Bullet m_bullet;
+		private ShipProperties m_properties;
 		private float m_gunTimer = 0;
 
 		private void ShootByBaseGun()
@@ -48,12 +44,17 @@ namespace MyGame.Hero
 				return;
 			}
 
-			Bullet bullet = m_bullet.copy;
-			world.Add(bullet);
+			Bullet bullet = world.factory.GetAmmo<Bullet>(AmmoType.PLAYER_BULLET);
+			bullet.data = m_properties.gunData;
 			bullet.Shoot(position, Vector3.forward);
 		}
-		private void UpdateColdowns()
+		private void UpdateProperties()
 		{
+			gunColdown = 0.6f;//m_properties.gunColdown;
+
+			m_properties.gunData = new BulletData();
+			m_properties.gunData.speed = 30;
+			m_properties.gunData.demage = 10;
 		}
 	}
 }

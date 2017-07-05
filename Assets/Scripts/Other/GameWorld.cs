@@ -48,7 +48,7 @@ namespace MyGame
 			ship.OnGameplayChange();
 			container.NotifyObjects();
 		}
-		public void Add<T>(T obj) where T : IWorldEntity
+		public void Add<T>(T obj) where T : WorldObject
 		{
 			if (obj.isWorldSet)
 			{
@@ -57,9 +57,10 @@ namespace MyGame
 
 			container.Add(obj);
 		}
-		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity
+		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : WorldObject
 		{
-			container.Remove(obj, isOpenBeforeDelete);
+			if (isOpenBeforeDelete) OpenObject(obj);
+			container.Remove(obj);
 		}
 
 		public Vector3 GetNearestEnemy(Vector3 point)
@@ -92,7 +93,7 @@ namespace MyGame
 				return;
 			}
 
-			float factor = (useShipMagnetic) ? ship.mind.magnetic : 1;
+			float factor = (useShipMagnetic) ? ship.mind.magnetFactor : 1;
 			float distanceFactor = ship.mind.magnetDistance / distance;
 			float movement = factor * distanceFactor * MAGNETIC_SPEED * Time.fixedDeltaTime;
 			body.position = Vector3.MoveTowards(
@@ -116,8 +117,11 @@ namespace MyGame
 			explosionObject.transform.position = position;
 			explosionObject.transform.SetParent(map.skyObjects);
 		}
-
 		public void Cleanup()
+		{
+		}
+
+		protected void OnTriggerExit(Collider other)
 		{
 		}
 
@@ -141,6 +145,19 @@ namespace MyGame
 		private void FixedUpdate()
 		{
 			//Debug.Log(container.ToString());
+		}
+		private void OpenObject(WorldObject obj)
+		{
+			playerBar.points += obj.points;
+			obj.bonuses.ForEach(bonus =>
+			{
+				Utils.DoAnyTimes(bonus.value, () =>
+				{
+					Bonus newBonus = factory.GetBonus(bonus.key);
+					newBonus.position = obj.position;
+					newBonus.explosionStart = true;
+				});
+			});
 		}
 		private void Dismantle(WorldObject dismantleObject)
 		{
@@ -173,8 +190,8 @@ namespace MyGame
 		Transform sky { get; }
 		Transform ground { get; }
 
-		void Add<T>(T obj) where T : IWorldEntity;
-		void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity;
+		void Add<T>(T obj) where T : WorldObject;
+		void Remove<T>(T obj, bool isOpenBeforeDelete) where T : WorldObject;
 
 		Vector3 GetNearestEnemy(Vector3 point);
 
@@ -205,7 +222,7 @@ namespace MyGame
 				AddOther(obj as WorldObject);
 			}
 		}
-		public void Remove<T>(T obj, bool isOpenBeforeDelete) where T : IWorldEntity
+		public void Remove<T>(T obj) where T : WorldObject
 		{
 			if (obj is Enemy)
 			{

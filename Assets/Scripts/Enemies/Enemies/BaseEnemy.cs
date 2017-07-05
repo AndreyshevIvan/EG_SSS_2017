@@ -14,6 +14,7 @@ namespace MyGame.Enemies
 			touchDemage = 10;
 			starsCount = 5;
 			points = 57;
+			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 5));
 		}
 		protected override void Shoot()
 		{
