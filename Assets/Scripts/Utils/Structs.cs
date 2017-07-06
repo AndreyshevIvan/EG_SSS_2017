@@ -9,12 +9,13 @@ using System;
 namespace MyGame
 {
 	[System.Serializable]
-	public class TempPlayer
+	public class Player
 	{
-		public TempPlayer(IPlayerBar bar)
+		public Player(IPlayerBar bar, Ship ship)
 		{
 			m_points = 0;
-			playerBar = bar;
+			m_ship = ship;
+			m_bar = bar;
 		}
 
 		public EventDelegate onDemaged;
@@ -26,9 +27,31 @@ namespace MyGame
 		public void AddPoints(int pointsCount)
 		{
 			m_points = Mathf.Clamp(pointsCount + m_points, MIN_POINTS, MAX_POINTS);
-			playerBar.points = m_points;
+			m_bar.points = m_points;
 		}
-		public void Demaged()
+		public void Modify()
+		{
+			byte modificationsCount = m_ship.mind.ModificateByOne();
+		}
+		public void Heal(int healthCount)
+		{
+			m_ship.Heal(healthCount);
+		}
+		public void KillEnemy(UnitType type)
+		{
+			if (!m_killings.ContainsKey(type))
+			{
+				m_killings.Add(type, 1);
+				return;
+			}
+
+			uint killsCount;
+			m_killings.TryGetValue(type, out killsCount);
+			m_killings.Remove(type);
+			m_killings.Add(type, killsCount + 1);
+		}
+
+		public void BeDemaged()
 		{
 			if (isDemaged)
 			{
@@ -56,7 +79,10 @@ namespace MyGame
 		private const int MIN_POINTS = 0;
 		private const int MAX_POINTS = 999999999;
 
-		private IPlayerBar playerBar;
+		private IPlayerBar m_bar;
+		private Ship m_ship;
+
+		private Dictionary<UnitType, uint> m_killings;
 	}
 
 	[System.Serializable]
@@ -81,7 +107,7 @@ namespace MyGame
 	{
 		public RoadType road;
 		public UnitType enemy;
-		public float offset;
+		public float time;
 		public float speed;
 		public int count;
 	}

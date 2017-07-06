@@ -9,7 +9,7 @@ namespace MyGame
 	{
 		protected override void OnRealize()
 		{
-			world.ship.Heal(HEALTH_IN_HEARTH);
+			world.player.Heal(HEALTH_IN_HEARTH);
 		}
 
 		private const byte HEALTH_IN_HEARTH = 50;

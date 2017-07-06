@@ -16,22 +16,21 @@ namespace MyGame.Hero
 				UpdateProperties();
 			}
 		}
-		public IPlayerBar bar { get; set; }
 
 		public float magnetFactor { get { return m_properties.magnetFactor; } }
 		public float magnetDistance { get { return m_properties.magnetDistance; } }
 
-		public void ModificateByOne()
+		public byte ModificateByOne()
 		{
 			if (modification >= GameWorld.MODIFICATION_COUNT)
 			{
-				return;
+				return modification;
 			}
 
 			modification++;
-			bar.modifications = modification;
-
 			m_properties.gunColdown -= GUN_COLDOWN_STEP;
+
+			return modification;
 		}
 
 		protected override void OnInitEnd()
@@ -56,13 +55,14 @@ namespace MyGame.Hero
 			Bullet bullet = world.factory.GetAmmo<Bullet>(AmmoType.PLAYER_BULLET);
 			bullet.data = m_properties.gunData;
 			bullet.Shoot(position, Vector3.forward);
+			m_gunTimer = 0;
 		}
 		private void UpdateProperties()
 		{
 			m_properties.gunColdown = 0.7f;
 
 			m_properties.gunData = new BulletData();
-			m_properties.gunData.speed = 30;
+			m_properties.gunData.speed = 20;
 			m_properties.gunData.demage = 10;
 		}
 

@@ -33,14 +33,14 @@ namespace MyGame
 		}
 		public static bool UpdateTimer(ref float timer, float coldown)
 		{
+			bool isReady = timer >= coldown;
+			if (isReady)
+			{
+				return true;
+			}
+
 			timer += Time.fixedDeltaTime;
-			bool isReady = IsTimerReady(timer, coldown);
-			timer = (isReady) ? 0 : timer;
-			return isReady;
-		}
-		public static bool IsTimerReady(float timer, float coldown)
-		{
-			return timer > coldown;
+			return false;
 		}
 		public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
 		{

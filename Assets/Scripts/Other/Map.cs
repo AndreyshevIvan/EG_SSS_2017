@@ -15,7 +15,7 @@ namespace MyGame
 		public IFactory factory { get; set; }
 		public Transform groundObjects { get { return m_groundObjects; } }
 		public Transform skyObjects { get { return m_skyObjects; } }
-		public float offset { get; private set; }
+		public float time { get; private set; }
 		public bool isReached
 		{
 			get
@@ -39,7 +39,7 @@ namespace MyGame
 		}
 
 		[SerializeField]
-		private float m_maxOffset;
+		private float m_endTime;
 		[SerializeField]
 		private ParticleSystem m_windParticles;
 		[SerializeField]
@@ -58,11 +58,12 @@ namespace MyGame
 		private float m_enemiesCount = 0;
 		private bool m_isMapEnd = false;
 
+		[SerializeField]
 		private const float MOVE_SPEED = 1.6f;
 
 		private void Awake()
 		{
-			offset = 0;
+			time = 0;
 		}
 		private void FixedUpdate()
 		{
@@ -76,19 +77,20 @@ namespace MyGame
 		}
 		private void MoveGround()
 		{
-			if (offset >= m_maxOffset)
+			if (time >= m_endTime)
 			{
+				m_windParticles.Pause();
 				m_isMapEnd = true;
 				return;
 			}
 
 			float movement = MOVE_SPEED * Time.fixedDeltaTime;
 			m_ground.transform.Translate(new Vector3(0, 0, -movement));
-			offset += movement;
+			time += Time.fixedDeltaTime;
 		}
 		private void SpawnFlyInits()
 		{
-			FlySpawn spawn = tempSkySpawns.Find(x => x.offset <= offset);
+			FlySpawn spawn = tempSkySpawns.Find(x => x.time <= time);
 			if (spawn == null)
 			{
 				return;

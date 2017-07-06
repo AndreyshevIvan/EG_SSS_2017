@@ -89,14 +89,12 @@ namespace MyGame
 			openAllowed = false;
 			distmantleAllowed = false;
 
-			onGameStart += SmartPlayingUpdate;
-
 			onPlaying += PlayingUpdate;
 			onPlaying += UpdateBars;
-			onPlaying += onGameStart;
+			onPlaying += SmartPlayingUpdate;
 
 			onGameEnd += AfterMatchUpdate;
-			onGameEnd += onGameStart;
+			onGameEnd += SmartPlayingUpdate;
 
 			OnAwakeEnd();
 		}
@@ -156,7 +154,6 @@ namespace MyGame
 		private EventDelegate currentEvent { get; set; }
 		private EventDelegate onPlaying { get; set; }
 		private EventDelegate onGameEnd { get; set; }
-		private EventDelegate onGameStart { get; set; }
 }
 
 	public interface IWorldEntity

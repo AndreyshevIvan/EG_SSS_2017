@@ -16,7 +16,6 @@ namespace MyGame.Hero
 				health = maxHealth = 100;//value.health;
 			}
 		}
-		public IPlayerBar bar { get; set; }
 
 		public void MoveTo(Vector3 newPosition)
 		{
@@ -43,10 +42,14 @@ namespace MyGame.Hero
 			healthBar.SetValue(healthPart);
 			touchDemage = int.MaxValue;
 			isEraseOnDeath = false;
-			mind.bar = bar;
 		}
-		protected override void PlayingUpdate()
+		protected override void SmartPlayingUpdate()
 		{
+			if (m_startEndAnimation)
+			{
+				return;
+			}
+
 			position += velocity * Time.fixedDeltaTime;
 
 			UpdatePositionOnField();
@@ -57,6 +60,12 @@ namespace MyGame.Hero
 		}
 		protected override void AfterMatchUpdate()
 		{
+			if (!Utils.UpdateTimer(ref m_endTimer, GameplayController.ENDING_WAITING_TIME / 2))
+			{
+				return;
+			}
+
+			m_startEndAnimation = true;
 			float step = Time.fixedDeltaTime * AFTER_GAME_ANGLE_SPEED;
 			float zAngle = Mathf.MoveTowards(physicsBody.rotation.z, 0, step);
 			physicsBody.rotation = Quaternion.Euler( 0, X_ANGLE, zAngle);
@@ -65,11 +74,13 @@ namespace MyGame.Hero
 		protected override void DoAfterDemaged()
 		{
 			healthBar.SetValue(healthPart);
-			world.player.Demaged();
+			world.player.BeDemaged();
 		}
 
 		private Vector3 m_smoothDir;
 		private bool m_isMoved = false;
+		private bool m_startEndAnimation = false;
+		private float m_endTimer = 0;
 
 		private Vector3 velocity { get; set; }
 

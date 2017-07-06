@@ -17,6 +17,13 @@ namespace MyGame
 		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
 		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
 
+		public void Continue()
+		{
+			SceneManager.LoadScene("Main");
+		}
+
+		public const float ENDING_WAITING_TIME = 3;
+
 		private Ship ship { get; set; }
 		private Map map { get; set; }
 
@@ -39,13 +46,13 @@ namespace MyGame
 		private bool m_isPlaying;
 		private bool m_isStop;
 
-		public const float ENDING_TIME = 1.5f;
-		private const int FRAME_RATE = 40;
+		private const int FRAME_RATE = 60;
 
 		private void Awake()
 		{
 			QualitySettings.vSyncCount = 0;
 			Application.targetFrameRate = FRAME_RATE;
+			m_resultsUI.gameObject.SetActive(false);
 
 			isMapStart = false;
 			isPaused = false;
@@ -78,7 +85,6 @@ namespace MyGame
 		{
 			ship = m_factory.GetShip(ShipType.STANDART);
 			ship.properties = m_shipProperties;
-			ship.bar = m_interface;
 		}
 		private void InitWorld()
 		{
@@ -124,17 +130,26 @@ namespace MyGame
 		}
 		private IEnumerator OnMapReached(bool isWin)
 		{
-			User user = GameData.LoadUser();
-			User oldUser = (User)user.Clone();
-			user.AddNew(m_world.player);
-			User newUser = (User)user.Clone();
-			GameData.SaveUser(user);
+			if (!isWin)
+			{
+				m_world.KillPlayer();
+			}
 
-			yield return new WaitForSeconds(ENDING_TIME);
+			SaveUserData();
+			yield return new WaitForSeconds(ENDING_WAITING_TIME);
+			isStop = true;
 			m_interface.Ending();
 			yield return new WaitForSeconds(GameplayUI.ENDING_FADE_TIME);
-			isStop = true;
-			m_resultsUI.Open(oldUser, newUser, m_world.player, isWin);
+			m_resultsUI.gameObject.SetActive(true);
+			m_resultsUI.Open(null, null, m_world.player, isWin);
+		}
+		private void SaveUserData()
+		{
+			//User user = GameData.LoadUser();
+			//User oldUser = (User)user.Clone();
+			//user.AddNew(m_world.player);
+			//User newUser = (User)user.Clone();
+			//GameData.SaveUser(user);
 		}
 
 		private bool CheckUpdateChanges()

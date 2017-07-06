@@ -9,6 +9,8 @@ namespace MyGame.Enemies
 	public abstract class Enemy : Body
 	{
 		public byte starsCount { get; protected set; }
+		public UnitType type { get; set; }
+
 		protected bool isTimerWork { get; set; }
 		protected float coldown { get; set; }
 

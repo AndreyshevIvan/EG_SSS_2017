@@ -8,7 +8,7 @@ namespace MyGame
 	[System.Serializable]
 	public class User : ICloneable
 	{
-		public void AddNew(TempPlayer player)
+		public void AddNew(Player player)
 		{
 
 		}

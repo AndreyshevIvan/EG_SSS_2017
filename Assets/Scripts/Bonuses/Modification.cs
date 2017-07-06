@@ -9,7 +9,7 @@ namespace MyGame
 	{
 		protected override void OnRealize()
 		{
-			world.ship.mind.ModificateByOne();
+			world.player.Modify();
 		}
 	}
 }

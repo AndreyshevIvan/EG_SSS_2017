@@ -54,6 +54,7 @@ namespace MyGame
 
 			if (!isLive && isEraseOnDeath)
 			{
+				OnDeath();
 				world.CreateExplosion(explosion, position);
 				world.Remove(this);
 				return;
@@ -65,6 +66,7 @@ namespace MyGame
 		protected virtual void DoBeforeDemaged() { }
 		protected virtual void DoAfterDemaged() { }
 		protected virtual void OnDemageTaked() { }
+		protected virtual void OnDeath() { }
 
 		protected sealed override void UpdateBars()
 		{

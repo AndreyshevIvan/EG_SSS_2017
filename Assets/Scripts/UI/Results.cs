@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 
 namespace MyGame
 {
 	public class Results : MonoBehaviour
 	{
-		public void Open(User oldUser, User newUser, TempPlayer player, bool isWin)
+		public void Open(User oldUser, User newUser, Player player, bool isWin)
 		{
 			this.oldUser = oldUser;
 			this.newUser = newUser;
@@ -39,7 +38,7 @@ namespace MyGame
 
 		private User oldUser { get; set; }
 		private User newUser { get; set; }
-		private TempPlayer player { get; set; }
+		private Player player { get; set; }
 		private List<Graphic> graphics { get; set; }
 
 		private const float FADE_TIME = 0.4f;

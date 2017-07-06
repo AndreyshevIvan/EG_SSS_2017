@@ -74,13 +74,16 @@ namespace MyGame
 				return
 					isFirstTouchCreated &&
 					isSecondTouchCreated &&
-					!m_isPlayerControll;
+					!m_isPlayerControll &&
+					gameplay.isPlaying;
 			}
 		}
 		private bool isFirstTouchCreated { get; set; }
 		private bool isSecondTouchCreated { get; set; }
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
+		private const float TOUCH_OFFSET_Y = 0.035f;
+		private const float CAMERA_ANGLE_FACTOR = 0.076f;
 
 		private void Awake()
 		{
@@ -90,11 +93,16 @@ namespace MyGame
 
 		private void FixedUpdate()
 		{
+			if (gameplay.isStop)
+			{
+				return;
+			}
+
 			ControllInterface();
+			UpdateCurtain();
 
 			if (gameplay.isPlaying)
 			{
-				UpdateCurtain();
 				ControllShip();
 			}
 		}
@@ -108,8 +116,11 @@ namespace MyGame
 
 			isSecondTouchCreated = m_isPlayerControll = true;
 			Vector3 screenPosition = Input.mousePosition;
+			screenPosition.y += TOUCH_OFFSET_Y * Screen.height;
 			screenPosition.z = Camera.main.transform.position.y;
 			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+			screenPosition.x += screenPosition.x * -CAMERA_ANGLE_FACTOR;
+			screenPosition.z += screenPosition.z * -CAMERA_ANGLE_FACTOR;
 			if (moveShip != null) moveShip(screenPosition);
 		}
 		private void ControllInterface()

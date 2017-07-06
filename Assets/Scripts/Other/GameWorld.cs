@@ -26,7 +26,8 @@ namespace MyGame
 			}
 		}
 		public WorldContainer container { get; private set; }
-		public TempPlayer player { get { return m_player; } }
+		public Player player { get { return m_player; } }
+		public Vector3 shipPosition { get { return ship.position; } }
 
 		public IGameplay gameplay { get; set; }
 		public bool isMapStart { get { return gameplay.isMapStart; } }
@@ -112,8 +113,13 @@ namespace MyGame
 		}
 		public void KillPlayer()
 		{
+			if (!ship)
+			{
+				return;
+			}
+
 			Dismantle(ship);
-			Destroy(ship);
+			Remove(ship);
 		}
 		public void CreateExplosion(ParticleSystem explosion, Vector3 position)
 		{
@@ -131,7 +137,7 @@ namespace MyGame
 		}
 
 		private Ship m_ship;
-		private TempPlayer m_player;
+		private Player m_player;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
 
@@ -155,7 +161,7 @@ namespace MyGame
 		}
 		private void InitTempPlayer()
 		{
-			m_player = new TempPlayer(playerInterface);
+			m_player = new Player(playerInterface, ship);
 			m_player.onDemaged = () => { Debug.Log("Demaged"); };
 			m_player.onLossEnemy = () => { Debug.Log("LOSS"); };
 		}
@@ -214,8 +220,8 @@ namespace MyGame
 	public interface IGameWorld
 	{
 		IFactory factory { get; }
-		TempPlayer player { get; }
-		Ship ship { get; }
+		Player player { get; }
+		Vector3 shipPosition { get; }
 		Transform sky { get; }
 		Transform ground { get; }
 		BoundingBox box { get; }

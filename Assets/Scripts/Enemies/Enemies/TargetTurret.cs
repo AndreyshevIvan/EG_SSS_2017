@@ -24,7 +24,7 @@ namespace MyGame.Enemies
 		{
 			Bullet bullet = world.factory.GetAmmo<Bullet>(AmmoType.TARGET_TURRET);
 			bullet.data = m_bulletData;
-			Vector3 direction = Vector3.Normalize(world.ship.position - position);
+			Vector3 direction = Vector3.Normalize(world.shipPosition - position);
 			bullet.Shoot(position, direction);
 		}
 

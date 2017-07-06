@@ -19,5 +19,9 @@ namespace MyGame.Enemies
 		protected override void Shoot()
 		{
 		}
+		protected override void OnDeath()
+		{
+			world.player.KillEnemy(type);
+		}
 	}
 }

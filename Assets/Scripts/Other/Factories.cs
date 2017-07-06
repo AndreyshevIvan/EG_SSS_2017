@@ -24,6 +24,7 @@ namespace MyGame.Factory
 		{
 			Enemy enemy = Instantiate(m_enemies.Find(pair => pair.key == type).value);
 			m_world.Add(enemy);
+			enemy.type = type;
 			return enemy;
 		}
 

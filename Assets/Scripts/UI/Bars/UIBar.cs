@@ -76,7 +76,7 @@ namespace MyGame
 		}
 		private void UpdateFading()
 		{
-			if (!isFadable || !Utils.IsTimerReady(lastUpdateTimer, VISIBLE_TIME))
+			if (!isFadable || lastUpdateTimer < VISIBLE_TIME)
 			{
 				return;
 			}
