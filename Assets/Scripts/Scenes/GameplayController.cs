@@ -96,7 +96,7 @@ namespace MyGame
 		{
 			m_interface.Init(m_world);
 
-			m_interface.onPause += map.Pause;
+			m_interface.onPause += Pause;
 
 			m_interface.moveShip += ship.MoveTo;
 
@@ -151,6 +151,12 @@ namespace MyGame
 			//User newUser = (User)user.Clone();
 			//GameData.SaveUser(user);
 		}
+
+		private void Pause(bool isPause)
+		{
+			isPaused = isPause;
+			Time.timeScale = 1;
+		} 
 
 		private bool CheckUpdateChanges()
 		{

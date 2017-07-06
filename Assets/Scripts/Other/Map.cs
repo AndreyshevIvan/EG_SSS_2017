@@ -34,9 +34,6 @@ namespace MyGame
 			tempSkySpawns = new List<FlySpawn>(m_flySpawns);
 			SpawnAllGroundUnits();
 		}
-		public void Pause(bool isPause)
-		{
-		}
 
 		[SerializeField]
 		private float m_endTime;
