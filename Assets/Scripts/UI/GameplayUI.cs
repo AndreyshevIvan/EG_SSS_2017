@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.EventSystems;
 using MyGame.Hero;
+using MyGame.GameUtils;
 
 namespace MyGame
 {

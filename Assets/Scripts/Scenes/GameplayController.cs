@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using MyGame.Hero;
 using MyGame.Factory;
 using FluffyUnderware.Curvy;
+using MyGame.GameUtils;
 
 namespace MyGame
 {
@@ -34,7 +35,7 @@ namespace MyGame
 		[SerializeField]
 		private Factories m_factory;
 		private ShipProperties m_shipProperties = new ShipProperties();
-		private EventDelegate m_update;
+		private Updater m_updater;
 
 		private bool m_isMapStart;
 		private bool m_isPaused;
@@ -43,7 +44,6 @@ namespace MyGame
 		private bool m_isPlaying;
 
 		private float m_prePauseTimeScale;
-		private bool m_moveingComplete = false;
 
 		private const int FRAME_RATE = 60;
 		private const float SHIP_PRE_START_SPEED = 4;
@@ -52,6 +52,7 @@ namespace MyGame
 
 		private void Awake()
 		{
+			m_updater = GetComponent<Updater>();
 			QualitySettings.vSyncCount = 0;
 			Application.targetFrameRate = FRAME_RATE;
 
@@ -110,14 +111,12 @@ namespace MyGame
 			m_interface.firstTouchEvents += () =>
 			{
 				ship.roadController.Spline = null;
-				m_update += MoveShipToStartRoad;
+				m_updater.Add(MoveShipToStartRoad, SetStartRoad);
 			};
 		}
 
 		private void FixedUpdate()
 		{
-			if (m_update != null) m_update();
-
 			if (!CheckUpdateChanges() || !isGameEnd)
 			{
 				return;
@@ -141,21 +140,6 @@ namespace MyGame
 			ship.roadController.Position = 0;
 
 		}
-		private void MoveShipToStartRoad()
-		{
-			if (m_moveingComplete)
-			{
-				m_update -= MoveShipToStartRoad;
-				SetStartRoad();
-				return;
-			}
-
-			CurvySpline spline = m_factory.GetRoad(RoadType.PLAYER);
-			Vector3 target = spline.Segments[0].transform.position;
-			float movement = SHIP_START_SPEED * Time.fixedDeltaTime;
-			ship.position = Vector3.MoveTowards(ship.position, target, movement);
-			m_moveingComplete = ship.position == target;
-		}
 		private void OnMapReached()
 		{
 			if (!isWin)
@@ -170,15 +154,6 @@ namespace MyGame
 				m_interface.ViewResults(null, null, m_world.player, isWin);
 			});
 		}
-		private void SaveUserData()
-		{
-			//User user = GameData.LoadUser();
-			//User oldUser = (User)user.Clone();
-			//user.AddNew(m_world.player);
-			//User newUser = (User)user.Clone();
-			//GameData.SaveUser(user);
-		}
-
 		private void Pause(bool isPause)
 		{
 			isPaused = isPause;
@@ -213,7 +188,24 @@ namespace MyGame
 
 			m_world.GameplayChange();
 			m_interface.GameplayChange();
-		} 
+		}
+		private void SaveUserData()
+		{
+			//User user = GameData.LoadUser();
+			//User oldUser = (User)user.Clone();
+			//user.AddNew(m_world.player);
+			//User newUser = (User)user.Clone();
+			//GameData.SaveUser(user);
+		}
+
+		private bool MoveShipToStartRoad()
+		{
+			CurvySpline spline = m_factory.GetRoad(RoadType.PLAYER);
+			Vector3 target = spline.Segments[0].transform.position;
+			float movement = SHIP_START_SPEED * Time.fixedDeltaTime;
+			ship.position = Vector3.MoveTowards(ship.position, target, movement);
+			return ship.position == target;
+		}
 	}
 
 	public interface IGameplay

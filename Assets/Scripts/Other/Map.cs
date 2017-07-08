@@ -103,7 +103,7 @@ namespace MyGame
 				enemy.transform.SetParent(m_skyObjects);
 				enemy.roadController.Spline = road;
 				float spawnPosition = GameWorld.SPAWN_OFFSET * i / road.Length;
-				enemy.roadController.InitialPosition = spawnPosition;
+				enemy.roadController.Position = 10;
 				enemy.roadController.Speed = spawn.speed;
 			}
 			tempSkySpawns.Remove(spawn);

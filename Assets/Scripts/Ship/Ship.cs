@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyGame.GameUtils;
 
 namespace MyGame.Hero
 {
@@ -67,7 +68,6 @@ namespace MyGame.Hero
 				m_animator.SetTrigger(ROTATION_TRIGGER);
 			});
 		}
-
 		protected override void SmartPlayingUpdate()
 		{
 			if (m_startEndAnimation)
