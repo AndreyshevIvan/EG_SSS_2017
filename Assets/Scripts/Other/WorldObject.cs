@@ -46,15 +46,19 @@ namespace MyGame
 			{
 				return;
 			}
+			else if (gameplay.isPaused)
+			{
+				OnPauseEvents();
+			}
 			else if (gameplay.isPlaying)
 			{
-				OnPlaying();
+				OnPlayingEvents();
 				currentEvent = onPlaying;
 				return;
 			}
 			else if (gameplay.isGameEnd)
 			{
-				OnEnd();
+				OnEndEvents();
 				currentEvent = onGameEnd;
 				return;
 			}
@@ -102,8 +106,26 @@ namespace MyGame
 		protected virtual void OnInitEnd() { }
 
 		protected virtual void OnChangeGameplay() { }
+
+		private void OnPlayingEvents()
+		{
+			OnPlaying();
+			if (roadController) roadController.Play();
+		}
 		protected virtual void OnPlaying() { }
+
+		private void OnEndEvents()
+		{
+			OnEnd();
+		}
 		protected virtual void OnEnd() { }
+
+		private void OnPauseEvents()
+		{
+			OnPause();
+			if (roadController) roadController.Pause();
+		}
+		protected virtual void OnPause() { }
 
 		protected void OnTriggerEnter(Collider other)
 		{
@@ -154,7 +176,7 @@ namespace MyGame
 		private EventDelegate currentEvent { get; set; }
 		private EventDelegate onPlaying { get; set; }
 		private EventDelegate onGameEnd { get; set; }
-}
+	}
 
 	public interface IWorldEntity
 	{

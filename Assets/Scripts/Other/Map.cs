@@ -64,6 +64,8 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
+			//Debug.Log(time);
+
 			if (!gameplay.isPlaying)
 			{
 				return;

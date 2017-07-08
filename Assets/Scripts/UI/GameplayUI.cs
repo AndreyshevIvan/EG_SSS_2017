@@ -51,6 +51,15 @@ namespace MyGame
 		{
 			m_slowmoCurtain.CrossFadeAlpha(1, ENDING_FADE_TIME, true);
 		}
+		public void Pause(bool isPause)
+		{
+			onPause(isPause);
+			m_pauseInterface.SetActive(isPause);
+		}
+		public void DoAny()
+		{
+			Debug.Log("Test");
+		}
 
 		public void Add(UIBar bar)
 		{
@@ -76,14 +85,14 @@ namespace MyGame
 		[SerializeField]
 		private ModificationBar m_modsBar;
 		[SerializeField]
-		private Button m_pausButton;
+		private Button m_pauseButton;
 		[SerializeField]
 		private GameObject m_pauseInterface;
+		private EventTrigger m_pauseTrigger;
 
 		private bool m_isControll = false;
 
 		private IGameplay gameplay { get; set; }
-		private RectTransform pauseButtonRT { get; set; }
 		private bool isFirstTouchCreated { get; set; }
 		private bool isControllPlayer
 		{
@@ -92,43 +101,41 @@ namespace MyGame
 				return gameplay.isPlaying && m_isControll;
 			}
 		}
-		private Vector3 clickPosition { get; set; }
+		private bool isModeOn
+		{
+			get { return isFirstTouchCreated && !isControllPlayer; }
+		}
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
 		private const float TOUCH_OFFSET_Y = 0.035f;
 		private const float CAMERA_ANGLE_FACTOR = 0.076f;
-		private const float PAUSE_BUTTON_SIZE_FACTOR = 0.06f;
+		private const float PAUSE_BUTTON_SIZE_FACTOR = 0.07f;
 
 		private void Awake()
 		{
-			pauseButtonRT = m_pausButton.GetComponent<RectTransform>();
-			Utils.SetSize(pauseButtonRT, Screen.width * PAUSE_BUTTON_SIZE_FACTOR);
+			RectTransform pauseRect = m_pauseButton.GetComponent<RectTransform>();
+			Utils.SetSize(pauseRect, Screen.width * PAUSE_BUTTON_SIZE_FACTOR);
+
+			m_pauseTrigger = m_pauseButton.GetComponent<EventTrigger>();
 
 			m_slowmoCurtain.CrossFadeAlpha(0, 0, true);
 			m_pauseInterface.SetActive(false);
-			m_pausButton.targetGraphic.CrossFadeAlpha(0, 0, true);
+			m_pauseButton.targetGraphic.CrossFadeAlpha(0, 0, true);
 
-			prePlayingBehaviour += WaitFirstTouch;
+			prePlayingBehaviour += WaitStartTouch;
 
-			playingBehaviour += ControllInterface;
 			playingBehaviour += ControllShip;
-			playingBehaviour += UpdateCurtain;
-
-
+			playingBehaviour += UpdateSlowmoElements;
 		}
 		private void FixedUpdate()
 		{
-			currentBehaviour();
+			if (currentBehaviour != null) currentBehaviour();
 		}
 
-		private void OnMouseEnter()
-		{
-			clickPosition = Input.mousePosition;
-			Debug.Log(clickPosition);
-		}
 		private void ControllShip()
 		{
 			m_isControll = Input.GetMouseButton(0);
+
 			if (!m_isControll)
 			{
 				return;
@@ -143,31 +150,19 @@ namespace MyGame
 			screenPosition.z += screenPosition.z * -CAMERA_ANGLE_FACTOR;
 			if (moveShip != null) moveShip(screenPosition);
 		}
-		private void ControllInterface()
+		private void UpdateSlowmoElements()
 		{
-			if (!Input.GetMouseButton(0))
-			{
-				return;
-			}
-
-			if (Input.GetMouseButtonUp(0))
-			{
-				if (!pauseButtonRT.rect.Contains(Input.mousePosition))
-				{
-					return;
-				}
-
-				Pause(true);
-			}
-		}
-		private void UpdateCurtain()
-		{
-			bool isModeOn = isFirstTouchCreated && !isControllPlayer;
 			if (uncontrollEvents != null) uncontrollEvents(isModeOn);
+
 			float target = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			m_slowmoCurtain.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
+
+			target = (isModeOn) ? 1 : 0;
+			m_pauseTrigger.enabled = isModeOn;
+			if (isModeOn) m_pauseButton.gameObject.SetActive(true);
+			m_pauseButton.targetGraphic.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
 		}
-		private void WaitFirstTouch()
+		private void WaitStartTouch()
 		{
 			if (isFirstTouchCreated || !Input.GetMouseButton(0))
 			{
@@ -178,12 +173,6 @@ namespace MyGame
 			firstTouchEvents();
 			// TODO: closing interface
 		}
-
-		private void Pause(bool isPause)
-		{
-			onPause(isPause);
-			m_pauseInterface.SetActive(isPause);
-		} 
 
 		private EventDelegate currentBehaviour;
 		private EventDelegate prePlayingBehaviour;
