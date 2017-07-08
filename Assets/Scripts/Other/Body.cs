@@ -10,6 +10,7 @@ namespace MyGame
 	{
 		public int health { get; protected set; }
 		public float healthPart { get { return (float)health / (float)maxHealth; } }
+		public int healthPercents { get { return (int)Mathf.Round(100 * healthPart); } }
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
 		public int touchDemage { get; protected set; }
@@ -60,7 +61,7 @@ namespace MyGame
 				return;
 			}
 
-			if (healthBar) healthBar.SetValue(healthPart);
+			if (healthBar) healthBar.SetValue(healthPercents);
 		}
 		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
 		protected virtual void DoBeforeDemaged() { }

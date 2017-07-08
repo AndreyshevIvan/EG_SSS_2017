@@ -14,7 +14,7 @@ namespace MyGame.Hero
 			set
 			{
 				mind.properties = value;
-				health = maxHealth = 100;//value.health;
+				health = maxHealth = 1;//value.health;
 			}
 		}
 
@@ -33,11 +33,12 @@ namespace MyGame.Hero
 			mind = GetComponent<ShipMind>();
 			ParticleSystem.MainModule engineMain = m_engineParticles.main;
 			engineMain.simulationSpace = ParticleSystemSimulationSpace.Local;
+			m_animator = GetComponent<Animator>();
 		}
 		protected override void OnInitEnd()
 		{
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
-			healthBar.SetValue(healthPart);
+			healthBar.SetValue(healthPercents);
 			touchDemage = int.MaxValue;
 			isEraseOnDeath = false;
 		}
@@ -45,6 +46,7 @@ namespace MyGame.Hero
 		{
 			ParticleSystem.MainModule engineMain = m_engineParticles.main;
 			engineMain.simulationSpace = ParticleSystemSimulationSpace.World;
+			m_animator.SetTrigger(ROTATION_TRIGGER);
 		}
 		protected override void OnEnd()
 		{
@@ -80,7 +82,6 @@ namespace MyGame.Hero
 		}
 		protected override void DoAfterDemaged()
 		{
-			healthBar.SetValue(healthPart);
 			world.player.BeDemaged();
 		}
 
@@ -90,6 +91,7 @@ namespace MyGame.Hero
 		private float m_endTimer = 0;
 		[SerializeField]
 		ParticleSystem m_engineParticles;
+		Animator m_animator;
 
 		private Vector3 velocity { get; set; }
 
@@ -100,6 +102,7 @@ namespace MyGame.Hero
 		private const float TILT = 2;
 		private const float X_ANGLE = 180;
 		private const float MAX_VELOCITY_ANGLE = 80;
+		private const string ROTATION_TRIGGER = "EndRotate";
 
 		private void UpdateRotation()
 		{

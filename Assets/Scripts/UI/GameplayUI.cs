@@ -35,23 +35,28 @@ namespace MyGame
 
 			if (!gameplay.isMapStart)
 			{
+				OnPrePlaying();
 				currentBehaviour = prePlayingBehaviour;
 			}
 			else if (gameplay.isPlaying)
 			{
+				OnPlaying();
 				currentBehaviour = playingBehaviour;
 			}
 			else if (gameplay.isPaused)
 			{
 				currentBehaviour = pauseBehaviour;
 			}
+			else if (gameplay.isGameEnd)
+			{
+				OnGameEnd();
+			}
 		}
-		public void OnMapStart()
+		public void StartGame()
 		{
-		}
-		public void Ending()
-		{
-			m_slowmoCurtain.CrossFadeAlpha(1, ENDING_FADE_TIME, true);
+			if (firstTouchEvents != null) firstTouchEvents();
+			m_shipArea.GetComponent<Button>().interactable = false;
+			m_shipArea.GetComponent<Animator>().SetTrigger(AREA_EXIT_TRIGGER);
 		}
 		public void Pause(bool isPause)
 		{
@@ -88,7 +93,7 @@ namespace MyGame
 		private Button m_pauseButton;
 		[SerializeField]
 		private GameObject m_pauseInterface;
-		private EventTrigger m_pauseTrigger;
+		private Animator m_animator;
 
 		private bool m_isControll = false;
 
@@ -105,6 +110,7 @@ namespace MyGame
 		{
 			get { return isFirstTouchCreated && !isControllPlayer; }
 		}
+		private Camera camera { get; set; }
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
 		private const float TOUCH_OFFSET_Y = 0.035f;
@@ -112,10 +118,15 @@ namespace MyGame
 		private const float PAUSE_BUTTON_SIZE_FACTOR = 0.07f;
 		private const float AREA_SIZE_FACTOR = 0.28f;
 		private const float AREA_POS_FACTOR = 0.02f;
+		private const string AREA_EXIT_TRIGGER = "Start";
+		private const string LEVEL_INFO_TRIGGER = "OpenLevelInfo";
+		private const string CLOSE_LEVEL_INFO = "CloseLevelInfo";
 
 		private void Awake()
 		{
-			m_pauseTrigger = m_pauseButton.GetComponent<EventTrigger>();
+			camera = Camera.main;
+			Input.multiTouchEnabled = false;
+			m_animator = GetComponent<Animator>();
 
 			InitUIElements();
 			InitBehaviours();
@@ -131,13 +142,11 @@ namespace MyGame
 			RectTransform pauseRect = m_pauseButton.GetComponent<RectTransform>();
 			Utils.SetSize(pauseRect, Screen.width * PAUSE_BUTTON_SIZE_FACTOR);
 
-			m_shipArea.gameObject.SetActive(true);
 			float areaSize = AREA_SIZE_FACTOR * Screen.width;
 			Utils.SetSize(m_shipArea.GetComponent<RectTransform>(), areaSize);
 		}
 		private void InitBehaviours()
 		{
-			prePlayingBehaviour += WaitStartTouch;
 			prePlayingBehaviour += UpdatePreStartInterface;
 
 			playingBehaviour += ControllShip;
@@ -148,31 +157,12 @@ namespace MyGame
 		{
 			if (currentBehaviour != null) currentBehaviour();
 		}
-
-		private void WaitStartTouch()
-		{
-			if (isFirstTouchCreated || !Input.GetMouseButton(0))
-			{
-				return;
-			}
-
-			isFirstTouchCreated = true;
-			if (firstTouchEvents != null) firstTouchEvents();
-
-			Animation areaAnim = m_shipArea.GetComponent<Animation>();
-			if (areaAnim && areaAnim.clip)
-			{
-				areaAnim.Play();
-				m_shipArea.CrossFadeAlpha(0, areaAnim.clip.length, true);
-			}
-		}
 		private void UpdatePreStartInterface()
 		{
-			Vector3 areaPosition = Camera.main.WorldToScreenPoint(world.shipPosition);
+			Vector3 areaPosition = camera.WorldToScreenPoint(world.shipPosition);
 			areaPosition.y += Screen.height * AREA_POS_FACTOR;
 			m_shipArea.transform.position = areaPosition;
 		}
-
 		private void ControllShip()
 		{
 			m_isControll = Input.GetMouseButton(0);
@@ -185,23 +175,43 @@ namespace MyGame
 			isFirstTouchCreated = true;
 			Vector3 screenPosition = Input.mousePosition;
 			screenPosition.y += TOUCH_OFFSET_Y * Screen.height;
-			screenPosition.z = Camera.main.transform.position.y;
-			screenPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+			screenPosition.z = camera.transform.position.y;
+			screenPosition = camera.ScreenToWorldPoint(screenPosition);
 			screenPosition.x += screenPosition.x * -CAMERA_ANGLE_FACTOR;
 			screenPosition.z += screenPosition.z * -CAMERA_ANGLE_FACTOR;
 			if (moveShip != null) moveShip(screenPosition);
 		}
 		private void UpdateSlowmoElements()
 		{
+			if (gameplay.isGameEnd)
+			{
+				m_pauseButton.gameObject.SetActive(false);
+				return;
+			}
+
 			if (uncontrollEvents != null) uncontrollEvents(isModeOn);
 
 			float target = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			m_slowmoCurtain.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
 
 			target = (isModeOn) ? 1 : 0;
-			m_pauseTrigger.enabled = isModeOn;
 			if (isModeOn) m_pauseButton.gameObject.SetActive(true);
 			m_pauseButton.targetGraphic.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
+		}
+
+		private void OnPrePlaying()
+		{
+			m_pauseButton.gameObject.SetActive(false);
+			m_animator.SetTrigger(LEVEL_INFO_TRIGGER);
+		}
+		private void OnPlaying()
+		{
+			m_shipArea.gameObject.SetActive(false);
+			m_pauseButton.gameObject.SetActive(true);
+			m_animator.SetTrigger(CLOSE_LEVEL_INFO);
+		}
+		private void OnGameEnd()
+		{
 		}
 
 		private EventDelegate currentBehaviour;

@@ -25,7 +25,7 @@ namespace MyGame.Enemies
 
 			if (healthBar)
 			{
-				healthBar.SetValue(healthPart);
+				healthBar.SetValue(healthPercents);
 				healthBar.isFadable = true;
 			}
 			if (roadController) roadController.OnEndReached.AddListener(T =>

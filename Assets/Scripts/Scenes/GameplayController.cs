@@ -131,7 +131,7 @@ namespace MyGame
 				return;
 			}
 
-			StartCoroutine(OnMapReached(isWin));
+			OnMapReached();
 		}
 
 		private void SetStartRoad()
@@ -140,7 +140,6 @@ namespace MyGame
 			{
 				map.Play();
 				isMapStart = true;
-				m_interface.OnMapStart();
 				Destroy(ship.roadController);
 			});
 
@@ -165,7 +164,7 @@ namespace MyGame
 			ship.position = Vector3.MoveTowards(ship.position, target, movement);
 			m_moveingComplete = ship.position == target;
 		}
-		private IEnumerator OnMapReached(bool isWin)
+		private void OnMapReached()
 		{
 			if (!isWin)
 			{
@@ -173,12 +172,17 @@ namespace MyGame
 			}
 
 			SaveUserData();
-			yield return new WaitForSeconds(ENDING_WAITING_TIME);
-			isStop = true;
-			m_interface.Ending();
-			yield return new WaitForSeconds(GameplayUI.ENDING_FADE_TIME);
-			m_resultsUI.gameObject.SetActive(true);
-			m_resultsUI.Open(null, null, m_world.player, isWin);
+
+			Utils.DoAfterTime(this, ENDING_WAITING_TIME, () =>
+			{
+				isStop = true;
+
+				Utils.DoAfterTime(this, GameplayUI.ENDING_FADE_TIME, () =>
+				{
+					m_resultsUI.gameObject.SetActive(true);
+					m_resultsUI.Open(null, null, m_world.player, isWin);
+				});
+			});
 		}
 		private void SaveUserData()
 		{

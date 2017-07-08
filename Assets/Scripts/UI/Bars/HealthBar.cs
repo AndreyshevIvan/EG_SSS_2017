@@ -42,8 +42,8 @@ namespace MyGame
 		}
 		protected override void OnSetNewValue()
 		{
-			m_textField.text = value.ToString(PATTERN);
-			if (m_healthLine != null) m_healthLine.fillAmount = value;
+			m_textField.text = value.ToString() + PATTERN;
+			if (m_healthLine) m_healthLine.fillAmount = value;
 		}
 
 		private HorizontalLayoutGroup layout { get; set; }
@@ -53,6 +53,6 @@ namespace MyGame
 		private const float ENEMY_WIDTH = 0.06f;
 		private const float HEIGHT_FACTOR = 3.2f;
 		private const float PADDING_FACTOR = 0.0015f;
-		private const string PATTERN = "0%";
+		private const string PATTERN = "%";
 	}
 }

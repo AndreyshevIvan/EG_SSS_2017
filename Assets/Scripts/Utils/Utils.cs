@@ -111,5 +111,16 @@ namespace MyGame
 		{
 			list.ForEach(element => { if (element) Component.Destroy(element); });
 		}
+		public static void DoAfterTime(MonoBehaviour instance, float time, EventDelegate afterTimeEvent)
+		{
+			time = (time < 0) ? 0 : time;
+			instance.StartCoroutine(AfterTimeEvent(time, afterTimeEvent));
+		}
+
+		private static IEnumerator AfterTimeEvent(float time, EventDelegate afterTimeEvent)
+		{
+			yield return new WaitForSeconds(time);
+			if (afterTimeEvent != null) afterTimeEvent();
+		}
 	}
 }

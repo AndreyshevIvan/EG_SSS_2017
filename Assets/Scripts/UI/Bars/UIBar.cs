@@ -10,12 +10,12 @@ namespace MyGame
 {
 	public abstract class UIBar : MonoBehaviour
 	{
-		public float value { get; protected set; }
+		public int value { get; protected set; }
 		public Vector3 position { get; set; }
 		public bool isFadable { get; set; }
 		public UIContainer controller { get; set; }
 
-		public void SetValue(float newValue)
+		public void SetValue(int newValue)
 		{
 			if (newValue == value)
 			{
@@ -38,6 +38,7 @@ namespace MyGame
 		protected Vector2 offset { get; set; }
 		protected RectTransform rect { get; set; }
 		protected bool isFirstSetComplete { get; private set; }
+		protected bool isTimerWork { get; set; }
 
 		protected void Awake()
 		{
@@ -45,6 +46,7 @@ namespace MyGame
 			rect = GetComponent<RectTransform>();
 			isFirstSetComplete = false;
 			lastUpdateTimer = 0;
+			isTimerWork = true;
 			OnAwakeEnd();
 			InitSizing();
 		}
@@ -72,7 +74,7 @@ namespace MyGame
 			OnUpdate();
 			SetPosition(position);
 			UpdateFading();
-			lastUpdateTimer += Time.fixedDeltaTime;
+			if (isTimerWork) lastUpdateTimer += Time.fixedDeltaTime;
 		}
 		private void UpdateFading()
 		{
