@@ -30,6 +30,7 @@ namespace MyGame
 		RIGHT,
 		DIFF,
 		PLAYER,
+		PRE_START,
 	}
 
 	[System.Serializable]

@@ -28,7 +28,7 @@ namespace MyGame.Enemies
 				healthBar.SetValue(healthPart);
 				healthBar.isFadable = true;
 			}
-			if (roadController) roadController.OnEndReached.AddListener((T) =>
+			if (roadController) roadController.OnEndReached.AddListener(T =>
 			{
 				world.player.LossEnemy();
 				Exit();
@@ -37,6 +37,14 @@ namespace MyGame.Enemies
 		protected sealed override void PlayingUpdate()
 		{
 			TryShoot();
+		}
+		protected override void OnPlaying()
+		{
+			if (roadController) roadController.Play();
+		}
+		protected override void OnPause()
+		{
+			if (roadController) roadController.Pause();
 		}
 		protected sealed override void OnExitFromWorld()
 		{

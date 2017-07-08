@@ -8,6 +8,7 @@ namespace MyGame.Hero
 	public sealed class Ship : Body
 	{
 		public ShipMind mind { get; set; }
+		public ParticleSystem engine { get { return m_engineParticles; } }
 		public ShipProperties properties
 		{
 			set
@@ -27,21 +28,27 @@ namespace MyGame.Hero
 			m_isMoved = true;
 		}
 
-		protected override void OnEnd()
-		{
-			if (healthBar) healthBar.Close();
-		}
 		protected override void OnAwakeEnd()
 		{
 			mind = GetComponent<ShipMind>();
+			ParticleSystem.MainModule engineMain = m_engineParticles.main;
+			engineMain.simulationSpace = ParticleSystemSimulationSpace.Local;
 		}
 		protected override void OnInitEnd()
 		{
-			roadController.Spline = world.factory.GetRoad(RoadType.PLAYER);
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
 			healthBar.SetValue(healthPart);
 			touchDemage = int.MaxValue;
 			isEraseOnDeath = false;
+		}
+		protected override void OnPlaying()
+		{
+			ParticleSystem.MainModule engineMain = m_engineParticles.main;
+			engineMain.simulationSpace = ParticleSystemSimulationSpace.World;
+		}
+		protected override void OnEnd()
+		{
+			if (healthBar) healthBar.Close();
 		}
 		protected override void SmartPlayingUpdate()
 		{
@@ -81,6 +88,8 @@ namespace MyGame.Hero
 		private bool m_isMoved = false;
 		private bool m_startEndAnimation = false;
 		private float m_endTimer = 0;
+		[SerializeField]
+		ParticleSystem m_engineParticles;
 
 		private Vector3 velocity { get; set; }
 

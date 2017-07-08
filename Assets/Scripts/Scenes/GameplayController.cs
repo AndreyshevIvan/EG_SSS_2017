@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using MyGame.Hero;
 using MyGame.Factory;
+using FluffyUnderware.Curvy;
 
 namespace MyGame
 {
@@ -39,6 +40,8 @@ namespace MyGame
 		private Results m_resultsUI;
 		private ShipProperties m_shipProperties = new ShipProperties();
 
+		private EventDelegate m_update;
+
 		private bool m_isMapStart;
 		private bool m_isPaused;
 		private bool m_isGameEnd;
@@ -46,7 +49,12 @@ namespace MyGame
 		private bool m_isPlaying;
 		private bool m_isStop;
 
+		private float m_prePauseTimeScale;
+		private bool m_moveingComplete = false;
+
 		private const int FRAME_RATE = 60;
+		private const float SHIP_PRE_START_SPEED = 4;
+		private const float SHIP_START_SPEED = 6;
 
 		private void Awake()
 		{
@@ -85,6 +93,11 @@ namespace MyGame
 		{
 			ship = m_factory.GetShip(ShipType.STANDART);
 			ship.properties = m_shipProperties;
+
+			ship.roadController.Spline = m_factory.GetRoad(RoadType.PRE_START);
+			ship.roadController.Clamping = CurvyClamping.Loop;
+			ship.roadController.PlayAutomatically = true;
+			ship.roadController.Speed = SHIP_PRE_START_SPEED;
 		}
 		private void InitWorld()
 		{
@@ -102,17 +115,17 @@ namespace MyGame
 
 			m_interface.uncontrollEvents += isTrue => m_world.SetSlowMode(isTrue);
 
-			m_interface.firstTouchEvents += () => {
-				ship.roadController.Play();
+			m_interface.firstTouchEvents += () =>
+			{
+				ship.roadController.Spline = null;
+				m_update += MoveShipToStartRoad;
 			};
-			ship.roadController.OnEndReached.AddListener(T => {
-				isMapStart = true;
-				OnMapStart();
-			});
 		}
 
 		private void FixedUpdate()
 		{
+			if (m_update != null) m_update();
+
 			if (!CheckUpdateChanges() || !isGameEnd)
 			{
 				return;
@@ -121,12 +134,36 @@ namespace MyGame
 			StartCoroutine(OnMapReached(isWin));
 		}
 
-		private void OnMapStart()
+		private void SetStartRoad()
 		{
-			isMapStart = true;
-			map.Play();
-			m_interface.OnMapStart();
-			Destroy(ship.roadController);
+			ship.roadController.OnEndReached.AddListener(T =>
+			{
+				map.Play();
+				isMapStart = true;
+				m_interface.OnMapStart();
+				Destroy(ship.roadController);
+			});
+
+			ship.roadController.Spline = m_factory.GetRoad(RoadType.PLAYER);
+			ship.roadController.Clamping = CurvyClamping.Clamp;
+			ship.roadController.Speed = SHIP_START_SPEED;
+			ship.roadController.Position = 0;
+
+		}
+		private void MoveShipToStartRoad()
+		{
+			if (m_moveingComplete)
+			{
+				m_update -= MoveShipToStartRoad;
+				SetStartRoad();
+				return;
+			}
+
+			CurvySpline spline = m_factory.GetRoad(RoadType.PLAYER);
+			Vector3 target = spline.Segments[0].transform.position;
+			float movement = SHIP_START_SPEED * Time.fixedDeltaTime;
+			ship.position = Vector3.MoveTowards(ship.position, target, movement);
+			m_moveingComplete = ship.position == target;
 		}
 		private IEnumerator OnMapReached(bool isWin)
 		{
@@ -155,7 +192,13 @@ namespace MyGame
 		private void Pause(bool isPause)
 		{
 			isPaused = isPause;
-			Time.timeScale = 1;
+
+			if (isPause)
+			{
+				m_prePauseTimeScale = Time.timeScale;
+			}
+
+			Time.timeScale = (isPause) ? 1 : m_prePauseTimeScale;
 		} 
 
 		private bool CheckUpdateChanges()

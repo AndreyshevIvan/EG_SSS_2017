@@ -96,6 +96,7 @@ namespace MyGame
 			}
 
 			CurvySpline road = factory.GetRoad(spawn.road);
+
 			for (int i = 0; i < spawn.count; i++)
 			{
 				Enemy enemy = factory.GetEnemy(spawn.enemy);

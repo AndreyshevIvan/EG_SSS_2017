@@ -110,7 +110,6 @@ namespace MyGame
 		private void OnPlayingEvents()
 		{
 			OnPlaying();
-			if (roadController) roadController.Play();
 		}
 		protected virtual void OnPlaying() { }
 
@@ -123,7 +122,6 @@ namespace MyGame
 		private void OnPauseEvents()
 		{
 			OnPause();
-			if (roadController) roadController.Pause();
 		}
 		protected virtual void OnPause() { }
 
