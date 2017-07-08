@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.EventSystems;
+using MyGame.Hero;
 
 namespace MyGame
 {
@@ -49,9 +50,15 @@ namespace MyGame
 			}
 			else if (gameplay.isGameEnd)
 			{
-				OnGameEnd();
+				currentBehaviour = ControllShip;
+				Utils.DoAfterTime(this, Ship.ENDING_CONTROLL_DURATION, () =>
+				{
+					currentBehaviour = () => { };
+					OnGameEnd();
+				});
 			}
 		}
+
 		public void StartGame()
 		{
 			if (firstTouchEvents != null) firstTouchEvents();
@@ -62,6 +69,16 @@ namespace MyGame
 		{
 			onPause(isPause);
 			m_pauseInterface.SetActive(isPause);
+		}
+		public void ViewResults(User oldUser, User newUser, Player player, bool isWin)
+		{
+			m_endingTitle.text = StrManager.Get((uint)((isWin) ? 6 : 7));
+
+			this.oldUser = oldUser;
+			this.newUser = newUser;
+			this.player = player;
+
+			if (m_animator) m_animator.Play(OPEN_RESULTS);
 		}
 
 		public void Add(UIBar bar)
@@ -93,8 +110,12 @@ namespace MyGame
 		private Button m_pauseButton;
 		[SerializeField]
 		private GameObject m_pauseInterface;
+		[SerializeField]
+		private Text m_endingTitle;
+		[SerializeField]
+		private GameObject m_results;
 		private Animator m_animator;
-
+		private Camera m_camera;
 		private bool m_isControll = false;
 
 		private IGameWorld world { get; set; }
@@ -110,21 +131,29 @@ namespace MyGame
 		{
 			get { return isFirstTouchCreated && !isControllPlayer; }
 		}
-		private Camera camera { get; set; }
 
-		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
+		private User oldUser { get; set; }
+		private User newUser { get; set; }
+		private Player player { get; set; }
+
 		private const float TOUCH_OFFSET_Y = 0.035f;
 		private const float CAMERA_ANGLE_FACTOR = 0.076f;
 		private const float PAUSE_BUTTON_SIZE_FACTOR = 0.07f;
 		private const float AREA_SIZE_FACTOR = 0.28f;
 		private const float AREA_POS_FACTOR = 0.02f;
-		private const string AREA_EXIT_TRIGGER = "Start";
-		private const string LEVEL_INFO_TRIGGER = "OpenLevelInfo";
+
+		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
+		private const float RESULTS_FADE_TIME = 0.4f;
+
+		private const string AREA_EXIT_TRIGGER = "AreaExit";
+		private const string OPEN_LEVEL_INFO = "OpenLevelInfo";
 		private const string CLOSE_LEVEL_INFO = "CloseLevelInfo";
+		private const string OPEN_RESULTS = "OpenResults";
+		private const string CLOSE_BARS = "CloseBars";
 
 		private void Awake()
 		{
-			camera = Camera.main;
+			m_camera = Camera.main;
 			Input.multiTouchEnabled = false;
 			m_animator = GetComponent<Animator>();
 
@@ -159,7 +188,7 @@ namespace MyGame
 		}
 		private void UpdatePreStartInterface()
 		{
-			Vector3 areaPosition = camera.WorldToScreenPoint(world.shipPosition);
+			Vector3 areaPosition = m_camera.WorldToScreenPoint(world.shipPosition);
 			areaPosition.y += Screen.height * AREA_POS_FACTOR;
 			m_shipArea.transform.position = areaPosition;
 		}
@@ -175,8 +204,8 @@ namespace MyGame
 			isFirstTouchCreated = true;
 			Vector3 screenPosition = Input.mousePosition;
 			screenPosition.y += TOUCH_OFFSET_Y * Screen.height;
-			screenPosition.z = camera.transform.position.y;
-			screenPosition = camera.ScreenToWorldPoint(screenPosition);
+			screenPosition.z = m_camera.transform.position.y;
+			screenPosition = m_camera.ScreenToWorldPoint(screenPosition);
 			screenPosition.x += screenPosition.x * -CAMERA_ANGLE_FACTOR;
 			screenPosition.z += screenPosition.z * -CAMERA_ANGLE_FACTOR;
 			if (moveShip != null) moveShip(screenPosition);
@@ -202,16 +231,26 @@ namespace MyGame
 		private void OnPrePlaying()
 		{
 			m_pauseButton.gameObject.SetActive(false);
-			m_animator.SetTrigger(LEVEL_INFO_TRIGGER);
+			m_animator.Play(OPEN_LEVEL_INFO);
 		}
 		private void OnPlaying()
 		{
 			m_shipArea.gameObject.SetActive(false);
 			m_pauseButton.gameObject.SetActive(true);
+			m_pauseButton.targetGraphic.CrossFadeAlpha(0, 0, true);
 			m_animator.SetTrigger(CLOSE_LEVEL_INFO);
 		}
 		private void OnGameEnd()
 		{
+			m_pauseButton.gameObject.SetActive(false);
+			m_results.SetActive(true);
+			List<Graphic> graphic = Utils.GetAllComponents<Graphic>(m_results.transform);
+			graphic.ForEach(element => element.CrossFadeAlpha(0, 0, true));
+			Utils.DoAfterTime(this, GameplayController.ENDING_WAITING_TIME, () =>
+			{
+				m_points.FadeClose(ENDING_FADE_TIME);
+				m_modsBar.FadeClose(ENDING_FADE_TIME);
+			});
 		}
 
 		private EventDelegate currentBehaviour;

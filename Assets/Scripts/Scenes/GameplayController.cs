@@ -13,7 +13,6 @@ namespace MyGame
 	{
 		public bool isMapStart { get; private set; }
 		public bool isPaused { get; private set; }
-		public bool isStop { get; private set; }
 		public bool isGameEnd { get { return !ship.isLive || (map.isReached && m_world.isAllEnemiesKilled); } }
 		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
 		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
@@ -22,8 +21,6 @@ namespace MyGame
 		{
 			SceneManager.LoadScene("Main");
 		}
-
-		public const float ENDING_WAITING_TIME = 3;
 
 		private Ship ship { get; set; }
 		private Map map { get; set; }
@@ -36,10 +33,7 @@ namespace MyGame
 		private ScenesController m_scenesController;
 		[SerializeField]
 		private Factories m_factory;
-		[SerializeField]
-		private Results m_resultsUI;
 		private ShipProperties m_shipProperties = new ShipProperties();
-
 		private EventDelegate m_update;
 
 		private bool m_isMapStart;
@@ -47,7 +41,6 @@ namespace MyGame
 		private bool m_isGameEnd;
 		private bool m_isWin;
 		private bool m_isPlaying;
-		private bool m_isStop;
 
 		private float m_prePauseTimeScale;
 		private bool m_moveingComplete = false;
@@ -55,16 +48,15 @@ namespace MyGame
 		private const int FRAME_RATE = 60;
 		private const float SHIP_PRE_START_SPEED = 4;
 		private const float SHIP_START_SPEED = 6;
+		public const float ENDING_WAITING_TIME = 3;
 
 		private void Awake()
 		{
 			QualitySettings.vSyncCount = 0;
 			Application.targetFrameRate = FRAME_RATE;
-			m_resultsUI.gameObject.SetActive(false);
 
 			isMapStart = false;
 			isPaused = false;
-			isStop = false;
 		}
 		private void Start()
 		{
@@ -175,13 +167,7 @@ namespace MyGame
 
 			Utils.DoAfterTime(this, ENDING_WAITING_TIME, () =>
 			{
-				isStop = true;
-
-				Utils.DoAfterTime(this, GameplayUI.ENDING_FADE_TIME, () =>
-				{
-					m_resultsUI.gameObject.SetActive(true);
-					m_resultsUI.Open(null, null, m_world.player, isWin);
-				});
+				m_interface.ViewResults(null, null, m_world.player, isWin);
 			});
 		}
 		private void SaveUserData()
@@ -212,8 +198,7 @@ namespace MyGame
 				m_isPaused != isPaused ||
 				m_isGameEnd != isGameEnd ||
 				m_isWin != isWin ||
-				m_isPlaying != isPlaying) ||
-				m_isStop != isStop;
+				m_isPlaying != isPlaying);
 
 			if (isChange) UpdateChanges();
 			return isChange;
@@ -225,7 +210,6 @@ namespace MyGame
 			m_isGameEnd = isGameEnd;
 			m_isWin = isWin;
 			m_isPlaying = isPlaying;
-			m_isStop = isStop;
 
 			m_world.GameplayChange();
 			m_interface.GameplayChange();
@@ -239,6 +223,5 @@ namespace MyGame
 		bool isGameEnd { get; }
 		bool isWin { get; }
 		bool isPlaying { get; }
-		bool isStop { get; }
 	}
 }

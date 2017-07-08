@@ -35,7 +35,6 @@ namespace MyGame
 		public bool isGameEnd { get { return gameplay.isGameEnd; } }
 		public bool isWin { get { return gameplay.isWin; } }
 		public bool isPlaying { get { return gameplay.isPlaying; } }
-		public bool isStop { get { return gameplay.isStop; } }
 
 		public Transform sky { get { return map.skyObjects; } }
 		public Transform ground { get { return map.groundObjects; } }

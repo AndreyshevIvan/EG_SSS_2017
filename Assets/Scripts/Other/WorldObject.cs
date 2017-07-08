@@ -42,11 +42,7 @@ namespace MyGame
 			OnChangeGameplay();
 			currentEvent = () => { };
 
-			if (gameplay.isStop)
-			{
-				return;
-			}
-			else if (gameplay.isPaused)
+			if (gameplay.isPaused)
 			{
 				OnPauseEvents();
 			}
@@ -58,7 +54,7 @@ namespace MyGame
 			}
 			else if (gameplay.isGameEnd)
 			{
-				OnEndEvents();
+				OnEndGameplayEvents();
 				currentEvent = onGameEnd;
 				return;
 			}
@@ -113,11 +109,11 @@ namespace MyGame
 		}
 		protected virtual void OnPlaying() { }
 
-		private void OnEndEvents()
+		private void OnEndGameplayEvents()
 		{
-			OnEnd();
+			OnEndGameplay();
 		}
-		protected virtual void OnEnd() { }
+		protected virtual void OnEndGameplay() { }
 
 		private void OnPauseEvents()
 		{
@@ -138,12 +134,22 @@ namespace MyGame
 				return;
 			}
 
+			if (m_extraUpdate != null) m_extraUpdate();
 			if (currentEvent != null) currentEvent();
 		}
 		protected virtual void PlayingUpdate() { }
 		protected virtual void SmartPlayingUpdate() { }
 		protected virtual void AfterMatchUpdate() { }
 		protected virtual void UpdateBars() { }
+
+		protected void AddExtraListener(EventDelegate listener)
+		{
+			m_extraUpdate += listener;
+		}
+		protected void EraseExtraListener(EventDelegate listener)
+		{
+			if (m_extraUpdate != null) m_extraUpdate -= listener;
+		}
 
 		protected abstract void OnExitFromWorld();
 		protected void UpdatePositionOnField()
@@ -170,6 +176,7 @@ namespace MyGame
 		[SerializeField]
 		private ParticleSystem m_explosion;
 		private bool m_isStartExit = false;
+		private EventDelegate m_extraUpdate;
 
 		private EventDelegate currentEvent { get; set; }
 		private EventDelegate onPlaying { get; set; }

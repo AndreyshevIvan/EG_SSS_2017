@@ -15,6 +15,7 @@ namespace MyGame
 		protected override void OnAwakeEnd()
 		{
 			CreateNewPlanks();
+			ResetFadeElements();
 		}
 		protected override void OnSetNewValue()
 		{

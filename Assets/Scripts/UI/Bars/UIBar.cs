@@ -28,6 +28,10 @@ namespace MyGame
 			if (isFadable && isFirstSetComplete) SetFade(1, 0);
 			if (!isFirstSetComplete) isFirstSetComplete = true;
 		}
+		public void FadeClose(float duration)
+		{
+			m_fadeElements.ForEach(element => element.CrossFadeAlpha(0, duration, true));
+		}
 		public void Close()
 		{
 			controller.Erase(this);
@@ -42,7 +46,7 @@ namespace MyGame
 
 		protected void Awake()
 		{
-			m_fadeElements = Utils.GetAllComponents<Graphic>(gameObject.transform);
+			ResetFadeElements();
 			rect = GetComponent<RectTransform>();
 			isFirstSetComplete = false;
 			lastUpdateTimer = 0;
@@ -55,12 +59,17 @@ namespace MyGame
 		protected abstract void OnSetNewValue();
 		protected virtual void SetPosition(Vector3 worldPosition) { }
 		protected virtual void OnUpdate() { }
+
 		protected void SetFade(float fade, float duration)
 		{
 			m_fadeElements.ForEach(element =>
 			{
 				element.CrossFadeAlpha(fade, duration, true);
 			});
+		}
+		protected void ResetFadeElements()
+		{
+			m_fadeElements = Utils.GetAllComponents<Graphic>(gameObject.transform);
 		}
 
 		private List<Graphic> m_fadeElements;
