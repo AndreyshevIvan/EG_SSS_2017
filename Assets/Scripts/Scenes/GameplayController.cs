@@ -14,9 +14,27 @@ namespace MyGame
 	{
 		public bool isMapStart { get; private set; }
 		public bool isPaused { get; private set; }
-		public bool isGameEnd { get { return !ship.isLive || (map.isReached && m_world.isAllEnemiesKilled); } }
-		public bool isWin { get { return isGameEnd && m_world.ship.isLive; } }
-		public bool isPlaying { get { return !isPaused && isMapStart && !isGameEnd; } }
+		public bool isGameEnd
+		{
+			get
+			{
+				return !ship.isLive || (map.isReached && m_world.isAllEnemiesKilled);
+			}
+		}
+		public bool isWin
+		{
+			get
+			{
+				return isGameEnd && m_world.ship.isLive;
+			}
+		}
+		public bool isPlaying
+		{
+			get
+			{
+				return !isPaused && isMapStart && !isGameEnd;
+			}
+		}
 
 		public void Continue()
 		{

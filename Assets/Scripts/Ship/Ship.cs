@@ -43,7 +43,7 @@ namespace MyGame.Hero
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
 			healthBar.SetValue(healthPercents);
 			touchDemage = int.MaxValue;
-			isEraseOnDeath = false;
+			m_isEraseOnDeath = false;
 		}
 
 		protected override void OnPlaying()
@@ -106,7 +106,7 @@ namespace MyGame.Hero
 		private const float CONTROLL_MAX_ANGLE = 80;
 
 		private const float ENDING_ANIM_DURATION = 5;
-		private const float ENDING_ESCAPE_SPEED = 15;
+		private const float ENDING_ESCAPE_SPEED = 10;
 		private const float ENDING_ANGLE_SPEED = 1;
 
 		private const string ROTATION_TRIGGER = "EndRotate";

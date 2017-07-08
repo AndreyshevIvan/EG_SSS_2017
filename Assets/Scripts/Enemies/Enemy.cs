@@ -31,6 +31,7 @@ namespace MyGame.Enemies
 			}
 			if (roadController) roadController.OnEndReached.AddListener(T =>
 			{
+				Debug.Log("Lost Enemy!");
 				world.player.LossEnemy();
 				Exit();
 			});
@@ -49,7 +50,6 @@ namespace MyGame.Enemies
 		}
 		protected sealed override void OnExitFromWorld()
 		{
-			base.OnExitFromWorld();
 			world.player.LossEnemy();
 		}
 		protected abstract void InitProperties();

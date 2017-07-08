@@ -78,6 +78,7 @@ namespace MyGame
 		protected IGameWorld world { get; private set; }
 		protected Rigidbody physicsBody { get; private set; }
 		protected List<ParticleSystem> particles { get; set; }
+		protected List<Component> toDestroy { get; private set; }
 
 		protected void Awake()
 		{
@@ -85,6 +86,7 @@ namespace MyGame
 			roadController = GetComponent<SplineController>();
 			particles = Utils.GetAllComponents<ParticleSystem>(this);
 			bonuses = new List<Pair<BonusType, int>>();
+			toDestroy = new List<Component>();
 
 			exitAllowed = true;
 			openAllowed = false;
@@ -152,7 +154,7 @@ namespace MyGame
 			if (m_extraUpdate != null) m_extraUpdate -= listener;
 		}
 
-		protected abstract void OnExitFromWorld();
+		protected virtual void OnExitFromWorld() { }
 		protected void UpdatePositionOnField()
 		{
 			position = new Vector3(
@@ -172,6 +174,10 @@ namespace MyGame
 		{
 			Utils.DestroyAll(particles);
 			points = 0;
+		}
+		protected void OnDestroy()
+		{
+			toDestroy.ForEach(element => { if (element) Destroy(element); });
 		}
 
 		[SerializeField]

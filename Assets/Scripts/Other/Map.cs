@@ -54,9 +54,10 @@ namespace MyGame
 
 		private float m_enemiesCount = 0;
 		private bool m_isMapEnd = false;
+		private Enemy m_enemyToDebug;
 
-		[SerializeField]
 		private const float MOVE_SPEED = 1.6f;
+		private const float FLY_SPAWN_OFFSET = 5;
 
 		private void Awake()
 		{
@@ -64,8 +65,6 @@ namespace MyGame
 		}
 		private void FixedUpdate()
 		{
-			//Debug.Log(time);
-
 			if (!gameplay.isPlaying)
 			{
 				return;
@@ -102,9 +101,9 @@ namespace MyGame
 				Enemy enemy = factory.GetEnemy(spawn.enemy);
 				enemy.transform.SetParent(m_skyObjects);
 				enemy.roadController.Spline = road;
-				float spawnPosition = GameWorld.SPAWN_OFFSET * i / road.Length;
-				enemy.roadController.Position = 10;
+				enemy.roadController.InitialPosition = i * 2;
 				enemy.roadController.Speed = spawn.speed;
+				m_enemyToDebug = enemy;
 			}
 			tempSkySpawns.Remove(spawn);
 		}

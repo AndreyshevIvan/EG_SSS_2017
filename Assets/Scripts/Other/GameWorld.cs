@@ -174,7 +174,8 @@ namespace MyGame
 		private void OnTriggerExit(Collider other)
 		{
 			WorldObject obj = other.GetComponent<WorldObject>();
-			if (obj && !obj.roadController && obj.exitAllowed)
+
+			if (obj)
 			{
 				obj.ExitFromWorld();
 				Remove(obj);
