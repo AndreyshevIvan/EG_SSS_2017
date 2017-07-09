@@ -10,7 +10,7 @@ using MyGame.GameUtils;
 
 namespace MyGame
 {
-	public class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer, IWorldEntity
+	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer, IWorldEntity
 	{
 		public PointDelegate moveShip;
 		public BoolEventDelegate uncontrollEvents;
@@ -71,16 +71,6 @@ namespace MyGame
 			onPause(isPause);
 			m_pauseInterface.SetActive(isPause);
 		}
-		public void ViewResults(User oldUser, User newUser, Player player, bool isWin)
-		{
-			m_endingTitle.text = StrManager.Get((uint)((isWin) ? 6 : 7));
-
-			this.oldUser = oldUser;
-			this.newUser = newUser;
-			this.player = player;
-
-			if (m_animator) m_animator.Play(OPEN_RESULTS);
-		}
 
 		public void Add(UIBar bar)
 		{
@@ -111,10 +101,6 @@ namespace MyGame
 		private Button m_pauseButton;
 		[SerializeField]
 		private GameObject m_pauseInterface;
-		[SerializeField]
-		private Text m_endingTitle;
-		[SerializeField]
-		private GameObject m_results;
 		private Animator m_animator;
 		private Camera m_camera;
 		private bool m_isControll = false;
@@ -133,23 +119,17 @@ namespace MyGame
 			get { return isFirstTouchCreated && !isControllPlayer; }
 		}
 
-		private User oldUser { get; set; }
-		private User newUser { get; set; }
-		private Player player { get; set; }
-
 		private const float TOUCH_OFFSET_Y = 0.035f;
 		private const float CAMERA_ANGLE_FACTOR = 0.076f;
 		private const float PAUSE_BUTTON_SIZE_FACTOR = 0.07f;
-		private const float AREA_SIZE_FACTOR = 0.28f;
+		private const float AREA_SIZE_FACTOR = 0.3f;
 		private const float AREA_POS_FACTOR = 0.02f;
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
-		private const float RESULTS_FADE_TIME = 0.4f;
 
 		private const string AREA_EXIT_TRIGGER = "AreaExit";
 		private const string OPEN_LEVEL_INFO = "OpenLevelInfo";
 		private const string CLOSE_LEVEL_INFO = "CloseLevelInfo";
-		private const string OPEN_RESULTS = "OpenResults";
 		private const string CLOSE_BARS = "CloseBars";
 
 		private void Awake()
@@ -245,13 +225,9 @@ namespace MyGame
 		{
 			m_pauseButton.gameObject.SetActive(false);
 			m_results.SetActive(true);
-			List<Graphic> graphic = Utils.GetAllComponents<Graphic>(m_results.transform);
-			graphic.ForEach(element => element.CrossFadeAlpha(0, 0, true));
-			Utils.DoAfterTime(this, GameplayController.ENDING_WAITING_TIME, () =>
-			{
-				m_points.FadeClose(ENDING_FADE_TIME);
-				m_modsBar.FadeClose(ENDING_FADE_TIME);
-			});
+			Utils.FadeElement(m_results.transform, 0, 0);
+			m_points.FadeClose(ENDING_FADE_TIME);
+			m_modsBar.FadeClose(ENDING_FADE_TIME);
 		}
 
 		private EventDelegate currentBehaviour;
@@ -259,6 +235,95 @@ namespace MyGame
 		private EventDelegate playingBehaviour;
 		private EventDelegate pauseBehaviour;
 		private EventDelegate winBehaviour;
+	}
+
+	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer, IWorldEntity
+	{
+		public void ViewResults(User oldUser, User newUser, Player player)
+		{
+			this.player = player;
+
+			CalcData();
+			InitResultsInterface();
+		}
+
+		[SerializeField]
+		private Text m_endingTitle;
+		[SerializeField]
+		private Text m_levelCompletTxt;
+		[SerializeField]
+		private Text m_clearVictoryTxt;
+		[SerializeField]
+		private Text m_allKillsTxt;
+		[SerializeField]
+		private Text m_starsTxt;
+		[SerializeField]
+		private Text m_starsValue;
+		[SerializeField]
+		private Text m_pointsValue;
+
+		[SerializeField]
+		private Sprite m_goodIco;
+		[SerializeField]
+		private Sprite m_badIco;
+		[SerializeField]
+		private Image m_levelCompleteIco;
+		[SerializeField]
+		private Image m_clearVictoryIco;
+		[SerializeField]
+		private Image m_allKillsIco;
+		[SerializeField]
+		private Image m_pointsLine;
+
+		[SerializeField]
+		private GameObject m_results;
+		[SerializeField]
+		private Button m_continue;
+
+		private User oldUser { get; set; }
+		private User newUser { get; set; }
+		private Player player { get; set; }
+
+		private const float RESULTS_FADE_TIME = 0.4f;
+
+		private const string OPEN_RESULTS = "OpenResults";
+
+		private void CalcData()
+		{
+
+		}
+		private void InitResultsInterface()
+		{
+			InitStrings();
+			InitAchievements();
+
+			Utils.FadeElement(m_results.transform, 1, RESULTS_FADE_TIME);
+
+
+			if (m_animator) m_animator.Play(OPEN_RESULTS);
+		}
+		private void InitStrings()
+		{
+			m_endingTitle.text = StrManager.Get(6);
+			m_levelCompletTxt.text = StrManager.Get(8);
+			m_clearVictoryTxt.text = StrManager.Get(9);
+			m_allKillsTxt.text = StrManager.Get(10);
+			m_starsTxt.text = StrManager.Get(7);
+		}
+		private void InitAchievements()
+		{
+			if (!player.isWin)
+			{
+				m_levelCompleteIco.sprite = m_badIco;
+				m_clearVictoryIco.sprite = m_badIco;
+				m_allKillsIco.sprite = m_badIco;
+				return;
+			}
+
+			m_levelCompleteIco.sprite = m_goodIco;
+			if (!player.isDemaged) m_clearVictoryIco.sprite = m_goodIco;
+			if (!player.isLossEnemy) m_allKillsIco.sprite = m_badIco;
+		}
 	}
 
 	public delegate void PointDelegate(Vector3 touchPositiion);
@@ -270,7 +335,6 @@ namespace MyGame
 		int points { set; }
 		int modifications { set; }
 	}
-
 	public interface UIContainer
 	{
 		void Add(UIBar bar);

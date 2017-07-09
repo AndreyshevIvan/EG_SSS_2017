@@ -8,6 +8,8 @@ using MyGame.GameUtils;
 
 namespace MyGame
 {
+	using BonusCount = Pair<BonusType, int>;
+
 	public abstract class WorldObject : MonoBehaviour, IWorldEntity
 	{
 		public Vector3 position
@@ -78,15 +80,15 @@ namespace MyGame
 		protected IGameWorld world { get; private set; }
 		protected Rigidbody physicsBody { get; private set; }
 		protected List<ParticleSystem> particles { get; set; }
-		protected List<Component> toDestroy { get; private set; }
+		protected List<GameObject> toDestroy { get; private set; }
 
 		protected void Awake()
 		{
 			physicsBody = GetComponent<Rigidbody>();
 			roadController = GetComponent<SplineController>();
 			particles = Utils.GetAllComponents<ParticleSystem>(this);
-			bonuses = new List<Pair<BonusType, int>>();
-			toDestroy = new List<Component>();
+			bonuses = new List<BonusCount>();
+			toDestroy = new List<GameObject>();
 
 			exitAllowed = true;
 			openAllowed = false;

@@ -31,6 +31,11 @@ namespace MyGame
 		}
 		public void FadeClose(float duration)
 		{
+			if (m_fadeElements == null)
+			{
+				return;
+			}
+
 			m_fadeElements.ForEach(element => element.CrossFadeAlpha(0, duration, true));
 		}
 		public void Close()

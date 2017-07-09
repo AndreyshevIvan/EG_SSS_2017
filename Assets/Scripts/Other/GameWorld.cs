@@ -46,7 +46,6 @@ namespace MyGame
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
 		public const int WORLD_BOX_LAYER = 31;
-		public const int MODIFICATION_COUNT = 7;
 
 		public void Init(IGameWorld gameWorld)
 		{
@@ -140,6 +139,8 @@ namespace MyGame
 		private Player m_player;
 		private bool m_lastModeType = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
+		[SerializeField]
+		private Material m_garbageMaterial;
 
 		private const float MAGNETIC_SPEED = 2;
 		private const float SLOW_TIMESCALE = 0.2f;
@@ -214,6 +215,8 @@ namespace MyGame
 				body.isKinematic = false;
 				body.gameObject.layer = GARBAGE_LAYER;
 				body.AddForce(Utils.RandomVect(-DISMANTLE_FORCE, DISMANTLE_FORCE));
+				List<MeshRenderer> materials = Utils.GetAllComponents<MeshRenderer>(body.transform);
+				materials.ForEach(element => element.material = m_garbageMaterial);
 			});
 		}
 	}

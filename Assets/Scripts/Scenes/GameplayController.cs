@@ -122,14 +122,14 @@ namespace MyGame
 
 			m_interface.onPause += Pause;
 
-			m_interface.moveShip += ship.MoveTo;
+			m_interface.moveShip += MoveShip;
 
 			m_interface.uncontrollEvents += isTrue => m_world.SetSlowMode(isTrue);
 
 			m_interface.firstTouchEvents += () =>
 			{
 				ship.roadController.Spline = null;
-				m_updater.Add(MoveShipToStartRoad, SetStartRoad);
+				m_updater.Add(MoveShipToStartRoad, SetStartRoad, UpdType.FIXED);
 			};
 		}
 
@@ -169,7 +169,8 @@ namespace MyGame
 
 			Utils.DoAfterTime(this, ENDING_WAITING_TIME, () =>
 			{
-				m_interface.ViewResults(null, null, m_world.player, isWin);
+				m_world.player.isWin = isWin;
+				m_interface.ViewResults(null, null, m_world.player);
 			});
 		}
 		private void Pause(bool isPause)
@@ -181,7 +182,7 @@ namespace MyGame
 				m_prePauseTimeScale = Time.timeScale;
 			}
 
-			Time.timeScale = (isPause) ? 1 : m_prePauseTimeScale;
+			Time.timeScale = (isPause) ? 0 : m_prePauseTimeScale;
 		} 
 
 		private bool CheckUpdateChanges()
@@ -216,6 +217,10 @@ namespace MyGame
 			//GameData.SaveUser(user);
 		}
 
+		private void MoveShip(Vector3 targetPosition)
+		{
+			if (ship) ship.MoveTo(targetPosition);
+		}
 		private bool MoveShipToStartRoad()
 		{
 			CurvySpline spline = m_factory.GetRoad(RoadType.PLAYER);

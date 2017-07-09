@@ -19,8 +19,13 @@ namespace MyGame
 		public EventDelegate onDemaged;
 		public EventDelegate onLossEnemy;
 
+		public bool isWin { get; set; }
 		public bool isDemaged { get; private set; }
 		public bool isLossEnemy { get; private set; }
+		public bool isAllowedModify { get { return modifications < MODIFICATION_COUNT; } }
+		public byte modifications { get { return m_modifications; } }
+
+		public const int MODIFICATION_COUNT = 12;
 
 		public void AddPoints(int pointsCount)
 		{
@@ -29,8 +34,14 @@ namespace MyGame
 		}
 		public void Modify()
 		{
-			byte modificationsCount = m_ship.mind.ModificateByOne();
-			m_bar.modifications = modificationsCount;
+			if (!isAllowedModify)
+			{
+				return;
+			}
+
+			m_modifications++;
+			m_ship.mind.ModificateByOne();
+			m_bar.modifications = modifications;
 		}
 		public void Heal(int healthCount)
 		{
@@ -74,6 +85,7 @@ namespace MyGame
 		}
 
 		private int m_points;
+		private byte m_modifications = 0;
 
 		private const int MIN_POINTS = 0;
 		private const int MAX_POINTS = 999999999;

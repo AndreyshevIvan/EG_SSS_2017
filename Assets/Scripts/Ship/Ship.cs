@@ -15,7 +15,7 @@ namespace MyGame.Hero
 			set
 			{
 				mind.properties = value;
-				health = maxHealth = 1;//value.health;
+				health = maxHealth = 100;// value.health;
 			}
 		}
 
@@ -42,6 +42,7 @@ namespace MyGame.Hero
 		{
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
 			healthBar.SetValue(healthPercents);
+			toDestroy.Add(healthBar.gameObject);
 			touchDemage = int.MaxValue;
 			m_isEraseOnDeath = false;
 		}

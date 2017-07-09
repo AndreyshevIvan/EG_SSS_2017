@@ -24,7 +24,7 @@ namespace MyGame
 			{
 				plank.color = m_inactive;
 
-				if (m_planks.IndexOf(plank) <= value)
+				if (m_planks.IndexOf(plank) < value)
 				{
 					plank.color = m_active;
 				}
@@ -39,7 +39,7 @@ namespace MyGame
 			m_planks.ForEach(element => Destroy(element));
 			m_planks.Clear();
 
-			Utils.DoAnyTimes(GameWorld.MODIFICATION_COUNT, () =>
+			Utils.DoAnyTimes(Player.MODIFICATION_COUNT, () =>
 			{
 				GameObject plank = Instantiate(m_plank, transform);
 				Image image = plank.GetComponentInChildren<Image>();

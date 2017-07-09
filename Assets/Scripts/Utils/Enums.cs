@@ -71,4 +71,11 @@ namespace MyGame
 		LOCALE,
 		LEVEL_PRICE,
 	}
+
+	[System.Serializable]
+	public enum UpdType
+	{
+		FIXED,
+		UI,
+	}
 }

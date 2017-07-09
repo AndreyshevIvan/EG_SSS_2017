@@ -7,6 +7,8 @@ using MyGame.GameUtils;
 
 namespace MyGame.Enemies
 {
+	using BonusCount = Pair<BonusType, int>;
+
 	public abstract class Enemy : Body
 	{
 		public byte starsCount { get; protected set; }
@@ -28,10 +30,10 @@ namespace MyGame.Enemies
 			{
 				healthBar.SetValue(healthPercents);
 				healthBar.isFadable = true;
+				toDestroy.Add(healthBar.gameObject);
 			}
 			if (roadController) roadController.OnEndReached.AddListener(T =>
 			{
-				Debug.Log("Lost Enemy!");
 				world.player.LossEnemy();
 				Exit();
 			});
@@ -40,11 +42,28 @@ namespace MyGame.Enemies
 		{
 			TryShoot();
 		}
-		protected override void OnPlaying()
+		protected sealed override void OnDeath()
+		{
+			world.player.KillEnemy(type);
+
+			if (Utils.IsHappen(0.1f))
+			{
+				bonuses.Add(BonusCount.Create(BonusType.HEALTH, 1));
+			}
+			else if (world.player.isAllowedModify && Utils.IsHappen(0.4f))
+			{
+				bonuses.Add(BonusCount.Create(BonusType.AMMO_UP, 1));
+			}
+		}
+		protected sealed override void OnPlaying()
 		{
 			if (roadController) roadController.Play();
 		}
-		protected override void OnPause()
+		protected sealed override void OnPause()
+		{
+			if (roadController) roadController.Pause();
+		}
+		protected sealed override void OnEndGameplay()
 		{
 			if (roadController) roadController.Pause();
 		}

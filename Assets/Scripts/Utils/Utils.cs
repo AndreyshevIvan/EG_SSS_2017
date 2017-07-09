@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MyGame.GameUtils
 {
@@ -115,6 +116,16 @@ namespace MyGame.GameUtils
 		{
 			time = (time < 0) ? 0 : time;
 			instance.StartCoroutine(AfterTimeEvent(time, afterTimeEvent));
+		}
+		public static void FadeElement(Transform obj, float alpha, float duration)
+		{
+			List<Graphic> graphic = Utils.GetAllComponents<Graphic>(obj);
+			graphic.ForEach(element => element.CrossFadeAlpha(alpha, duration, true));
+		}
+		public static bool IsHappen(float probability)
+		{
+			float random = UnityEngine.Random.Range(0.0f, 1.0f);
+			return random <= probability;
 		}
 
 		private static IEnumerator AfterTimeEvent(float time, EventDelegate afterTimeEvent)
