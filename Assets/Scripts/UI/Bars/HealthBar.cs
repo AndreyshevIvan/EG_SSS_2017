@@ -10,6 +10,8 @@ namespace MyGame
 {
 	public sealed class HealthBar : UIBar
 	{
+		public const float HP_BAR_FADE_DUR = 0.4f;
+
 		protected override void OnAwakeEnd()
 		{
 			layout = GetComponent<HorizontalLayoutGroup>();

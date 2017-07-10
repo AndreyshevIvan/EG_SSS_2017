@@ -16,7 +16,6 @@ namespace MyGame
 		public Vector3 position { get; set; }
 		public int value { get; protected set; }
 		public bool isActive { get; protected set; }
-		public bool isFadable { get; set; }
 
 		public void SetActive(bool isActive)
 		{
@@ -32,7 +31,7 @@ namespace MyGame
 		}
 		public void SetValue(int newValue)
 		{
-			if (newValue == value)
+			if (newValue == value && isFirstSetComplete)
 			{
 				return;
 			}
@@ -40,17 +39,11 @@ namespace MyGame
 			value = newValue;
 			OnSetNewValue();
 			lastUpdateTimer = 0;
-			if (isFadable && isFirstSetComplete) Fade(1, 0);
 			if (!isFirstSetComplete) isFirstSetComplete = true;
 		}
 		public void Fade(float fade, float duration)
 		{
-			if (m_fadeElements == null)
-			{
-				return;
-			}
-
-			m_fadeElements.ForEach(element => element.CrossFadeAlpha(fade, duration, true));
+			Utils.FadeList(m_fadeElements, fade, duration);
 		}
 		public void Close()
 		{
@@ -88,7 +81,6 @@ namespace MyGame
 		{
 			OnUpdate();
 			SetPosition(position);
-			UpdateFading();
 			if (isTimerWork) lastUpdateTimer += Time.fixedDeltaTime;
 		}
 		protected virtual void OnUpdate() { }
@@ -104,16 +96,6 @@ namespace MyGame
 		private const float CLOSE_FADE_TIME = 0.15f;
 		private const float VISIBLE_TIME = 1;
 		private const float FADE_TIME = 0.3f;
-
-		private void UpdateFading()
-		{
-			if (!isFadable || lastUpdateTimer < VISIBLE_TIME)
-			{
-				return;
-			}
-
-			Fade(0, FADE_TIME);
-		}
 	}
 
 	public delegate void CloseEvent<IEnumerator>();

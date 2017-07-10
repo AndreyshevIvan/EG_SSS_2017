@@ -123,6 +123,15 @@ namespace MyGame.GameUtils
 			float random = UnityEngine.Random.Range(0.0f, 1.0f);
 			return random <= probability;
 		}
+		public static void FadeList(List<Graphic> list, float fade, float duration = 0)
+		{
+			if (list == null)
+			{
+				return;
+			}
+
+			list.ForEach(x => x.CrossFadeAlpha(fade, duration, true));
+		}
 
 		private static IEnumerator AfterTimeEvent(float time, EventDelegate afterTimeEvent)
 		{

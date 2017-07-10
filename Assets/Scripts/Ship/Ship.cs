@@ -84,13 +84,16 @@ namespace MyGame.Hero
 			UpdatePositionOnField();
 			UpdateRotation();
 			UpdateMoveingSpeed();
-
-			healthBar.isFadable = maxHealth == health;
 		}
 
 		protected override void DoAfterDemaged()
 		{
 			world.player.BeDemaged();
+			healthBar.Fade(1, HealthBar.HP_BAR_FADE_DUR);
+		}
+		protected override void OnHealEnd()
+		{
+			if (isFull) healthBar.Fade(0, HealthBar.HP_BAR_FADE_DUR);
 		}
 
 		[SerializeField]

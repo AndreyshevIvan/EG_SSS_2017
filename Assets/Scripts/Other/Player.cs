@@ -52,6 +52,14 @@ namespace MyGame
 			m_ship.mind.ModificateByOne();
 			m_bar.modifications = modifications;
 		}
+		public bool Laser()
+		{
+			return true;
+		}
+		public bool Bomb()
+		{
+			return true;
+		}
 		public void Heal(int healthCount)
 		{
 			m_ship.Heal(healthCount);

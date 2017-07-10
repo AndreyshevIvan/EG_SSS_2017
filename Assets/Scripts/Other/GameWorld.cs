@@ -170,7 +170,7 @@ namespace MyGame
 		}
 		private void UpdateSlowmode()
 		{
-			float step = Time.fixedDeltaTime / GameplayUI.SLOWMO_CHANGE_TIME * m_deltaScale;
+			float step = Time.fixedDeltaTime / GameplayUI.SLOWMO_OPEN_DUR * m_deltaScale;
 			Time.timeScale = Mathf.MoveTowards(Time.timeScale, m_targetTimeScale, step);
 			Time.fixedDeltaTime = (Time.timeScale != 1) ? SLOWMO_DT : NORMAL_DT;
 		} 

@@ -14,25 +14,26 @@ namespace MyGame
 		public int healthPercents { get { return (int)Mathf.Round(100 * healthPart); } }
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
+		public bool isFull { get { return health == maxHealth; } }
 		public int touchDemage { get; protected set; }
 
 		public virtual void Heal(int healCount)
 		{
-			health = health + healCount;
-			if (health > maxHealth)
+			if (healCount == 0)
 			{
-				health = maxHealth;
+				return;
 			}
+
+			health = health + healCount;
+			health = Mathf.Clamp(health, 0, maxHealth);
+			if (healthBar) healthBar.SetValue(healthPercents);
+			OnHealEnd();
 		}
 
 		protected bool m_isEraseOnDeath = true;
 
 		protected UIBar healthBar { get; set; }
 		protected int maxHealth { get; set; }
-		protected int addDemage
-		{
-			set { health = (health - value < 0) ? 0 : health - value; }
-		}
 
 		protected sealed override void OnTrigger(Collider other)
 		{
@@ -45,7 +46,7 @@ namespace MyGame
 			if (!otherBody) return;
 
 			DoBeforeDemaged();
-			addDemage = otherBody.touchDemage;
+			Heal(-1 * otherBody.touchDemage);
 			otherBody.OnDemageTaked();
 			DoAfterDemaged();
 
@@ -62,6 +63,8 @@ namespace MyGame
 		protected virtual void DoAfterDemaged() { }
 		protected virtual void OnDemageTaked() { }
 		protected virtual void OnDeath() { }
+
+		protected virtual void OnHealEnd() { }
 
 		protected sealed override void UpdateBars()
 		{

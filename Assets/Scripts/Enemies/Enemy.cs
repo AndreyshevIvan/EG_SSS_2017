@@ -28,7 +28,6 @@ namespace MyGame.Enemies
 			if (healthBar)
 			{
 				healthBar.SetValue(healthPercents);
-				healthBar.isFadable = true;
 				toDestroy.Add(healthBar.gameObject);
 			}
 			if (roadController) roadController.OnEndReached.AddListener(T =>
@@ -65,6 +64,10 @@ namespace MyGame.Enemies
 		protected sealed override void OnExitFromWorld()
 		{
 			world.player.LossEnemy();
+		}
+		protected sealed override void DoAfterDemaged()
+		{
+			if (healthBar) healthBar.Fade(1, HealthBar.HP_BAR_FADE_DUR);
 		}
 		protected abstract void InitProperties();
 		protected abstract void Shoot();

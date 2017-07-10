@@ -25,7 +25,7 @@ namespace MyGame
 		public int modifications { set { m_modsBar.SetValue(value); } }
 
 		public const float ENDING_FADE_DURATION = 0.4f;
-		public const float SLOWMO_CHANGE_TIME = 0.3f;
+		public const float SLOWMO_OPEN_DUR = 0.3f;
 
 		public void Init(IGameWorld gameWorld)
 		{
@@ -88,28 +88,23 @@ namespace MyGame
 		public void Pause(bool isPause)
 		{
 			onPause(isPause);
-			m_pauseInterface.SetActive(isPause);
+			SetActive(m_pauseInterface, isPause);
 		}
 		public void Bomb()
 		{
-			Debug.Log(isSlowMode);
-			if (!isSlowMode)
+			if (player.Laser())
 			{
-				return;
+				lastTouch = UITouch.SPELL;
+				SetSlowMode(false);
 			}
-
-			if (onBomb()) lastTouch = UITouch.SPELL;
-			SetSlowMode(false);
 		}
 		public void Laser()
 		{
-			if (!isSlowMode)
+			if (player.Bomb())
 			{
-				return;
+				lastTouch = UITouch.SPELL;
+				SetSlowMode(false);
 			}
-
-			if (onLaser()) lastTouch = UITouch.SPELL;
-			SetSlowMode(false);
 		}
 
 		public void Add(UIBar bar)
@@ -142,24 +137,22 @@ namespace MyGame
 		[SerializeField]
 		private ModificationBar m_modsBar;
 		[SerializeField]
-		private Button m_pauseButton;
+		private RectTransform m_pauseButton;
 		[SerializeField]
-		private GameObject m_pauseInterface;
+		private Component m_pauseInterface;
 		[SerializeField]
 		private Component m_levelTitle;
 		[SerializeField]
-		private SuperWeaponBar m_bombBar;
+		private SpellBar m_bombBar;
 		[SerializeField]
-		private SuperWeaponBar m_laserBar;
+		private SpellBar m_laserBar;
 		private Animator m_animator;
 		private Camera m_camera;
-		private EventDelegate m_firstTouchEvents;
 		private List<Graphic> m_slowButtonsGraphic;
 
 		private IGameWorld world { get; set; }
 		private IGameplay gameplay { get; set; }
 		private UITouch lastTouch { get; set; }
-		private bool isSlowMode { get; set; }
 
 		private const float TOUCH_OFFSET_Y = 0.035f;
 		private const float CAMERA_ANGLE_FACTOR = 0.076f;
@@ -182,9 +175,6 @@ namespace MyGame
 			m_animator = GetComponent<Animator>();
 			m_slowButtonsGraphic = Utils.GetAllComponents<Graphic>(m_slowButtons);
 			lastTouch = UITouch.WAIT;
-			isSlowMode = false;
-
-			m_firstTouchEvents = () => { m_firstTouchEvents = null; };
 
 			InitUIElements();
 			InitBehaviours();
@@ -192,14 +182,9 @@ namespace MyGame
 		}
 		private void InitUIElements()
 		{
-			m_curtain.gameObject.SetActive(true);
 			m_curtain.CrossFadeAlpha(0, 0, true);
-			m_pauseInterface.SetActive(false);
 
-			m_pauseButton.targetGraphic.CrossFadeAlpha(0, 0, true);
-
-			RectTransform pauseRect = m_pauseButton.GetComponent<RectTransform>();
-			Utils.SetSize(pauseRect, Screen.width * PAUSE_BUTTON_SIZE_FACTOR);
+			Utils.SetSize(m_pauseButton, Screen.width * PAUSE_BUTTON_SIZE_FACTOR);
 
 			float areaSize = AREA_SIZE_FACTOR * Screen.width;
 			Utils.SetSize(m_shipArea.GetComponent<RectTransform>(), areaSize);
@@ -229,8 +214,6 @@ namespace MyGame
 				return;
 			}
 
-			if (m_firstTouchEvents != null) m_firstTouchEvents();
-
 			Vector3 screenPosition = Input.mousePosition;
 			screenPosition.y += TOUCH_OFFSET_Y * Screen.height;
 			screenPosition.z = m_camera.transform.position.y;
@@ -247,23 +230,21 @@ namespace MyGame
 
 		public void SetSlowMode(bool isModeOn)
 		{
-			isSlowMode = isModeOn;
-			if (onChangeMode != null) onChangeMode(isSlowMode);
+			if (onChangeMode != null) onChangeMode(isModeOn);
 
-			float target = (isSlowMode) ? MAX_CURTAIN_TRANSPARENCY : 0;
-			m_curtain.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true);
+			float curtainAlpha = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
+			m_curtain.CrossFadeAlpha(curtainAlpha, SLOWMO_OPEN_DUR, true);
 
-			target = (isSlowMode) ? 1 : 0;
-			m_slowButtonsGraphic.ForEach(x => x.CrossFadeAlpha(target, SLOWMO_CHANGE_TIME, true));
+			float buttonsAlpha = (isModeOn) ? 1 : 0;
+			Utils.FadeList(m_slowButtonsGraphic, buttonsAlpha, SLOWMO_OPEN_DUR);
 
-			if (isSlowMode)
+			if (isModeOn)
 			{
 				m_slowButtons.transform.SetParent(m_controll);
+				return;
 			}
-			else
-			{
-				m_slowButtons.transform.SetParent(m_curtain.transform);
-			}
+
+			m_slowButtons.transform.SetParent(m_curtain.transform);
 		}
 
 		private void OnPrePlaying()
@@ -284,12 +265,12 @@ namespace MyGame
 			SetActive(m_modsBar, true);
 			SetActive(m_bombBar, true);
 			SetActive(m_laserBar, true);
+			SetActive(m_curtain, true);
 
-			m_pauseButton.targetGraphic.CrossFadeAlpha(0, 0, true);
+			m_curtain.CrossFadeAlpha(0, 0, true);
 			m_points.Fade(1, BARS_FADING_DURATION);
 			m_modsBar.Fade(1, BARS_FADING_DURATION);
-			m_bombBar.Fade(0, 0);
-			m_laserBar.Fade(0, 0);
+			Utils.FadeList(m_slowButtonsGraphic, 0);
 		}
 		private void OnGameEnd()
 		{
@@ -302,8 +283,10 @@ namespace MyGame
 		}
 		private void CloseAll()
 		{
+			SetActive(m_curtain, false);
 			SetActive(m_results, false);
 			SetActive(m_pauseButton, false);
+			SetActive(m_pauseInterface, false);
 			SetActive(m_shipArea, false);
 			SetActive(m_points, false);
 			SetActive(m_modsBar, false);
