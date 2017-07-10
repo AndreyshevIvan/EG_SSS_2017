@@ -63,7 +63,6 @@ namespace MyGame
 
 		private float m_prePauseTimeScale;
 
-		private const int FRAME_RATE = 60;
 		private const float SHIP_PRE_START_SPEED = 4;
 		private const float SHIP_START_SPEED = 6;
 		public const float ENDING_WAITING_TIME = 3;
@@ -72,7 +71,6 @@ namespace MyGame
 		{
 			m_updater = GetComponent<Updater>();
 			QualitySettings.vSyncCount = 0;
-			Application.targetFrameRate = FRAME_RATE;
 
 			isMapStart = false;
 			isPaused = false;

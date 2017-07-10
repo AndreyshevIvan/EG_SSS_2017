@@ -29,14 +29,14 @@ namespace MyGame
 			if (isFadable && isFirstSetComplete) SetFade(1, 0);
 			if (!isFirstSetComplete) isFirstSetComplete = true;
 		}
-		public void FadeClose(float duration)
+		public void Fade(float fade, float duration)
 		{
 			if (m_fadeElements == null)
 			{
 				return;
 			}
 
-			m_fadeElements.ForEach(element => element.CrossFadeAlpha(0, duration, true));
+			m_fadeElements.ForEach(element => element.CrossFadeAlpha(fade, duration, true));
 		}
 		public void Close()
 		{

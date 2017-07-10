@@ -22,7 +22,7 @@ namespace MyGame
 		public int modifications { set { m_modsBar.SetValue(value); } }
 		public bool isFirstTouchCreated { get; private set; }
 
-		public const float ENDING_FADE_TIME = 0.4f;
+		public const float ENDING_FADE_DURATION = 0.4f;
 		public const float SLOWMO_CHANGE_TIME = 0.3f;
 
 		public void Init(IGameWorld gameWorld)
@@ -65,6 +65,7 @@ namespace MyGame
 			if (firstTouchEvents != null) firstTouchEvents();
 			m_shipArea.GetComponent<Button>().interactable = false;
 			m_shipArea.GetComponent<Animator>().SetTrigger(AREA_EXIT_TRIGGER);
+			m_animator.SetTrigger(CLOSE_LEVEL_INFO);
 		}
 		public void Pause(bool isPause)
 		{
@@ -126,6 +127,7 @@ namespace MyGame
 		private const float AREA_POS_FACTOR = 0.02f;
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
+		private const float BARS_FADING_DURATION = 1.2f;
 
 		private const string AREA_EXIT_TRIGGER = "AreaExit";
 		private const string OPEN_LEVEL_INFO = "OpenLevelInfo";
@@ -211,23 +213,44 @@ namespace MyGame
 
 		private void OnPrePlaying()
 		{
-			m_pauseButton.gameObject.SetActive(false);
+			CloseAll();
+			SetActive(m_shipArea, true);
+
+			m_points.Fade(0, 0);
+			m_modsBar.Fade(0, 0);
 			m_animator.Play(OPEN_LEVEL_INFO);
 		}
 		private void OnPlaying()
 		{
-			m_shipArea.gameObject.SetActive(false);
-			m_pauseButton.gameObject.SetActive(true);
+			CloseAll();
+			SetActive(m_pauseButton, true);
+			SetActive(m_points, true);
+			SetActive(m_modsBar, true);
+
 			m_pauseButton.targetGraphic.CrossFadeAlpha(0, 0, true);
-			m_animator.SetTrigger(CLOSE_LEVEL_INFO);
+			m_points.Fade(1, BARS_FADING_DURATION);
+			m_modsBar.Fade(1, BARS_FADING_DURATION);
 		}
 		private void OnGameEnd()
 		{
-			m_pauseButton.gameObject.SetActive(false);
-			m_results.SetActive(true);
+			CloseAll();
+			SetActive(m_results, true);
+
 			Utils.FadeElement(m_results.transform, 0, 0);
-			m_points.FadeClose(ENDING_FADE_TIME);
-			m_modsBar.FadeClose(ENDING_FADE_TIME);
+			m_points.Fade(0, BARS_FADING_DURATION);
+			m_modsBar.Fade(0, BARS_FADING_DURATION);
+		}
+		private void CloseAll()
+		{
+			SetActive(m_results, false);
+			SetActive(m_pauseButton, false);
+			SetActive(m_shipArea, false);
+			SetActive(m_points, false);
+			SetActive(m_modsBar, false);
+		}
+		private void SetActive(Component element, bool isOpen)
+		{
+			element.gameObject.SetActive(isOpen);
 		}
 
 		private EventDelegate currentBehaviour;
@@ -250,7 +273,7 @@ namespace MyGame
 		[SerializeField]
 		private Text m_endingTitle;
 		[SerializeField]
-		private Text m_levelCompletTxt;
+		private Text m_levelCompleteTxt;
 		[SerializeField]
 		private Text m_clearVictoryTxt;
 		[SerializeField]
@@ -263,9 +286,7 @@ namespace MyGame
 		private Text m_pointsValue;
 
 		[SerializeField]
-		private Sprite m_goodIco;
-		[SerializeField]
-		private Sprite m_badIco;
+		private Color m_completeColor;
 		[SerializeField]
 		private Image m_levelCompleteIco;
 		[SerializeField]
@@ -276,7 +297,7 @@ namespace MyGame
 		private Image m_pointsLine;
 
 		[SerializeField]
-		private GameObject m_results;
+		private Component m_results;
 		[SerializeField]
 		private Button m_continue;
 
@@ -284,13 +305,13 @@ namespace MyGame
 		private User newUser { get; set; }
 		private Player player { get; set; }
 
-		private const float RESULTS_FADE_TIME = 0.4f;
+		private const float ACHIEVEMENTS_SIZE_FACTOR = 0.05f;
+		private const float RESULTS_FADE_TIME = 0.2f;
 
 		private const string OPEN_RESULTS = "OpenResults";
 
 		private void CalcData()
 		{
-
 		}
 		private void InitResultsInterface()
 		{
@@ -299,30 +320,37 @@ namespace MyGame
 
 			Utils.FadeElement(m_results.transform, 1, RESULTS_FADE_TIME);
 
-
 			if (m_animator) m_animator.Play(OPEN_RESULTS);
 		}
 		private void InitStrings()
 		{
 			m_endingTitle.text = StrManager.Get(6);
-			m_levelCompletTxt.text = StrManager.Get(8);
+			m_levelCompleteTxt.text = StrManager.Get(8);
 			m_clearVictoryTxt.text = StrManager.Get(9);
 			m_allKillsTxt.text = StrManager.Get(10);
 			m_starsTxt.text = StrManager.Get(7);
+
+			int fontSize = Utils.GetFromSreen(ACHIEVEMENTS_SIZE_FACTOR);
+			m_levelCompleteTxt.fontSize = fontSize;
+			m_clearVictoryTxt.fontSize = fontSize;
+			m_allKillsTxt.fontSize = fontSize;
+			m_starsTxt.fontSize = fontSize;
+			m_starsValue.fontSize = fontSize;
+			m_pointsValue.fontSize = fontSize;
 		}
 		private void InitAchievements()
 		{
+			m_starsValue.text = player.stars.ToString();
+			m_pointsValue.text = player.points.ToString();
+
 			if (!player.isWin)
 			{
-				m_levelCompleteIco.sprite = m_badIco;
-				m_clearVictoryIco.sprite = m_badIco;
-				m_allKillsIco.sprite = m_badIco;
 				return;
 			}
 
-			m_levelCompleteIco.sprite = m_goodIco;
-			if (!player.isDemaged) m_clearVictoryIco.sprite = m_goodIco;
-			if (!player.isLossEnemy) m_allKillsIco.sprite = m_badIco;
+			m_levelCompleteIco.color = m_completeColor;
+			if (!player.isDemaged) m_clearVictoryIco.color = m_completeColor;
+			if (!player.isLossEnemy) m_allKillsIco.color = m_completeColor;
 		}
 	}
 

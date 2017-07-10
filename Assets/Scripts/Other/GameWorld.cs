@@ -105,10 +105,7 @@ namespace MyGame
 			float factor = (useShipMagnetic) ? ship.mind.magnetFactor : 1;
 			float distanceFactor = ship.mind.magnetDistance / distance;
 			float movement = factor * distanceFactor * MAGNETIC_SPEED * Time.fixedDeltaTime;
-			body.position = Vector3.MoveTowards(
-				body.position,
-				ship.position,
-				movement);
+			body.position = Vector3.MoveTowards(body.position, ship.position, movement);
 		}
 		public void KillPlayer()
 		{
@@ -138,6 +135,7 @@ namespace MyGame
 		private Ship m_ship;
 		private Player m_player;
 		private bool m_lastModeType = false;
+		private bool m_isDismantle = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
 		[SerializeField]
 		private Material m_garbageMaterial;
@@ -207,6 +205,12 @@ namespace MyGame
 			}
 
 			CreateExplosion(dismantleObject.explosion, dismantleObject.position);
+
+			if (!m_isDismantle)
+			{
+				return;
+			}
+
 			List<Rigidbody> bodies = Utils.GetChilds<Rigidbody>(dismantleObject);
 			bodies.ForEach(body =>
 			{

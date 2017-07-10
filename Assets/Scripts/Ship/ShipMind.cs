@@ -18,8 +18,8 @@ namespace MyGame.Hero
 			}
 		}
 
-		public float magnetFactor { get { return m_properties.magnetFactor; } }
-		public float magnetDistance { get { return m_properties.magnetDistance; } }
+		public float magnetFactor { get { return 1; } }
+		public float magnetDistance { get { return 2; } }
 
 		public void ModificateByOne()
 		{

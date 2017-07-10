@@ -17,6 +17,7 @@ namespace MyGame
 
 		protected override void OnRealize()
 		{
+			world.player.AddStars((int)price);
 		}
 		protected override void OnAwakeEnd()
 		{

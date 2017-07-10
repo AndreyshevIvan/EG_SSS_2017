@@ -20,10 +20,12 @@ namespace MyGame
 		public EventDelegate onLossEnemy;
 
 		public bool isWin { get; set; }
-		public bool isDemaged { get; private set; }
-		public bool isLossEnemy { get; private set; }
+		public bool isDemaged { get { return m_isDemaged; } }
+		public bool isLossEnemy { get { return m_isLossEnemy; } }
 		public bool isAllowedModify { get { return modifications < MODIFICATION_COUNT; } }
 		public byte modifications { get { return m_modifications; } }
+		public int stars { get { return m_stars; } }
+		public int points { get { return m_points; } }
 
 		public const int MODIFICATION_COUNT = 12;
 
@@ -31,6 +33,10 @@ namespace MyGame
 		{
 			m_points = Mathf.Clamp(pointsCount + m_points, MIN_POINTS, MAX_POINTS);
 			m_bar.points = m_points;
+		}
+		public void AddStars(int count)
+		{
+			m_stars += count;
 		}
 		public void Modify()
 		{
@@ -63,29 +69,18 @@ namespace MyGame
 
 		public void BeDemaged()
 		{
-			if (isDemaged)
-			{
-				return;
-			}
-
-			if (onDemaged != null) onDemaged();
-			onDemaged = null;
-			isDemaged = true;
+			SetTrigger(ref m_isDemaged, onDemaged);
 		}
 		public void LossEnemy()
 		{
-			if (isLossEnemy)
-			{
-				return;
-			}
-
-			if (onLossEnemy != null) onLossEnemy();
-			onLossEnemy = null;
-			isLossEnemy = true;
+			SetTrigger(ref m_isLossEnemy, onLossEnemy);
 		}
 
 		private int m_points;
+		private int m_stars;
 		private byte m_modifications = 0;
+		private bool m_isDemaged = false;
+		private bool m_isLossEnemy = false;
 
 		private const int MIN_POINTS = 0;
 		private const int MAX_POINTS = 999999999;
@@ -94,5 +89,17 @@ namespace MyGame
 		private Ship m_ship;
 
 		private Dictionary<UnitType, uint> m_killings = new Dictionary<UnitType, uint>();
+
+		private void SetTrigger(ref bool trigger, EventDelegate onTriggerEvent)
+		{
+			if (trigger)
+			{
+				return;
+			}
+
+			if (onTriggerEvent != null) onTriggerEvent();
+			onTriggerEvent = null;
+			trigger = true;
+		}
 	}
 }
