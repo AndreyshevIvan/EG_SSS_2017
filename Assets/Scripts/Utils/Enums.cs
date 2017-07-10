@@ -78,4 +78,11 @@ namespace MyGame
 		FIXED,
 		UI,
 	}
+
+	[System.Serializable]
+	public enum Layer
+	{
+		UNTOUCH = 0,
+		PLAYER_BULLET = 8,
+	}
 }

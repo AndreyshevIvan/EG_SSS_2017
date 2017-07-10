@@ -19,6 +19,7 @@ namespace MyGame
 		public EventDelegate onDemaged;
 		public EventDelegate onLossEnemy;
 
+		public Vector3 shipPosition { get { return m_ship.position; } }
 		public bool isWin { get; set; }
 		public bool isDemaged { get { return m_isDemaged; } }
 		public bool isLossEnemy { get { return m_isLossEnemy; } }
@@ -27,8 +28,8 @@ namespace MyGame
 
 		public int stars { get { return m_stars; } }
 		public int points { get { return m_points; } }
-		public int bombPersents { get; set; }
-		public int laserPercents { get; set; }
+		public float bombProcess { get { return m_ship.mind.bombProcess; } }
+		public float laserProcess { get { return m_ship.mind.laserProcess; } }
 
 		public const int MODIFICATION_COUNT = 12;
 
@@ -54,11 +55,11 @@ namespace MyGame
 		}
 		public bool Laser()
 		{
-			return true;
+			return m_ship.mind.Laser();
 		}
 		public bool Bomb()
 		{
-			return true;
+			return m_ship.mind.Bomb();
 		}
 		public void Heal(int healthCount)
 		{

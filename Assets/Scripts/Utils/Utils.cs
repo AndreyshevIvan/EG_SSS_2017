@@ -130,7 +130,10 @@ namespace MyGame.GameUtils
 				return;
 			}
 
-			list.ForEach(x => x.CrossFadeAlpha(fade, duration, true));
+			list.ForEach(x =>
+			{
+				if (x) x.CrossFadeAlpha(fade, duration, true);
+			});
 		}
 
 		private static IEnumerator AfterTimeEvent(float time, EventDelegate afterTimeEvent)

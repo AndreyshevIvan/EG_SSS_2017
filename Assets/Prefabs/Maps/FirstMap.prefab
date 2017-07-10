@@ -617,7 +617,9 @@ MonoBehaviour:
     time: 34
     speed: 12
     count: 10
-  m_groundSpawns: []
+  m_groundSpawns:
+  - position: {x: 3, y: 0, z: 4}
+    enemy: 2
 --- !u!198 &198917089717585566
 ParticleSystem:
   m_ObjectHideFlags: 1

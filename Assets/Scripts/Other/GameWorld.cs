@@ -13,7 +13,6 @@ namespace MyGame
 {
 	public class GameWorld : MonoBehaviour, IGameWorld, IGameplay, IWorldEntity
 	{
-		public IPlayerBar playerInterface { get; set; }
 		public IFactory factory { get; set; }
 		public Map map { get; set; }
 		public Ship ship
@@ -27,7 +26,6 @@ namespace MyGame
 			}
 		}
 		public WorldContainer container { get; private set; }
-		public Player player { get { return m_player; } }
 		public Vector3 shipPosition { get { return ship.position; } }
 
 		public IGameplay gameplay { get; set; }
@@ -36,6 +34,7 @@ namespace MyGame
 		public bool isGameEnd { get { return gameplay.isGameEnd; } }
 		public bool isWin { get { return gameplay.isWin; } }
 		public bool isPlaying { get { return gameplay.isPlaying; } }
+		public Player player { get { return gameplay.player; } }
 
 		public Transform sky { get { return map.skyObjects; } }
 		public Transform ground { get { return map.groundObjects; } }
@@ -129,7 +128,6 @@ namespace MyGame
 		}
 
 		private Ship m_ship;
-		private Player m_player;
 		private bool m_lastModeType = false;
 		private bool m_isDismantle = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
@@ -157,9 +155,8 @@ namespace MyGame
 		}
 		private void InitTempPlayer()
 		{
-			m_player = new Player(playerInterface, ship);
-			m_player.onDemaged = () => { Debug.Log("Demaged"); };
-			m_player.onLossEnemy = () => { Debug.Log("LOSS"); };
+			player.onDemaged = () => { Debug.Log("Demaged"); };
+			player.onLossEnemy = () => { Debug.Log("LOSS"); };
 		}
 
 		private void FixedUpdate()

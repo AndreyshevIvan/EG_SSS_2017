@@ -21,13 +21,24 @@ namespace MyGame.Enemies
 		}
 		protected override void Shoot()
 		{
+			if (!IsInArea())
+			{
+				return;
+			}
+
 			Bullet bullet = world.factory.GetAmmo<Bullet>(AmmoType.TARGET_TURRET);
 			bullet.data = m_bulletData;
 			Vector3 direction = Vector3.Normalize(world.shipPosition - position);
 			bullet.Shoot(position, direction);
 		}
+		private bool IsInArea()
+		{
+			return false;
+		}
 
 		private BulletData m_bulletData = new BulletData();
+		[SerializeField]
+		private Transform m_gun;
 
 		private const float SHOOT_DISTANCE = 20;
 	}

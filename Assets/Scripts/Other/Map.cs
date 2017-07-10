@@ -110,11 +110,13 @@ namespace MyGame
 		}
 		private void SpawnAllGroundUnits()
 		{
+			/*
 			m_groundSpawns.ForEach(spawn => {
 				Enemy enemy = factory.GetEnemy(spawn.enemy);
 				enemy.transform.SetParent(m_groundObjects);
 				enemy.position = spawn.position;
 			});
+			*/
 		}
 	}
 }

@@ -15,13 +15,21 @@ namespace MyGame
 		}
 		protected override void OnSetNewValue()
 		{
-			Debug.Log("Update");
-			m_progress.fillAmount = (float)value / 100;
+			m_progress.fillAmount = (float)value / MAX_PERCENTS;
+			m_animator.SetBool(m_readyTrigger, isReady);
 		}
 
 		[SerializeField]
 		private Image m_progress;
 		[SerializeField]
 		private Image m_icon;
+		[SerializeField]
+		private Animator m_animator;
+		[SerializeField]
+		private string m_readyTrigger;
+
+		private bool isReady { get { return value == MAX_PERCENTS; } }
+
+		private const int MAX_PERCENTS = 100;
 	}
 }

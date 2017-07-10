@@ -35,11 +35,7 @@ namespace MyGame
 				return !isPaused && isMapStart && !isGameEnd;
 			}
 		}
-
-		public void Continue()
-		{
-			SceneManager.LoadScene("Main");
-		}
+		public Player player { get; private set; }
 
 		private Ship ship { get; set; }
 		private Map map { get; set; }
@@ -84,6 +80,7 @@ namespace MyGame
 			InitShip();
 			InitWorld();
 			InitInterface();
+			InitPlayer();
 
 			UpdateChanges();
 		}
@@ -112,11 +109,10 @@ namespace MyGame
 		{
 			m_world.map = map;
 			m_world.ship = ship;
-			m_world.playerInterface = m_interface;
 		}
 		private void InitInterface()
 		{
-			m_interface.Init(m_world);
+			m_interface.Init(this);
 
 			m_interface.onPause += Pause;
 
@@ -129,9 +125,10 @@ namespace MyGame
 				ship.roadController.Spline = null;
 				m_updater.Add(MoveShipToStartRoad, SetStartRoad, UpdType.FIXED);
 			};
-
-			m_interface.onBomb = () => { Debug.Log("Bomb"); return true; };
-			m_interface.onLaser = () => { Debug.Log("Laser"); return true; };
+		}
+		private void InitPlayer()
+		{
+			player = new Player(m_interface, ship);
 		}
 
 		private void FixedUpdate()
@@ -239,5 +236,6 @@ namespace MyGame
 		bool isGameEnd { get; }
 		bool isWin { get; }
 		bool isPlaying { get; }
+		Player player { get; }
 	}
 }

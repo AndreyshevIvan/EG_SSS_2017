@@ -10,7 +10,7 @@ using MyGame.GameUtils;
 
 namespace MyGame
 {
-	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer, IWorldEntity
+	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer
 	{
 		public PointDelegate moveShip;
 		public BoolEventDelegate onChangeMode;
@@ -18,19 +18,15 @@ namespace MyGame
 		public EventDelegate startTouchEvents;
 		public EventDelegate onRestart;
 
-		public ResultEvent onBomb;
-		public ResultEvent onLaser;
-
 		public int points { set { m_points.SetValue(value); } }
 		public int modifications { set { m_modsBar.SetValue(value); } }
 
 		public const float ENDING_FADE_DURATION = 0.4f;
 		public const float SLOWMO_OPEN_DUR = 0.3f;
 
-		public void Init(IGameWorld gameWorld)
+		public void Init(IGameplay gameplay)
 		{
-			world = gameWorld;
-			gameplay = world as IGameplay;
+			this.gameplay = gameplay;
 		}
 		public void GameplayChange()
 		{
@@ -92,7 +88,7 @@ namespace MyGame
 		}
 		public void Bomb()
 		{
-			if (player.Laser())
+			if (player.Bomb())
 			{
 				lastTouch = UITouch.SPELL;
 				SetSlowMode(false);
@@ -100,7 +96,7 @@ namespace MyGame
 		}
 		public void Laser()
 		{
-			if (player.Bomb())
+			if (player.Laser())
 			{
 				lastTouch = UITouch.SPELL;
 				SetSlowMode(false);
@@ -150,7 +146,6 @@ namespace MyGame
 		private Camera m_camera;
 		private List<Graphic> m_slowButtonsGraphic;
 
-		private IGameWorld world { get; set; }
 		private IGameplay gameplay { get; set; }
 		private UITouch lastTouch { get; set; }
 
@@ -203,7 +198,7 @@ namespace MyGame
 		}
 		private void UpdatePreStartInterface()
 		{
-			Vector3 areaPosition = m_camera.WorldToScreenPoint(world.shipPosition);
+			Vector3 areaPosition = m_camera.WorldToScreenPoint(player.shipPosition);
 			areaPosition.y += Screen.height * AREA_POS_FACTOR;
 			m_shipArea.transform.position = areaPosition;
 		}
@@ -224,8 +219,8 @@ namespace MyGame
 		}
 		private void UpdateGunBars()
 		{
-			m_bombBar.SetValue(player.bombPersents);
-			m_laserBar.SetValue(player.laserPercents);
+			m_bombBar.SetValue((int)(player.bombProcess * 100));
+			m_laserBar.SetValue((int)(player.laserProcess * 100));
 		}
 
 		public void SetSlowMode(bool isModeOn)
@@ -235,7 +230,7 @@ namespace MyGame
 			float curtainAlpha = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			m_curtain.CrossFadeAlpha(curtainAlpha, SLOWMO_OPEN_DUR, true);
 
-			float buttonsAlpha = (isModeOn) ? 1 : 0;
+			float buttonsAlpha = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			Utils.FadeList(m_slowButtonsGraphic, buttonsAlpha, SLOWMO_OPEN_DUR);
 
 			if (isModeOn)
@@ -313,7 +308,7 @@ namespace MyGame
 		}
 	}
 
-	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer, IWorldEntity
+	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer
 	{
 		public void ViewResults(User oldUser, User newUser)
 		{
@@ -352,7 +347,7 @@ namespace MyGame
 		[SerializeField]
 		private Button m_continue;
 
-		private Player player { get { return world.player; } }
+		private Player player { get { return gameplay.player; } }
 		private User oldUser { get; set; }
 		private User newUser { get; set; }
 

@@ -646,6 +646,8 @@ MonoBehaviour:
   m_explosion: {fileID: 198403414197330982, guid: 905c4978ed191754f87b26817e5d7477,
     type: 2}
   m_bulletSpawn: {fileID: 4752216160107728}
+  m_bombPrefab: {fileID: 114409831981066414, guid: 5c02a3521a202114796cd65f1144781a,
+    type: 2}
 --- !u!198 &198374502041875510
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -703,7 +705,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -918694038
+  randomSeed: -389786051
   InitialModule:
     serializedVersion: 3
     enabled: 1
