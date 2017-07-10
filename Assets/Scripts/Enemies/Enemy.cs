@@ -11,7 +11,6 @@ namespace MyGame.Enemies
 
 	public abstract class Enemy : Body
 	{
-		public byte starsCount { get; protected set; }
 		public UnitType type { get; set; }
 
 		protected bool isTimerWork { get; set; }
@@ -34,7 +33,7 @@ namespace MyGame.Enemies
 			}
 			if (roadController) roadController.OnEndReached.AddListener(T =>
 			{
-				world.player.LossEnemy();
+				if (!gameplay.isGameEnd) world.player.LossEnemy();
 				Exit();
 			});
 		}
@@ -60,10 +59,6 @@ namespace MyGame.Enemies
 			if (roadController) roadController.Play();
 		}
 		protected sealed override void OnPause()
-		{
-			if (roadController) roadController.Pause();
-		}
-		protected sealed override void OnEndGameplay()
 		{
 			if (roadController) roadController.Pause();
 		}

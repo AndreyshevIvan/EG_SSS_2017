@@ -6,16 +6,30 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using MyGame.GameUtils;
+using UnityEngine.EventSystems;
 
 namespace MyGame
 {
 	public abstract class UIBar : MonoBehaviour
 	{
-		public int value { get; protected set; }
-		public Vector3 position { get; set; }
-		public bool isFadable { get; set; }
 		public UIContainer controller { get; set; }
+		public Vector3 position { get; set; }
+		public int value { get; protected set; }
+		public bool isActive { get; protected set; }
+		public bool isFadable { get; set; }
 
+		public void SetActive(bool isActive)
+		{
+			this.isActive = isActive;
+
+			if (isActive)
+			{
+				OnActivete();
+				return;
+			}
+
+			OnDisactivate();
+		}
 		public void SetValue(int newValue)
 		{
 			if (newValue == value)
@@ -26,7 +40,7 @@ namespace MyGame
 			value = newValue;
 			OnSetNewValue();
 			lastUpdateTimer = 0;
-			if (isFadable && isFirstSetComplete) SetFade(1, 0);
+			if (isFadable && isFirstSetComplete) Fade(1, 0);
 			if (!isFirstSetComplete) isFirstSetComplete = true;
 		}
 		public void Fade(float fade, float duration)
@@ -44,16 +58,19 @@ namespace MyGame
 			Destroy(gameObject);
 		}
 
-		protected float lastUpdateTimer { get; private set; }
-		protected Vector2 offset { get; set; }
+		protected Camera mainCamera { get; private set; }
+		protected EventTrigger trigger { get; private set; }
 		protected RectTransform rect { get; set; }
+		protected float lastUpdateTimer { get; private set; }
 		protected bool isFirstSetComplete { get; private set; }
 		protected bool isTimerWork { get; set; }
 
 		protected void Awake()
 		{
 			ResetFadeElements();
+			mainCamera = Camera.main;
 			rect = GetComponent<RectTransform>();
+			trigger = GetComponent<EventTrigger>();
 			isFirstSetComplete = false;
 			lastUpdateTimer = 0;
 			isTimerWork = true;
@@ -62,17 +79,21 @@ namespace MyGame
 		}
 		protected virtual void OnAwakeEnd() { }
 		protected virtual void InitSizing() { }
-		protected abstract void OnSetNewValue();
-		protected virtual void SetPosition(Vector3 worldPosition) { }
-		protected virtual void OnUpdate() { }
+		protected virtual void OnActivete() { }
+		protected virtual void OnDisactivate() { }
 
-		protected void SetFade(float fade, float duration)
+		protected abstract void OnSetNewValue();
+
+		protected void FixedUpdate()
 		{
-			m_fadeElements.ForEach(element =>
-			{
-				element.CrossFadeAlpha(fade, duration, true);
-			});
+			OnUpdate();
+			SetPosition(position);
+			UpdateFading();
+			if (isTimerWork) lastUpdateTimer += Time.fixedDeltaTime;
 		}
+		protected virtual void OnUpdate() { }
+		protected virtual void SetPosition(Vector3 worldPosition) { }
+
 		protected void ResetFadeElements()
 		{
 			m_fadeElements = Utils.GetAllComponents<Graphic>(gameObject.transform);
@@ -84,13 +105,6 @@ namespace MyGame
 		private const float VISIBLE_TIME = 1;
 		private const float FADE_TIME = 0.3f;
 
-		private void FixedUpdate()
-		{
-			OnUpdate();
-			SetPosition(position);
-			UpdateFading();
-			if (isTimerWork) lastUpdateTimer += Time.fixedDeltaTime;
-		}
 		private void UpdateFading()
 		{
 			if (!isFadable || lastUpdateTimer < VISIBLE_TIME)
@@ -98,7 +112,7 @@ namespace MyGame
 				return;
 			}
 
-			SetFade(0, FADE_TIME);
+			Fade(0, FADE_TIME);
 		}
 	}
 

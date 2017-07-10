@@ -122,13 +122,16 @@ namespace MyGame
 
 			m_interface.moveShip += MoveShip;
 
-			m_interface.uncontrollEvents += isTrue => m_world.SetSlowMode(isTrue);
+			m_interface.onChangeMode += isTrue => m_world.SetSlowMode(isTrue);
 
-			m_interface.firstTouchEvents += () =>
+			m_interface.startTouchEvents += () =>
 			{
 				ship.roadController.Spline = null;
 				m_updater.Add(MoveShipToStartRoad, SetStartRoad, UpdType.FIXED);
 			};
+
+			m_interface.onBomb = () => { Debug.Log("Bomb"); return true; };
+			m_interface.onLaser = () => { Debug.Log("Laser"); return true; };
 		}
 
 		private void FixedUpdate()
@@ -168,7 +171,7 @@ namespace MyGame
 			Utils.DoAfterTime(this, ENDING_WAITING_TIME, () =>
 			{
 				m_world.player.isWin = isWin;
-				m_interface.ViewResults(null, null, m_world.player);
+				m_interface.ViewResults(null, null);
 			});
 		}
 		private void Pause(bool isPause)

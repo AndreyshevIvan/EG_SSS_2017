@@ -24,8 +24,11 @@ namespace MyGame
 		public bool isLossEnemy { get { return m_isLossEnemy; } }
 		public bool isAllowedModify { get { return modifications < MODIFICATION_COUNT; } }
 		public byte modifications { get { return m_modifications; } }
+
 		public int stars { get { return m_stars; } }
 		public int points { get { return m_points; } }
+		public int bombPersents { get; set; }
+		public int laserPercents { get; set; }
 
 		public const int MODIFICATION_COUNT = 12;
 

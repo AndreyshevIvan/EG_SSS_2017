@@ -19,7 +19,7 @@ namespace MyGame.Hero
 		}
 
 		public float magnetFactor { get { return 1; } }
-		public float magnetDistance { get { return 2; } }
+		public float magnetDistance { get { return 5; } }
 
 		public void ModificateByOne()
 		{

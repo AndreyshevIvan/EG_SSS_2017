@@ -65,10 +65,6 @@ namespace MyGame.GameUtils
 			T otherBody = other.GetComponent<T>();
 			return otherBody;
 		}
-		public static Vector3 WorldToCanvas(Vector3 worldPosition)
-		{
-			return Camera.main.WorldToScreenPoint(worldPosition);
-		}
 		public static List<T> ToList<T>(T[] arr)
 		{
 			return new List<T>(arr);

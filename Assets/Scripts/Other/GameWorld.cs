@@ -78,17 +78,13 @@ namespace MyGame
 		}
 		public void SetSlowMode(bool isModeOn)
 		{
-			float targetScale = (isModeOn) ? SLOW_TIMESCALE : 1;
+			m_targetTimeScale = (isModeOn) ? SLOW_TIMESCALE : 1;
 
 			if (isModeOn != m_lastModeType)
 			{
-				m_deltaScale = Mathf.Abs(targetScale - Time.timeScale);
+				m_deltaScale = Mathf.Abs(m_targetTimeScale - Time.timeScale);
 				m_lastModeType = isModeOn;
 			}
-
-			float step = Time.fixedDeltaTime / GameplayUI.SLOWMO_CHANGE_TIME * m_deltaScale;
-			Time.timeScale = Mathf.MoveTowards(Time.timeScale, targetScale, step);
-			Time.fixedDeltaTime = (Time.timeScale != 1) ? SLOWMO_DT : NORMAL_DT;
 		}
 		public void SubscribeToMove(WorldObject body)
 		{
@@ -137,6 +133,7 @@ namespace MyGame
 		private bool m_lastModeType = false;
 		private bool m_isDismantle = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
+		private float m_targetTimeScale = 1;
 		[SerializeField]
 		private Material m_garbageMaterial;
 
@@ -168,7 +165,15 @@ namespace MyGame
 		private void FixedUpdate()
 		{
 			//Debug.Log(container.ToString());
+			UpdateSlowmode();
+
 		}
+		private void UpdateSlowmode()
+		{
+			float step = Time.fixedDeltaTime / GameplayUI.SLOWMO_CHANGE_TIME * m_deltaScale;
+			Time.timeScale = Mathf.MoveTowards(Time.timeScale, m_targetTimeScale, step);
+			Time.fixedDeltaTime = (Time.timeScale != 1) ? SLOWMO_DT : NORMAL_DT;
+		} 
 
 		private void OnTriggerExit(Collider other)
 		{

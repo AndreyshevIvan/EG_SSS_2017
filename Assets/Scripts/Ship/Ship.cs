@@ -37,6 +37,7 @@ namespace MyGame.Hero
 			ParticleSystem.MainModule engineMain = m_engineParticles.main;
 			engineMain.simulationSpace = ParticleSystemSimulationSpace.Local;
 			m_animator = GetComponent<Animator>();
+			m_animator.Play(ROTATION_CLIP);
 		}
 		protected override void OnInitEnd()
 		{
@@ -52,6 +53,7 @@ namespace MyGame.Hero
 			ParticleSystem.MainModule engineMain = m_engineParticles.main;
 			engineMain.simulationSpace = ParticleSystemSimulationSpace.World;
 			m_animator.SetTrigger(ROTATION_TRIGGER);
+			Utils.DoAfterTime(this, 1, () => { m_animator.enabled = false; });
 		}
 		protected override void OnEndGameplay()
 		{
@@ -60,6 +62,7 @@ namespace MyGame.Hero
 			Utils.DoAfterTime(this, ENDING_CONTROLL_DURATION, () =>
 			{
 				m_startEndAnimation = true;
+				m_animator.enabled = true;
 				m_animator.Play(ROTATION_CLIP);
 				AddExtraListener(EndingAnimation);
 			});
@@ -102,9 +105,9 @@ namespace MyGame.Hero
 		private const float MODEL_X_ANGLE = 180;
 
 		private const float CONTROLL_SPEED = 80;
-		private const float CONTROLL_TILT = 2;
 		private const float CONTROLL_SMOOTHING = 15;
-		private const float CONTROLL_MAX_ANGLE = 80;
+		private const float CONTROLL_TILT = 1;
+		private const float CONTROLL_MAX_ANGLE = 60;
 
 		private const float ENDING_ANIM_DURATION = 5;
 		private const float ENDING_ESCAPE_SPEED = 10;

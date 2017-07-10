@@ -12,9 +12,9 @@ namespace MyGame.Enemies
 		{
 			health = maxHealth = 50;
 			touchDemage = 100;
-			starsCount = 7;
 			points = 1527;
 			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
+			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 5));
 		}
 		protected override void Shoot()
 		{

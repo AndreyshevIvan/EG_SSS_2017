@@ -11,7 +11,6 @@ namespace MyGame.Enemies
 		protected override void InitProperties()
 		{
 			health = maxHealth = 100;
-			starsCount = 2;
 			points = 157;
 			coldown = 1;
 			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
