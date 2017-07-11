@@ -36,12 +36,32 @@ namespace MyGame.Enemies
 				Exit();
 			});
 		}
+		protected abstract void InitProperties();
+
 		protected sealed override void PlayingUpdate()
 		{
-			UpdateTaktic();
+			if (m_tactic != null) m_tactic();
 			TryShoot();
 		}
-		protected virtual void UpdateTaktic() { }
+		protected abstract void Shoot();
+		protected void ExtraReady()
+		{
+			m_timer = coldown;
+		}
+
+		protected sealed override void OnPlaying()
+		{
+			if (roadController) roadController.Play();
+		}
+		protected sealed override void OnPause()
+		{
+			if (roadController) roadController.Pause();
+		}
+
+		protected sealed override void DoAfterDemaged()
+		{
+			if (healthBar) healthBar.Fade(1, HealthBar.HP_BAR_FADE_DUR);
+		}
 		protected sealed override void OnDeath()
 		{
 			world.player.KillEnemy(type);
@@ -55,22 +75,18 @@ namespace MyGame.Enemies
 				bonuses.Add(BonusCount.Create(BonusType.AMMO_UP, 1));
 			}
 		}
-		protected sealed override void OnPlaying()
+
+		protected void AddTactic(EventDelegate tactic)
 		{
-			if (roadController) roadController.Play();
+			m_tactic += tactic;
 		}
-		protected sealed override void OnPause()
+		protected void RemoveTactic(EventDelegate tactic)
 		{
-			if (roadController) roadController.Pause();
+			if (m_tactic != null) m_tactic -= tactic;
 		}
-		protected sealed override void DoAfterDemaged()
-		{
-			if (healthBar) healthBar.Fade(1, HealthBar.HP_BAR_FADE_DUR);
-		}
-		protected abstract void InitProperties();
-		protected abstract void Shoot();
 
 		private float m_timer = 0;
+		private EventDelegate m_tactic;
 
 		private void TryShoot()
 		{

@@ -11,7 +11,7 @@ namespace MyGame
 		BASE_ENEMY,
 		ROCKET_COPTER,
 		TARGET_TURRET,
-		CIRCLE_TURRET,
+		ANGLE_TURRET,
 	}
 
 	[System.Serializable]
@@ -61,7 +61,7 @@ namespace MyGame
 	{
 		PLAYER_BULLET,
 		TARGET_TURRET,
-		QIRCLE_TURRET,
+		ANGLE_TURRET,
 		COPTER_ROCKET,
 		PLAYER_BOMB,
 		PLAYER_LASER,

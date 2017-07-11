@@ -18,8 +18,27 @@ namespace MyGame.Enemies
 
 			m_bulletData.demage = 10;
 			m_bulletData.speed = 5;
+
+			AddTactic(RotateGun);
 		}
-		protected override void UpdateTaktic()
+		protected override void Shoot()
+		{
+			if (!inGameBox)
+			{
+				return;
+			}
+
+			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.TARGET_TURRET);
+			Vector3 direction = Vector3.Normalize(world.shipPosition - position);
+			m_bulletData.direction = direction;
+			bullet.Shoot(m_bulletData, position);
+		}
+
+		[SerializeField]
+		private Transform m_gun;
+		private BulletData m_bulletData = new BulletData();
+
+		private void RotateGun()
 		{
 			if (!inGameBox)
 			{
@@ -31,23 +50,5 @@ namespace MyGame.Enemies
 			Quaternion newRotation = Quaternion.Slerp(m_gun.rotation, rotation, 1);
 			m_gun.transform.rotation = newRotation;
 		}
-		protected override void Shoot()
-		{
-			if (!inGameBox)
-			{
-				return;
-			}
-
-			Bullet bullet = world.factory.GetAmmo<Bullet>(AmmoType.TARGET_TURRET);
-			Vector3 direction = Vector3.Normalize(world.shipPosition - position);
-			m_bulletData.direction = direction;
-			bullet.Shoot(m_bulletData, position);
-		}
-
-		private BulletData m_bulletData = new BulletData();
-		[SerializeField]
-		private Transform m_gun;
-
-		private const float SHOOT_DISTANCE = 20;
 	}
 }

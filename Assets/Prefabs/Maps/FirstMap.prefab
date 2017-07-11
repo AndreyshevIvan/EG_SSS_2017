@@ -581,45 +581,20 @@ MonoBehaviour:
   m_groundObjects: {fileID: 4967626015242824}
   m_skyObjects: {fileID: 4304714994984520}
   m_ground: {fileID: 4496978326847128}
-  m_flySpawns:
-  - road: 0
-    enemy: 0
-    time: 2
-    speed: 8
-    count: 6
-  - road: 1
-    enemy: 1
-    time: 5
-    speed: 3
-    count: 1
-  - road: 2
-    enemy: 0
-    time: 13
-    speed: 8
-    count: 6
-  - road: 3
-    enemy: 1
-    time: 20
-    speed: 2
-    count: 2
-  - road: 0
-    enemy: 0
-    time: 26
-    speed: 6
-    count: 8
-  - road: 3
-    enemy: 1
-    time: 30
-    speed: 4
-    count: 4
-  - road: 2
-    enemy: 0
-    time: 34
-    speed: 12
-    count: 10
+  m_flySpawns: []
   m_groundSpawns:
-  - position: {x: 4, y: 0, z: 20}
-    enemy: 2
+  - position: {x: -9, y: 0, z: 20}
+    enemy: 3
+  - position: {x: -9, y: 0, z: 32}
+    enemy: 3
+  - position: {x: -9, y: 0, z: 40}
+    enemy: 3
+  - position: {x: 9, y: 0, z: 28}
+    enemy: 3
+  - position: {x: 9, y: 0, z: 36}
+    enemy: 3
+  - position: {x: 9, y: 0, z: 44}
+    enemy: 3
 --- !u!198 &198917089717585566
 ParticleSystem:
   m_ObjectHideFlags: 1
