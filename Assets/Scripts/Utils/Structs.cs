@@ -18,6 +18,14 @@ namespace MyGame
 			this.zMin = zMin;
 			this.zMax = zMax;
 		}
+		public bool Contain(Vector3 point)
+		{
+			return
+				point.x >= xMin &&
+				point.x <= xMax &&
+				point.z <= zMax &&
+				point.z >= zMin;
+		}
 
 		public float xMin;
 		public float xMax;

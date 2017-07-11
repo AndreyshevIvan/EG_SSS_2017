@@ -18,10 +18,6 @@ namespace MyGame
 				return LOCALE_PATH + localeName + LOCALE_FILE_NAME;
 			}
 		}
-		public static BoundingBox mapBox
-		{
-			get { return new BoundingBox(-10, 10, -25, 25); }
-		}
 		public static string LEVELS_PATH = RESOURCES_PATH + "levels/levels";
 
 		public static void SaveUser(User user)

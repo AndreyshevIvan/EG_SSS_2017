@@ -135,6 +135,23 @@ namespace MyGame.GameUtils
 				if (x) x.CrossFadeAlpha(fade, duration, true);
 			});
 		}
+		public static void Swap(ref float first, ref float second)
+		{
+			float tmp = first;
+			first = second;
+			second = tmp;
+		}
+		public static Vector3 RndDirBetween(float minAngle, float maxAngle)
+		{
+			minAngle = Mathf.Clamp(minAngle, 0, 360);
+			maxAngle = Mathf.Clamp(maxAngle, 0, 360);
+
+			if (minAngle > maxAngle) Swap(ref minAngle, ref maxAngle);
+			float delta = maxAngle - minAngle;
+			float rads = (minAngle + UnityEngine.Random.Range(0, delta)) * Mathf.PI / 180;
+
+			return new Vector3(Mathf.Cos(rads), 0, Mathf.Sin(rads));
+		}
 
 		private static IEnumerator AfterTimeEvent(float time, EventDelegate afterTimeEvent)
 		{

@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy.Controllers;
 using MyGame.GameUtils;
+using MyGame.Factory;
 
 namespace MyGame
 {
@@ -23,6 +24,7 @@ namespace MyGame
 		public bool exitAllowed { get; protected set; }
 		public bool openAllowed { get; protected set; }
 		public bool distmantleAllowed { get; protected set; }
+		public bool inGameBox { get { return m_box.Contain(position); } }
 
 		public bool isWorldSet { get { return world != null; } }
 		public int points { get; protected set; }
@@ -37,6 +39,7 @@ namespace MyGame
 
 			world = newWorld;
 			gameplay = (IGameplay)newWorld;
+			m_box = world.box;
 			OnInitEnd();
 			GameplayChange();
 		}
@@ -76,8 +79,11 @@ namespace MyGame
 			OnExitFromWorld();
 		}
 
+		protected BoundingBox m_box;
+
 		protected IGameplay gameplay { get; private set; }
 		protected IGameWorld world { get; private set; }
+		protected IFactory factory { get { return world.factory; } }
 		protected Rigidbody physicsBody { get; private set; }
 		protected List<ParticleSystem> particles { get; set; }
 		protected List<GameObject> toDestroy { get; private set; }
@@ -99,6 +105,7 @@ namespace MyGame
 			onPlaying += SmartPlayingUpdate;
 
 			onGameEnd += AfterMatchUpdate;
+			onGameEnd += UpdateBars;
 			onGameEnd += SmartPlayingUpdate;
 
 			OnAwakeEnd();
@@ -160,9 +167,9 @@ namespace MyGame
 		protected void UpdatePositionOnField()
 		{
 			position = new Vector3(
-				Mathf.Clamp(position.x, world.box.xMin, world.box.xMax),
+				Mathf.Clamp(position.x, m_box.xMin, m_box.xMax),
 				GameWorld.FLY_HEIGHT,
-				Mathf.Clamp(position.z, world.box.zMin, world.box.zMax)
+				Mathf.Clamp(position.z, m_box.zMin, m_box.zMax)
 			);
 		}
 

@@ -52,7 +52,6 @@ namespace MyGame
 		}
 
 		protected Camera mainCamera { get; private set; }
-		protected EventTrigger trigger { get; private set; }
 		protected RectTransform rect { get; set; }
 		protected float lastUpdateTimer { get; private set; }
 		protected bool isFirstSetComplete { get; private set; }
@@ -63,7 +62,6 @@ namespace MyGame
 			ResetFadeElements();
 			mainCamera = Camera.main;
 			rect = GetComponent<RectTransform>();
-			trigger = GetComponent<EventTrigger>();
 			isFirstSetComplete = false;
 			lastUpdateTimer = 0;
 			isTimerWork = true;

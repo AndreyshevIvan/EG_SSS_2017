@@ -149,10 +149,10 @@ namespace MyGame
 		private IGameplay gameplay { get; set; }
 		private UITouch lastTouch { get; set; }
 
-		private const float TOUCH_OFFSET_Y = 0.035f;
+		private const float TOUCH_OFFSET_Y = 0.04f;
 		private const float CAMERA_ANGLE_FACTOR = 0.076f;
 		private const float PAUSE_BUTTON_SIZE_FACTOR = 0.08f;
-		private const float AREA_SIZE_FACTOR = 0.3f;
+		private const float AREA_SIZE_FACTOR = 0.35f;
 		private const float AREA_POS_FACTOR = 0.02f;
 
 		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;

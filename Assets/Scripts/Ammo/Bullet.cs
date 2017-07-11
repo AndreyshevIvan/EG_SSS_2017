@@ -7,17 +7,16 @@ namespace MyGame
 {
 	public sealed class Bullet : Body
 	{
-		public BulletData data { get; set; }
 		public Vector3 direction { get; set; }
 
-		public void Shoot(Vector3 shootPosition, Vector3 shootDirection)
+		public void Shoot(BulletData data, Vector3 spawnPosition)
 		{
+			this.data = data;
 			touchDemage = data.demage;
-
-			shootPosition.y = GameWorld.FLY_HEIGHT;
-			position = shootPosition;
-			shootDirection.y = 0;
-			direction = shootDirection;
+			spawnPosition.y = GameWorld.FLY_HEIGHT;
+			position = spawnPosition;
+			data.direction.y = 0;
+			direction = data.direction;
 		}
 
 		protected override void OnInitEnd()
@@ -31,10 +30,13 @@ namespace MyGame
 		{
 			position += direction * Time.fixedDeltaTime * data.speed;
 		}
+
+		private BulletData data { get; set; }
 	}
 
 	public struct BulletData
 	{
+		public Vector3 direction;
 		public float speed;
 		public int demage;
 	}

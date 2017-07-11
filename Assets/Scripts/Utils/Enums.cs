@@ -63,6 +63,8 @@ namespace MyGame
 		TARGET_TURRET,
 		QIRCLE_TURRET,
 		COPTER_ROCKET,
+		PLAYER_BOMB,
+		PLAYER_LASER,
 	}
 
 	[System.Serializable]

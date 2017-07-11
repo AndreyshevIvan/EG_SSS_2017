@@ -11,9 +11,16 @@ namespace MyGame
 	{
 		public BulletData gunData;
 		public float gunColdown;
+
 		public float rocketColdown;
+
 		public float bombColdown;
+
+		public BulletData laserData;
 		public float laserColdown;
+		public float laserDuration;
+		public float laserShootColdown;
+
 		public int health;
 		public int rocketsDemage;
 		public float magnetDistance;

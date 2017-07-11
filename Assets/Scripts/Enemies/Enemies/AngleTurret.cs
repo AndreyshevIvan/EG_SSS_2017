@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MyGame.Enemies
 {
-	public class CircleTurret : Enemy
+	public class AngleTurret : Enemy
 	{
 		protected override void InitProperties()
 		{

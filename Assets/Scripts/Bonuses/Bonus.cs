@@ -7,9 +7,14 @@ namespace MyGame
 {
 	public abstract class Bonus : WorldObject
 	{
-		public bool isMagnetic { get; set; }
 		public bool explosionStart { get; set; }
+		public bool isMagnetic { get; protected set; }
 
+		protected override void OnAwakeEnd()
+		{
+			explosionStart = true;
+			isMagnetic = false;
+		}
 		protected void Start()
 		{
 			exitAllowed = true;
@@ -21,7 +26,6 @@ namespace MyGame
 				SetExplosionForce();
 			}
 		}
-
 		protected sealed override void OnExitFromWorld()
 		{
 		}
@@ -42,8 +46,8 @@ namespace MyGame
 		}
 		protected abstract void OnRealize();
 
-		protected const float DELTA_FORCE = 400;
-		private const float DELTA_ROTATION = 10;
+		private const float DELTA_FORCE = 200;
+		private const float DELTA_ROTATION = 6;
 
 		private void SetExplosionForce()
 		{

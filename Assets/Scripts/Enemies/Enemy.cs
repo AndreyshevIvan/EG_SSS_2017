@@ -19,7 +19,7 @@ namespace MyGame.Enemies
 		protected sealed override void OnInitEnd()
 		{
 			isTimerWork = false;
-			exitAllowed = true;
+			exitAllowed = false;
 			openAllowed = true;
 			distmantleAllowed = true;
 
@@ -38,8 +38,10 @@ namespace MyGame.Enemies
 		}
 		protected sealed override void PlayingUpdate()
 		{
+			UpdateTaktic();
 			TryShoot();
 		}
+		protected virtual void UpdateTaktic() { }
 		protected sealed override void OnDeath()
 		{
 			world.player.KillEnemy(type);
@@ -61,10 +63,6 @@ namespace MyGame.Enemies
 		{
 			if (roadController) roadController.Pause();
 		}
-		protected sealed override void OnExitFromWorld()
-		{
-			world.player.LossEnemy();
-		}
 		protected sealed override void DoAfterDemaged()
 		{
 			if (healthBar) healthBar.Fade(1, HealthBar.HP_BAR_FADE_DUR);
@@ -79,6 +77,7 @@ namespace MyGame.Enemies
 			if (isTimerWork && Utils.UpdateTimer(ref m_timer, coldown))
 			{
 				Shoot();
+				m_timer = 0;
 			}
 		}
 	}

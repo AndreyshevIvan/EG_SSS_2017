@@ -128,6 +128,7 @@ namespace MyGame
 		}
 
 		private Ship m_ship;
+		private Camera m_camera;
 		private bool m_lastModeType = false;
 		private bool m_isDismantle = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
@@ -144,26 +145,29 @@ namespace MyGame
 
 		private void Awake()
 		{
-			box = GameData.mapBox;
+			box = new BoundingBox(-9.5f, 9.5f, -20, 15);
 			container = new WorldContainer();
+			m_camera = Camera.main;
 			container.Init(this);
 		}
 
 		private void Start()
 		{
 			InitTempPlayer();
+			InitVisibleArea();
 		}
 		private void InitTempPlayer()
 		{
 			player.onDemaged = () => { Debug.Log("Demaged"); };
 			player.onLossEnemy = () => { Debug.Log("LOSS"); };
 		}
+		private void InitVisibleArea()
+		{
+		}
 
 		private void FixedUpdate()
 		{
-			//Debug.Log(container.ToString());
 			UpdateSlowmode();
-
 		}
 		private void UpdateSlowmode()
 		{
@@ -176,7 +180,7 @@ namespace MyGame
 		{
 			WorldObject obj = other.GetComponent<WorldObject>();
 
-			if (obj)
+			if (obj && obj.exitAllowed)
 			{
 				obj.ExitFromWorld();
 				Remove(obj);

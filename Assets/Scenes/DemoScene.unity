@@ -4359,6 +4359,8 @@ MonoBehaviour:
     value: {fileID: 114552388259447474, guid: 8cdab1d20f3211e40a0280182141389a, type: 2}
   - key: 1
     value: {fileID: 114913540811696196, guid: 0af1860afc4830e48bfb7f69c0c87d3a, type: 2}
+  - key: 4
+    value: {fileID: 114409831981066414, guid: 5c02a3521a202114796cd65f1144781a, type: 2}
 --- !u!114 &1423890043
 MonoBehaviour:
   m_ObjectHideFlags: 0
