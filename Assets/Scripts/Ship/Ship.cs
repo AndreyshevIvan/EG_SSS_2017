@@ -46,6 +46,7 @@ namespace MyGame.Hero
 			toDestroy.Add(healthBar.gameObject);
 			touchDemage = int.MaxValue;
 			m_isEraseOnDeath = false;
+			distmantleAllowed = true;
 		}
 
 		protected override void OnPlaying()

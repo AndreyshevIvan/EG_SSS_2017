@@ -144,7 +144,7 @@ namespace MyGame.Hero
 			m_properties.laserColdown = 16;
 			m_properties.laserData = new BulletData();
 			m_properties.laserData.speed = 28;
-			m_properties.laserData.demage = 1;
+			m_properties.laserData.demage = 2;
 			m_properties.laserDuration = 3;
 			m_properties.laserShootColdown = 0.03f;
 

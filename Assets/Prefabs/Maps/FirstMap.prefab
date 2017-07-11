@@ -436,7 +436,7 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 0
     m_Resolution: 1
     m_CustomResolution: -1
     m_Strength: 0.8
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da27aff00407cb428786135e1448c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_endTime: 130
+  m_endTime: 122
   m_windParticles: {fileID: 198917089717585566}
   m_groundObjects: {fileID: 4967626015242824}
   m_skyObjects: {fileID: 4304714994984520}
@@ -667,19 +667,14 @@ MonoBehaviour:
     time: 106
     speed: 8
     count: 8
-  - road: 6
-    enemy: 0
-    time: 106
-    speed: 6
-    count: 10
   - road: 1
     enemy: 0
-    time: 115
+    time: 116
     speed: 8
-    count: 8
+    count: 6
   - road: 9
     enemy: 0
-    time: 116
+    time: 120
     speed: 6
     count: 6
   m_groundSpawns:
@@ -713,19 +708,19 @@ MonoBehaviour:
     enemy: 2
   - position: {x: 5, y: 0, z: 185}
     enemy: 2
-  - position: {x: 5, y: 0, z: 190}
+  - position: {x: 6, y: 0, z: 190}
     enemy: 3
-  - position: {x: 5, y: 0, z: 196}
+  - position: {x: 6, y: 0, z: 196}
     enemy: 3
-  - position: {x: -5, y: 0, z: 190}
+  - position: {x: -6, y: 0, z: 190}
     enemy: 3
-  - position: {x: -5, y: 0, z: 196}
+  - position: {x: -6, y: 0, z: 196}
     enemy: 3
-  - position: {x: -3, y: 0, z: 200}
+  - position: {x: -6, y: 0, z: 200}
     enemy: 3
   - position: {x: 0, y: 0, z: 200}
-    enemy: 3
-  - position: {x: 3, y: 0, z: 200}
+    enemy: 2
+  - position: {x: 6, y: 0, z: 200}
     enemy: 3
 --- !u!198 &198917089717585566
 ParticleSystem:
@@ -734,7 +729,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1406397457043678}
   serializedVersion: 5
-  lengthInSec: 200
+  lengthInSec: 120
   simulationSpeed: 1
   looping: 1
   prewarm: 1
@@ -760,7 +755,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 1950628922
+  randomSeed: -9451323
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -1108,7 +1103,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 0
     randomizeRotationDirection: 0
-    maxNumParticles: 200
+    maxNumParticles: 100
     size3D: 0
     rotation3D: 0
     gravityModifier:

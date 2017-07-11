@@ -14,6 +14,7 @@ namespace MyGame.Enemies
 			coldown = 2.4f;
 			points = 120;
 			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
+			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 3));
 			isTimerWork = true;
 
 			m_bulletData.demage = 10;

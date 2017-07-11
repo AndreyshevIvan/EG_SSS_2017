@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 199707754144802126}
   - component: {fileID: 114406648173063954}
   m_Layer: 0
-  m_Name: EnemyExplosion
+  m_Name: EnemyBlueExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9596,7 +9596,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 4
+  m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5

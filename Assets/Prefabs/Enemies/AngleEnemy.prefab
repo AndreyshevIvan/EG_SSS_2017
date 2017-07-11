@@ -500,6 +500,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d518901cbb5ff468a3ea539ef9b26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_explosion: {fileID: 198403414197330982, guid: 63da5de75246a7942869e5742830751d,
+  m_explosion: {fileID: 198403414197330982, guid: 299cf78b911b03148b5d80d4d6c06350,
     type: 2}
   m_gun: {fileID: 4794769598056374}

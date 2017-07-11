@@ -52,7 +52,6 @@ namespace MyGame
 
 		private List<FlySpawn> tempSkySpawns { get; set; }
 
-		private float m_enemiesCount = 0;
 		private bool m_isMapEnd = false;
 		private Enemy m_enemyToDebug;
 

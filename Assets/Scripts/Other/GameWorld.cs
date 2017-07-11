@@ -110,8 +110,13 @@ namespace MyGame
 				return;
 			}
 
-			Dismantle(ship);
+			Vector3 deathPos = ship.position;
+			List<Pair<BonusType, int>> playerStars = new List<Pair<BonusType, int>>();
+			int stars = player.stars > DEATH_STARS_COUNT ? DEATH_STARS_COUNT : player.stars;
+			playerStars.Add(Pair<BonusType, int>.Create(BonusType.STAR, stars));
 			Remove(ship);
+			Destroy(ship.gameObject);
+			OpenBonuses(playerStars, deathPos);
 		}
 		public void CreateExplosion(ParticleSystem explosion, Vector3 position)
 		{
@@ -143,6 +148,7 @@ namespace MyGame
 		private const float NORMAL_DT = 0.02f;
 		private const float SLOWMO_DT = 0.01f;
 		private const int GARBAGE_LAYER = 12;
+		private const int DEATH_STARS_COUNT = 25;
 
 		private void Awake()
 		{
@@ -192,14 +198,27 @@ namespace MyGame
 		}
 		private void OpenObject(WorldObject obj)
 		{
-			player.AddPoints(obj.points);
+			if (!obj)
+			{
+				return;
+			}
 
-			obj.bonuses.ForEach(bonus =>
+			player.AddPoints(obj.points);
+			OpenBonuses(obj.bonuses, obj.position);
+		}
+		private void OpenBonuses(List<Pair<BonusType, int>> list, Vector3 spawn)
+		{
+			if (list == null)
+			{
+				return;
+			}
+
+			list.ForEach(bonus =>
 			{
 				Utils.DoAnyTimes(bonus.value, () =>
 				{
 					Bonus newBonus = factory.GetBonus(bonus.key);
-					newBonus.position = obj.position;
+					newBonus.position = spawn;
 					newBonus.explosionStart = true;
 				});
 			});
