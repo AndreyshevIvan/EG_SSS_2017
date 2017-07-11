@@ -57,6 +57,7 @@ namespace MyGame.Hero
 		}
 		protected override void OnEndGameplay()
 		{
+			gameObject.layer = (int)Layer.UNTOUCH;
 			if (healthBar) healthBar.Close();
 
 			Utils.DoAfterTime(this, ENDING_CONTROLL_DURATION, () =>

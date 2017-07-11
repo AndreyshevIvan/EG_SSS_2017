@@ -40,6 +40,7 @@ namespace MyGame
 		public Transform ground { get { return map.groundObjects; } }
 		public BoundingBox box { get; private set; }
 		public float visiblePosition { get; private set; }
+		public float time { get { return map.time; } }
 		public bool isAllEnemiesKilled { get { return container.isEnemiesEmpty; } }
 
 		public const float FLY_HEIGHT = 4;
@@ -145,7 +146,7 @@ namespace MyGame
 
 		private void Awake()
 		{
-			box = new BoundingBox(-9.5f, 9.5f, -20, 15);
+			box = GameData.box;
 			container = new WorldContainer();
 			m_camera = Camera.main;
 			container.Init(this);
@@ -240,6 +241,7 @@ namespace MyGame
 		Transform ground { get; }
 		BoundingBox box { get; }
 		float visiblePosition { get; }
+		float time { get; }
 
 		void Add<T>(T obj) where T : WorldObject;
 		void Remove<T>(T obj) where T : WorldObject;

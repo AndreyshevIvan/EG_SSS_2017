@@ -57,7 +57,6 @@ namespace MyGame
 		private Enemy m_enemyToDebug;
 
 		private const float MOVE_SPEED = 1.6f;
-		private const float FLY_SPAWN_OFFSET = 1.2f;
 
 		private void Awake()
 		{
@@ -101,7 +100,7 @@ namespace MyGame
 				Enemy enemy = factory.GetEnemy(spawn.enemy);
 				enemy.transform.SetParent(m_skyObjects);
 				enemy.roadController.Spline = road;
-				float spawnPosition = FLY_SPAWN_OFFSET * i / road.Length;
+				float spawnPosition = GetSplineOffset(spawn.enemy) * i / road.Length;
 				enemy.roadController.InitialPosition = spawnPosition;
 				enemy.roadController.Speed = spawn.speed;
 				m_enemyToDebug = enemy;
@@ -115,6 +114,18 @@ namespace MyGame
 				enemy.transform.SetParent(m_groundObjects);
 				enemy.position = spawn.position;
 			});
+		}
+		private float GetSplineOffset(UnitType type)
+		{
+			switch (type)
+			{
+				case UnitType.BASE_ENEMY:
+					return 1.2f;
+				case UnitType.ROCKET_COPTER:
+					return 2;
+			}
+
+			return 1;
 		}
 	}
 }

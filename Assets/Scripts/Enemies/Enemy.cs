@@ -66,11 +66,11 @@ namespace MyGame.Enemies
 		{
 			world.player.KillEnemy(type);
 
-			if (Utils.IsHappen(0.1f))
+			if (Utils.IsHappen(0.08f))
 			{
 				bonuses.Add(BonusCount.Create(BonusType.HEALTH, 1));
 			}
-			else if (world.player.isAllowedModify && Utils.IsHappen(0.4f))
+			else if (world.player.isAllowedModify && Utils.IsHappen(0.2f))
 			{
 				bonuses.Add(BonusCount.Create(BonusType.AMMO_UP, 1));
 			}

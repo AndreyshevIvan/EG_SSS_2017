@@ -31,7 +31,7 @@ namespace MyGame
 		public float bombProcess { get { return m_ship.mind.bombProcess; } }
 		public float laserProcess { get { return m_ship.mind.laserProcess; } }
 
-		public const int MODIFICATION_COUNT = 9;
+		public const int MODIFICATION_COUNT = 10;
 
 		public void AddPoints(int pointsCount)
 		{

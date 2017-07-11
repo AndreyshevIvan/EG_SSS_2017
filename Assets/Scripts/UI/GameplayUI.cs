@@ -48,7 +48,7 @@ namespace MyGame
 			}
 			else if (gameplay.isGameEnd)
 			{
-				currentBehaviour = ControllShip;
+				if (gameplay.isWin) currentBehaviour = ControllShip;
 				Utils.DoAfterTime(this, Ship.ENDING_CONTROLL_DURATION, () =>
 				{
 					currentBehaviour = () => { };
@@ -148,8 +148,11 @@ namespace MyGame
 
 		private IGameplay gameplay { get; set; }
 		private UITouch lastTouch { get; set; }
+		private BoundingBox box { get; set; }
 
 		private const float TOUCH_OFFSET_Y = 0.04f;
+		private const float CAMERA_MAX_OFFSET = 2;
+		private const float CAMERA_SPEED = 7;
 		private const float CAMERA_ANGLE_FACTOR = 0.076f;
 		private const float PAUSE_BUTTON_SIZE_FACTOR = 0.08f;
 		private const float AREA_SIZE_FACTOR = 0.35f;
@@ -170,6 +173,7 @@ namespace MyGame
 			m_animator = GetComponent<Animator>();
 			m_slowButtonsGraphic = Utils.GetAllComponents<Graphic>(m_slowButtons);
 			lastTouch = UITouch.WAIT;
+			box = GameData.box;
 
 			InitUIElements();
 			InitBehaviours();
@@ -216,6 +220,16 @@ namespace MyGame
 			screenPosition.x += screenPosition.x * -CAMERA_ANGLE_FACTOR;
 			screenPosition.z += screenPosition.z * -CAMERA_ANGLE_FACTOR;
 			if (moveShip != null) moveShip(screenPosition);
+			UpdateCameraPosition();
+		}
+		private void UpdateCameraPosition()
+		{
+			float playerXPart = player.shipPosition.x / box.xMax;
+			float camMove = playerXPart * playerXPart * CAMERA_MAX_OFFSET;
+			camMove = (player.shipPosition.x < 0) ? -camMove : camMove;
+			Vector3 newCameraPos = m_camera.transform.position;
+			newCameraPos.x = Mathf.MoveTowards(newCameraPos.x, camMove, CAMERA_SPEED * Time.fixedDeltaTime);
+			m_camera.transform.position = newCameraPos;
 		}
 		private void UpdateGunBars()
 		{
@@ -272,6 +286,7 @@ namespace MyGame
 			CloseAll();
 			SetActive(m_results, true);
 
+			SetSlowMode(false);
 			Utils.FadeElement(m_results.transform, 0, 0);
 			m_points.Fade(0, BARS_FADING_DURATION);
 			m_modsBar.Fade(0, BARS_FADING_DURATION);

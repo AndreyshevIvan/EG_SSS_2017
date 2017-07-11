@@ -169,7 +169,7 @@ namespace MyGame
 			position = new Vector3(
 				Mathf.Clamp(position.x, m_box.xMin, m_box.xMax),
 				GameWorld.FLY_HEIGHT,
-				Mathf.Clamp(position.z, m_box.zMin, m_box.zMax)
+				position.z//Mathf.Clamp(position.z, m_box.zMin, m_box.zMax)
 			);
 		}
 

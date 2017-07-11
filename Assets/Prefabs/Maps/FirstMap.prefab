@@ -576,24 +576,156 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da27aff00407cb428786135e1448c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_endTime: 40
+  m_endTime: 130
   m_windParticles: {fileID: 198917089717585566}
   m_groundObjects: {fileID: 4967626015242824}
   m_skyObjects: {fileID: 4304714994984520}
   m_ground: {fileID: 4496978326847128}
-  m_flySpawns: []
+  m_flySpawns:
+  - road: 2
+    enemy: 0
+    time: 2
+    speed: 8
+    count: 5
+  - road: 1
+    enemy: 0
+    time: 8
+    speed: 8
+    count: 5
+  - road: 3
+    enemy: 1
+    time: 15
+    speed: 4
+    count: 3
+  - road: 0
+    enemy: 0
+    time: 26
+    speed: 10
+    count: 10
+  - road: 1
+    enemy: 1
+    time: 35
+    speed: 6
+    count: 4
+  - road: 0
+    enemy: 0
+    time: 45
+    speed: 10
+    count: 8
+  - road: 3
+    enemy: 1
+    time: 50
+    speed: 4
+    count: 1
+  - road: 4
+    enemy: 1
+    time: 52
+    speed: 4
+    count: 2
+  - road: 5
+    enemy: 0
+    time: 58
+    speed: 10
+    count: 6
+  - road: 7
+    enemy: 0
+    time: 62
+    speed: 10
+    count: 6
+  - road: 6
+    enemy: 0
+    time: 66
+    speed: 10
+    count: 6
+  - road: 0
+    enemy: 0
+    time: 70
+    speed: 8
+    count: 10
+  - road: 8
+    enemy: 0
+    time: 86
+    speed: 10
+    count: 10
+  - road: 9
+    enemy: 0
+    time: 90
+    speed: 10
+    count: 10
+  - road: 5
+    enemy: 1
+    time: 96
+    speed: 6
+    count: 3
+  - road: 6
+    enemy: 1
+    time: 96
+    speed: 6
+    count: 3
+  - road: 0
+    enemy: 0
+    time: 106
+    speed: 8
+    count: 8
+  - road: 6
+    enemy: 0
+    time: 106
+    speed: 6
+    count: 10
+  - road: 1
+    enemy: 0
+    time: 115
+    speed: 8
+    count: 8
+  - road: 9
+    enemy: 0
+    time: 116
+    speed: 6
+    count: 6
   m_groundSpawns:
-  - position: {x: -9, y: 0, z: 20}
+  - position: {x: -9, y: 0, z: 120}
     enemy: 3
-  - position: {x: -9, y: 0, z: 32}
+  - position: {x: -9, y: 0, z: 132}
     enemy: 3
-  - position: {x: -9, y: 0, z: 40}
+  - position: {x: -9, y: 0, z: 140}
     enemy: 3
-  - position: {x: 9, y: 0, z: 28}
+  - position: {x: 9, y: 0, z: 128}
     enemy: 3
-  - position: {x: 9, y: 0, z: 36}
+  - position: {x: 9, y: 0, z: 136}
     enemy: 3
-  - position: {x: 9, y: 0, z: 44}
+  - position: {x: 9, y: 0, z: 144}
+    enemy: 3
+  - position: {x: 9, y: 0, z: 50}
+    enemy: 2
+  - position: {x: 4, y: 0, z: 60}
+    enemy: 2
+  - position: {x: -1, y: 0, z: 70}
+    enemy: 2
+  - position: {x: -6, y: 0, z: 175}
+    enemy: 2
+  - position: {x: -2, y: 0, z: 185}
+    enemy: 2
+  - position: {x: 6, y: 0, z: 175}
+    enemy: 2
+  - position: {x: 2, y: 0, z: 185}
+    enemy: 2
+  - position: {x: -5, y: 0, z: 185}
+    enemy: 2
+  - position: {x: 5, y: 0, z: 185}
+    enemy: 2
+  - position: {x: 5, y: 0, z: 190}
+    enemy: 3
+  - position: {x: 5, y: 0, z: 196}
+    enemy: 3
+  - position: {x: -5, y: 0, z: 190}
+    enemy: 3
+  - position: {x: -5, y: 0, z: 196}
+    enemy: 3
+  - position: {x: -3, y: 0, z: 200}
+    enemy: 3
+  - position: {x: 0, y: 0, z: 200}
+    enemy: 3
+  - position: {x: 3, y: 0, z: 200}
     enemy: 3
 --- !u!198 &198917089717585566
 ParticleSystem:

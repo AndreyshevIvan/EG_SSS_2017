@@ -84,8 +84,8 @@ namespace MyGame.Hero
 		private bool isBombReady { get; set; }
 		private bool isLaserReady { get; set; }
 
-		private const float SCATTER_STEP = 0.01f;
-		private const float GUN_COLDOWN_STEP = 0.04f;
+		private const float SCATTER_STEP = 0.335f;
+		private const float GUN_COLDOWN_STEP = 0.055f;
 
 		private void UpdateTimers()
 		{
@@ -101,6 +101,7 @@ namespace MyGame.Hero
 			}
 
 			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.PLAYER_BULLET);
+			m_properties.gunData.direction = Utils.RndDirBetween(90 - m_gunScatter, 90 + m_gunScatter);
 			bullet.Shoot(m_properties.gunData, m_bulletSpawn.position);
 			m_gunTimer = 0;
 		}
@@ -120,15 +121,15 @@ namespace MyGame.Hero
 				return;
 			}
 
-			m_properties.laserData.direction = Utils.RndDirBetween(30, 45);
+			m_properties.laserData.direction = Utils.RndDirBetween(30, 40);
 			Bullet left = factory.GetAmmo<Bullet>(AmmoType.PLAYER_LASER);
 			left.Shoot(m_properties.laserData, m_bulletSpawn.position);
 
-			m_properties.laserData.direction = Utils.RndDirBetween(80, 100);
+			m_properties.laserData.direction = Utils.RndDirBetween(84, 96);
 			Bullet middle = factory.GetAmmo<Bullet>(AmmoType.PLAYER_LASER);
 			middle.Shoot(m_properties.laserData, m_bulletSpawn.position);
 
-			m_properties.laserData.direction = Utils.RndDirBetween(135, 150);
+			m_properties.laserData.direction = Utils.RndDirBetween(140, 150);
 			Bullet right = factory.GetAmmo<Bullet>(AmmoType.PLAYER_LASER);
 			right.Shoot(m_properties.laserData, m_bulletSpawn.position);
 
@@ -136,21 +137,20 @@ namespace MyGame.Hero
 		}
 		private void SetNewProperties()
 		{
-			m_properties.gunColdown = 0.7f;
+			m_properties.gunColdown = 0.67f;
 
-			m_properties.bombColdown = 8;
+			m_properties.bombColdown = 10;
 
-			m_properties.laserColdown = 14;
+			m_properties.laserColdown = 16;
 			m_properties.laserData = new BulletData();
 			m_properties.laserData.speed = 28;
 			m_properties.laserData.demage = 1;
 			m_properties.laserDuration = 3;
-			m_properties.laserShootColdown = 0.032f;
+			m_properties.laserShootColdown = 0.03f;
 
 			m_properties.gunData = new BulletData();
-			m_properties.gunData.direction = Vector3.forward;
-			m_properties.gunData.speed = 16;
-			m_properties.gunData.demage = 8;
+			m_properties.gunData.speed = 20;
+			m_properties.gunData.demage = 6;
 		}
 	}
 }
