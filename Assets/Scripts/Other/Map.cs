@@ -58,7 +58,7 @@ namespace MyGame
 		private const float MOVE_SPEED = 1.6f;
 		private const float GROUND_SPAWN_MARGIN = 30;
 		private const float BASE_ENEMY_ROAD_OFFSET = 2;
-		private const float ROCKET_COPTER_ROAD_OFFSET = 2.7f;
+		private const float COPTER_ROAD_OFFSET = 2.85f;
 
 		private void Awake()
 		{
@@ -138,7 +138,7 @@ namespace MyGame
 				case UnitType.BASE_ENEMY:
 					return BASE_ENEMY_ROAD_OFFSET;
 				case UnitType.ROCKET_COPTER:
-					return ROCKET_COPTER_ROAD_OFFSET;
+					return COPTER_ROAD_OFFSET;
 			}
 
 			return 1;

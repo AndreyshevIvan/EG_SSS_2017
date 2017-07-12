@@ -10,12 +10,12 @@ namespace MyGame
 		public Vector3 direction { get; set; }
 		public TrailRenderer trailRenderer { get; private set; }
 
-		public void Shoot(BulletData data, Vector3 spawnPosition)
+		public void Shoot(BulletData data, Vector3 position)
 		{
 			this.data = data;
 			touchDemage = data.demage;
-			spawnPosition.y = GameWorld.FLY_HEIGHT;
-			position = spawnPosition;
+			position.y = GameWorld.FLY_HEIGHT;
+			this.position = position;
 			data.direction.y = 0;
 			direction = data.direction;
 		}

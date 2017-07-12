@@ -88,8 +88,8 @@ namespace MyGame.Enemies
 		private float m_timer = 0;
 		private EventDelegate m_tactic;
 
-		private float HEALTH_PROBABLILITY = 0.18f;
-		private float AMMO_PROBABILITY = 1;//0.2f;
+		private float HEALTH_PROBABLILITY = 0.14f;
+		private float AMMO_PROBABILITY = 0.2f;
 
 		private void TryShoot()
 		{

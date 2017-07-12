@@ -17,8 +17,8 @@ namespace MyGame.Enemies
 			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 3));
 			isTimerWork = true;
 
-			m_bulletData.demage = 10;
-			m_bulletData.speed = 5;
+			m_bulletData.demage = 15;
+			m_bulletData.speed = 6;
 
 			AddTactic(RotateGun);
 		}
@@ -52,8 +52,7 @@ namespace MyGame.Enemies
 
 			Vector3 direction = world.shipPosition - position;
 			Quaternion rotation = Quaternion.LookRotation(direction);
-			Quaternion newRotation = Quaternion.Slerp(m_gun.rotation, rotation, 1);
-			m_gun.transform.rotation = newRotation;
+			m_gun.rotation = Quaternion.Lerp(m_gun.rotation, rotation, 1);
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace MyGame.Enemies
 		protected override void InitProperties()
 		{
 			health = maxHealth = 1;
-			touchDemage = 10;
+			touchDemage = 20;
 			points = 40;
 			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 3));
 		}
