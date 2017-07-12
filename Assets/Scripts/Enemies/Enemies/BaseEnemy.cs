@@ -17,6 +17,11 @@ namespace MyGame.Enemies
 		}
 		protected override void Shoot()
 		{
+			roadController.Position = 10;
+		}
+		protected override void SmartPlayingUpdate()
+		{
+			//Debug.Log(roadController.Position);
 		}
 	}
 }

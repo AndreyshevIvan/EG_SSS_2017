@@ -6,9 +6,11 @@ using UnityEngine;
 using FluffyUnderware.Curvy.Controllers;
 using MyGame.GameUtils;
 using MyGame.Factory;
+using FluffyUnderware.Curvy;
 
 namespace MyGame
 {
+	using System.Collections;
 	using BonusCount = Pair<BonusType, int>;
 
 	public abstract class WorldObject : MonoBehaviour, IWorldEntity
@@ -66,6 +68,10 @@ namespace MyGame
 			}
 		}
 
+		public void AddToRoad(CurvySpline road, float position)
+		{
+			StartCoroutine(SetSpline(road, position));
+		}
 		public void MoveToGround()
 		{
 			transform.SetParent(world.ground);
@@ -197,6 +203,13 @@ namespace MyGame
 		private EventDelegate currentEvent { get; set; }
 		private EventDelegate onPlaying { get; set; }
 		private EventDelegate onGameEnd { get; set; }
+
+		private IEnumerator SetSpline(CurvySpline spline, float position)
+		{
+			roadController.Spline = spline;
+			yield return new WaitForFixedUpdate();
+			roadController.Position = position;
+		}
 	}
 
 	public interface IWorldEntity

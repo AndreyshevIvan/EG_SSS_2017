@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Version: 
   UpdateIn: 2
   m_Space: 0
-  m_PositionMode: 0
+  m_PositionMode: 1
   m_InitialPosition: 0
   m_MoveMode: 2
   m_Speed: 0

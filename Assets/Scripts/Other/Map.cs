@@ -57,6 +57,8 @@ namespace MyGame
 
 		private const float MOVE_SPEED = 1.6f;
 		private const float GROUND_SPAWN_MARGIN = 30;
+		private const float BASE_ENEMY_ROAD_OFFSET = 2;
+		private const float ROCKET_COPTER_ROAD_OFFSET = 2.7f;
 
 		private void Awake()
 		{
@@ -107,10 +109,8 @@ namespace MyGame
 			{
 				Enemy enemy = factory.GetEnemy(spawn.enemy);
 				enemy.transform.SetParent(m_skyObjects);
-				enemy.roadController.Spline = road;
-				float spawnPosition = GetSplineOffset(spawn.enemy) * i / road.Length;
-				enemy.roadController.InitialPosition = spawnPosition;
 				enemy.roadController.Speed = spawn.speed;
+				enemy.AddToRoad(road, GetRoadOffset(spawn.enemy) * i);
 			}
 		}
 
@@ -131,14 +131,14 @@ namespace MyGame
 			newEnemy.MoveToGround();
 		}
 
-		private float GetSplineOffset(UnitType type)
+		private float GetRoadOffset(UnitType type)
 		{
 			switch (type)
 			{
 				case UnitType.BASE_ENEMY:
-					return 1.2f;
+					return BASE_ENEMY_ROAD_OFFSET;
 				case UnitType.ROCKET_COPTER:
-					return 2;
+					return ROCKET_COPTER_ROAD_OFFSET;
 			}
 
 			return 1;
