@@ -11,7 +11,6 @@ namespace MyGame
 	{
 		public int health { get; protected set; }
 		public float healthPart { get { return (float)health / (float)maxHealth; } }
-		public int healthPercents { get { return (int)Mathf.Round(100 * healthPart); } }
 		public bool isLive { get { return isImmortal || health > 0; } }
 		public bool isImmortal { get; protected set; }
 		public bool isFull { get { return health == maxHealth; } }
@@ -26,7 +25,7 @@ namespace MyGame
 
 			health = health + healCount;
 			health = Mathf.Clamp(health, 0, maxHealth);
-			if (healthBar) healthBar.SetValue(healthPercents);
+			if (healthBar) healthBar.SetValue(health);
 			OnHealEnd();
 		}
 
@@ -56,7 +55,7 @@ namespace MyGame
 				world.Remove(this);
 			}
 
-			if (healthBar) healthBar.SetValue(healthPercents);
+			if (healthBar) healthBar.SetValue(health);
 		}
 		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
 		protected virtual void DoBeforeDemaged() { }

@@ -83,9 +83,23 @@ namespace MyGame.Hero
 		private bool isBaseGunReady { get; set; }
 		private bool isBombReady { get; set; }
 		private bool isLaserReady { get; set; }
+		private float modsPart
+		{
+			get
+			{
+				return world.player.modifications / Player.MODIFICATION_COUNT;
+			}
+		}
+		private Vector3 shootDirection
+		{
+			get
+			{
+				return Utils.RndDirBetween(90 - m_gunScatter, 90 + m_gunScatter);
+			}
+		}
 
-		private const float SCATTER_STEP = 0.335f;
-		private const float GUN_COLDOWN_STEP = 0.055f;
+		private const float SCATTER_STEP = 0.33f;
+		private const float GUN_COLDOWN_STEP = 0.0285f;
 
 		private void UpdateTimers()
 		{
@@ -101,7 +115,9 @@ namespace MyGame.Hero
 			}
 
 			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.PLAYER_BULLET);
-			m_properties.gunData.direction = Utils.RndDirBetween(90 - m_gunScatter, 90 + m_gunScatter);
+			bullet.trailRenderer.startColor = GameplayUI.GetShipBulletColor(modsPart);
+			bullet.trailRenderer.endColor = GameplayUI.GetShipBulletColor(modsPart);
+			m_properties.gunData.direction = shootDirection;
 			bullet.Shoot(m_properties.gunData, m_bulletSpawn.position);
 			m_gunTimer = 0;
 		}
@@ -137,20 +153,20 @@ namespace MyGame.Hero
 		}
 		private void SetNewProperties()
 		{
-			m_properties.gunColdown = 0.67f;
+			m_properties.gunColdown = 0.48f;
 
 			m_properties.bombColdown = 10;
 
 			m_properties.laserColdown = 16;
 			m_properties.laserData = new BulletData();
 			m_properties.laserData.speed = 28;
-			m_properties.laserData.demage = 2;
+			m_properties.laserData.demage = 1;
 			m_properties.laserDuration = 3;
 			m_properties.laserShootColdown = 0.03f;
 
 			m_properties.gunData = new BulletData();
-			m_properties.gunData.speed = 20;
-			m_properties.gunData.demage = 6;
+			m_properties.gunData.speed = 24;
+			m_properties.gunData.demage = 1;
 		}
 	}
 }

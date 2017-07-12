@@ -27,7 +27,7 @@ namespace MyGame.Enemies
 
 			if (healthBar)
 			{
-				healthBar.SetValue(healthPercents);
+				healthBar.SetValue(health);
 				toDestroy.Add(healthBar.gameObject);
 			}
 			if (roadController) roadController.OnEndReached.AddListener(T =>
@@ -60,17 +60,17 @@ namespace MyGame.Enemies
 
 		protected sealed override void DoAfterDemaged()
 		{
-			if (healthBar) healthBar.Fade(1, HealthBar.HP_BAR_FADE_DUR);
+			if (healthBar) healthBar.Fade(1, PlayerHealthBar.HP_BAR_FADE_DUR);
 		}
 		protected sealed override void OnDeath()
 		{
 			world.player.KillEnemy(type);
 
-			if (Utils.IsHappen(0.08f))
+			if (Utils.IsHappen(HEALTH_PROBABLILITY))
 			{
 				bonuses.Add(BonusCount.Create(BonusType.HEALTH, 1));
 			}
-			else if (world.player.isAllowedModify && Utils.IsHappen(0.2f))
+			if (world.player.isAllowedModify && Utils.IsHappen(AMMO_PROBABILITY))
 			{
 				bonuses.Add(BonusCount.Create(BonusType.AMMO_UP, 1));
 			}
@@ -87,6 +87,9 @@ namespace MyGame.Enemies
 
 		private float m_timer = 0;
 		private EventDelegate m_tactic;
+
+		private float HEALTH_PROBABLILITY = 0.18f;
+		private float AMMO_PROBABILITY = 0.2f;
 
 		private void TryShoot()
 		{

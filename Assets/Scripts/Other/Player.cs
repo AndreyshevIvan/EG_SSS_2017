@@ -31,7 +31,7 @@ namespace MyGame
 		public float bombProcess { get { return m_ship.mind.bombProcess; } }
 		public float laserProcess { get { return m_ship.mind.laserProcess; } }
 
-		public const int MODIFICATION_COUNT = 10;
+		public const int MODIFICATION_COUNT = 12;
 
 		public void AddPoints(int pointsCount)
 		{
@@ -44,7 +44,7 @@ namespace MyGame
 		}
 		public void Modify()
 		{
-			if (!isAllowedModify)
+			if (!isAllowedModify || !m_ship)
 			{
 				return;
 			}
@@ -55,14 +55,29 @@ namespace MyGame
 		}
 		public bool Laser()
 		{
+			if (!m_ship)
+			{
+				return false;
+			}
+
 			return m_ship.mind.Laser();
 		}
 		public bool Bomb()
 		{
+			if (!m_ship)
+			{
+				return false;
+			}
+
 			return m_ship.mind.Bomb();
 		}
 		public void Heal(int healthCount)
 		{
+			if (!m_ship)
+			{
+				return;
+			}
+
 			m_ship.Heal(healthCount);
 		}
 		public void KillEnemy(UnitType type)

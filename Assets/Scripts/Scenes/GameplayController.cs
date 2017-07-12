@@ -100,7 +100,7 @@ namespace MyGame
 			ship = m_factory.GetShip(ShipType.STANDART);
 			ship.properties = m_shipProperties;
 
-			ship.roadController.Spline = m_factory.GetRoad(RoadType.PRE_START);
+			ship.roadController.Spline = m_factory.GetRoad(RoadType.PLAYER_START);
 			ship.roadController.Clamping = CurvyClamping.Loop;
 			ship.roadController.PlayAutomatically = true;
 			ship.roadController.Speed = SHIP_PRE_START_SPEED;
@@ -123,7 +123,7 @@ namespace MyGame
 			m_interface.startTouchEvents += () =>
 			{
 				ship.roadController.Spline = null;
-				m_updater.Add(MoveShipToStartRoad, SetStartRoad, UpdType.FIXED);
+				m_updater.Add(MoveShipToStart, StartGame, UpdType.FIXED);
 			};
 		}
 		private void InitPlayer()
@@ -141,20 +141,11 @@ namespace MyGame
 			OnMapReached();
 		}
 
-		private void SetStartRoad()
+		private void StartGame()
 		{
-			ship.roadController.OnEndReached.AddListener(T =>
-			{
-				map.Play();
-				isMapStart = true;
-				Destroy(ship.roadController);
-			});
-
-			ship.roadController.Spline = m_factory.GetRoad(RoadType.PLAYER);
-			ship.roadController.Clamping = CurvyClamping.Clamp;
-			ship.roadController.Speed = SHIP_START_SPEED;
-			ship.roadController.Position = 0;
-
+			map.Play();
+			isMapStart = true;
+			Destroy(ship.roadController);
 		}
 		private void OnMapReached()
 		{
@@ -219,10 +210,9 @@ namespace MyGame
 		{
 			if (ship) ship.MoveTo(targetPosition);
 		}
-		private bool MoveShipToStartRoad()
+		private bool MoveShipToStart()
 		{
-			CurvySpline spline = m_factory.GetRoad(RoadType.PLAYER);
-			Vector3 target = spline.Segments[0].transform.position;
+			Vector3 target = new Vector3(0, GameWorld.FLY_HEIGHT, 0);
 			float movement = SHIP_START_SPEED * Time.fixedDeltaTime;
 			ship.position = Vector3.MoveTowards(ship.position, target, movement);
 			return ship.position == target;

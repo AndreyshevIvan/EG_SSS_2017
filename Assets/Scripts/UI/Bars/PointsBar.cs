@@ -12,7 +12,6 @@ namespace MyGame
 		protected override void OnAwakeEnd()
 		{
 			m_field = GetComponent<Text>();
-			isTimerWork = false;
 			OnSetNewValue();
 		}
 		protected override void OnSetNewValue()

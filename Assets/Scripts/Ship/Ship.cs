@@ -42,7 +42,7 @@ namespace MyGame.Hero
 		protected override void OnInitEnd()
 		{
 			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
-			healthBar.SetValue(healthPercents);
+			healthBar.SetValue(health);
 			toDestroy.Add(healthBar.gameObject);
 			touchDemage = int.MaxValue;
 			m_isEraseOnDeath = false;
@@ -91,11 +91,11 @@ namespace MyGame.Hero
 		protected override void DoAfterDemaged()
 		{
 			world.player.BeDemaged();
-			healthBar.Fade(1, HealthBar.HP_BAR_FADE_DUR);
+			healthBar.Fade(1, PlayerHealthBar.HP_BAR_FADE_DUR);
 		}
 		protected override void OnHealEnd()
 		{
-			if (isFull) healthBar.Fade(0, HealthBar.HP_BAR_FADE_DUR);
+			if (isFull) healthBar.Fade(0, PlayerHealthBar.HP_BAR_FADE_DUR);
 		}
 
 		[SerializeField]

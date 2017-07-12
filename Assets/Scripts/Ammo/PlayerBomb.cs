@@ -60,7 +60,7 @@ namespace MyGame
 
 		private const float CAST_DURATION = 0.8f;
 		private const float TARGET_RADIUS = 20;
-		private const int DEMAGE = 20;
+		private const int DEMAGE = 1;
 
 		private IEnumerator DestroyAfterBoom()
 		{

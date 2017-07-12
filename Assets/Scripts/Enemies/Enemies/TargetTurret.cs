@@ -10,7 +10,7 @@ namespace MyGame.Enemies
 	{
 		protected override void InitProperties()
 		{
-			health = maxHealth = 46 + (int)(world.time / 10);
+			health = maxHealth = 5;
 			coldown = 2.4f;
 			points = 120;
 			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
@@ -30,14 +30,18 @@ namespace MyGame.Enemies
 			}
 
 			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.TARGET_TURRET);
-			Vector3 direction = Vector3.Normalize(world.shipPosition - position);
+			Vector3 direction = Vector3.Normalize(world.shipPosition - spawnPos);
 			m_bulletData.direction = direction;
-			bullet.Shoot(m_bulletData, position);
+			bullet.Shoot(m_bulletData, spawnPos);
 		}
 
 		[SerializeField]
 		private Transform m_gun;
+		[SerializeField]
+		private Transform m_bulletSpawn;
 		private BulletData m_bulletData = new BulletData();
+
+		private Vector3 spawnPos { get { return m_bulletSpawn.position; } }
 
 		private void RotateGun()
 		{

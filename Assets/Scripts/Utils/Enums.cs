@@ -35,8 +35,7 @@ namespace MyGame
 		COME_TO_ME_MIDDLE,
 		COME_TO_ME_AND_BACK_RIGHT,
 		COME_TO_ME_AND_BACK_LEFT,
-		PLAYER,
-		PRE_START,
+		PLAYER_START,
 	}
 
 	[System.Serializable]
@@ -92,5 +91,7 @@ namespace MyGame
 	{
 		UNTOUCH = 0,
 		PLAYER_BULLET = 8,
+		FLY_ENEMY = 10,
+		GROUND_ENEMY = 15,
 	}
 }

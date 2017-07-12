@@ -22,7 +22,8 @@ namespace MyGame.Factory
 
 		public Enemy GetEnemy(UnitType type)
 		{
-			Enemy enemy = Instantiate(m_enemies.Find(pair => pair.key == type).value);
+			Enemy origin = m_enemies.Find(pair => pair.key == type).value;
+			Enemy enemy = Instantiate(origin, ENEMY_SPAWN, Quaternion.identity);
 			m_world.Add(enemy);
 			enemy.type = type;
 			return enemy;
@@ -77,6 +78,8 @@ namespace MyGame.Factory
 
 		private WorldContainer m_world;
 		private UIContainer m_interface;
+
+		private Vector3 ENEMY_SPAWN = new Vector3(-1000, -1000, -1000);
 	}
 
 	public interface IFactory

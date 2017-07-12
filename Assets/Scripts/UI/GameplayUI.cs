@@ -415,6 +415,16 @@ namespace MyGame
 		}
 	}
 
+	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer
+	{
+		public static Color GetShipBulletColor(float modsPart)
+		{
+			float part = 1 - modsPart;
+			Color color = new Color(255, 255 * part, 255 * part);
+			return color;
+		}
+	}
+
 	public delegate void PointDelegate(Vector3 touchPositiion);
 	public delegate void BoolEventDelegate(bool isStartOrEnd);
 	public delegate void EventDelegate();

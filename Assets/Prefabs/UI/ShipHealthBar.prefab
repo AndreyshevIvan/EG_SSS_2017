@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 224567324408007646}
   - component: {fileID: 222890064739041350}
   - component: {fileID: 114852878645861338}
-  - component: {fileID: 114071631287942908}
   m_Layer: 5
   m_Name: ShipHealthBar
   m_TagString: Untagged
@@ -64,28 +63,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114071631287942908
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1724165993182718}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
 --- !u!114 &114190045630504394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -158,8 +135,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_textField: {fileID: 114418501056346800}
-  m_healthLine: {fileID: 114190045630504394}
-  m_isShip: 1
 --- !u!114 &114923585975150158
 MonoBehaviour:
   m_ObjectHideFlags: 1

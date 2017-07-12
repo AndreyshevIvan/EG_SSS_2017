@@ -38,8 +38,6 @@ namespace MyGame
 		[SerializeField]
 		private float m_endTime;
 		[SerializeField]
-		private ParticleSystem m_windParticles;
-		[SerializeField]
 		private Transform m_groundObjects;
 		[SerializeField]
 		private Transform m_skyObjects;
@@ -53,7 +51,6 @@ namespace MyGame
 		private List<FlySpawn> tempSkySpawns { get; set; }
 
 		private bool m_isMapEnd = false;
-		private Enemy m_enemyToDebug;
 
 		private const float MOVE_SPEED = 1.6f;
 
@@ -75,7 +72,6 @@ namespace MyGame
 		{
 			if (time >= m_endTime)
 			{
-				m_windParticles.Pause();
 				m_isMapEnd = true;
 				return;
 			}
@@ -102,7 +98,6 @@ namespace MyGame
 				float spawnPosition = GetSplineOffset(spawn.enemy) * i / road.Length;
 				enemy.roadController.InitialPosition = spawnPosition;
 				enemy.roadController.Speed = spawn.speed;
-				m_enemyToDebug = enemy;
 			}
 			tempSkySpawns.Remove(spawn);
 		}

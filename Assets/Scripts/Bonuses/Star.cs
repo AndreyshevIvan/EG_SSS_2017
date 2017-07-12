@@ -19,7 +19,7 @@ namespace MyGame
 		{
 			world.player.AddStars((int)price);
 		}
-		protected override void OnAwakeEnd()
+		protected override void OnStart()
 		{
 			isMagnetic = true;
 			price = StarPrice.X1;

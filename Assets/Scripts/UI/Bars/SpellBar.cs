@@ -11,7 +11,6 @@ namespace MyGame
 	{
 		protected override void OnAwakeEnd()
 		{
-			isTimerWork = false;
 		}
 		protected override void OnSetNewValue()
 		{

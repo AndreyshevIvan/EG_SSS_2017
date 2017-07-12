@@ -8,6 +8,7 @@ namespace MyGame
 	public sealed class Bullet : Body
 	{
 		public Vector3 direction { get; set; }
+		public TrailRenderer trailRenderer { get; private set; }
 
 		public void Shoot(BulletData data, Vector3 spawnPosition)
 		{
@@ -21,6 +22,7 @@ namespace MyGame
 
 		protected override void OnInitEnd()
 		{
+			trailRenderer = GetComponent<TrailRenderer>();
 			MoveToSky();
 		}
 		protected override void OnDemageTaked()

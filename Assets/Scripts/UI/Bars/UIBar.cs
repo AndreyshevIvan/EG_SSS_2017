@@ -17,6 +17,8 @@ namespace MyGame
 		public int value { get; protected set; }
 		public bool isActive { get; protected set; }
 
+		public const float HP_BAR_FADE_DUR = 0.4f;
+
 		public void SetActive(bool isActive)
 		{
 			this.isActive = isActive;
@@ -37,9 +39,15 @@ namespace MyGame
 			}
 
 			value = newValue;
+
+			if (!isFirstSetComplete)
+			{
+				OnFirstSet();
+				isFirstSetComplete = true;
+			}
+
 			OnSetNewValue();
 			lastUpdateTimer = 0;
-			if (!isFirstSetComplete) isFirstSetComplete = true;
 		}
 		public void Fade(float fade, float duration)
 		{
@@ -64,7 +72,7 @@ namespace MyGame
 			rect = GetComponent<RectTransform>();
 			isFirstSetComplete = false;
 			lastUpdateTimer = 0;
-			isTimerWork = true;
+			isTimerWork = false;
 			OnAwakeEnd();
 			InitSizing();
 		}
@@ -72,6 +80,7 @@ namespace MyGame
 		protected virtual void InitSizing() { }
 		protected virtual void OnActivete() { }
 		protected virtual void OnDisactivate() { }
+		protected virtual void OnFirstSet() { }
 
 		protected abstract void OnSetNewValue();
 

@@ -8,24 +8,25 @@ namespace MyGame
 	public abstract class Bonus : WorldObject
 	{
 		public bool explosionStart { get; set; }
+		public bool rotateOnStart { get; set; }
 		public bool isMagnetic { get; protected set; }
 
-		protected override void OnAwakeEnd()
+		protected sealed override void OnAwakeEnd()
 		{
 			explosionStart = true;
+			rotateOnStart = true;
 			isMagnetic = false;
 		}
 		protected void Start()
 		{
+			OnStart();
 			exitAllowed = true;
 			world.SubscribeToMove(this);
-			SetRandomRotation();
 
-			if (explosionStart)
-			{
-				SetExplosionForce();
-			}
+			if (explosionStart) SetExplosionForce();
+			if (rotateOnStart) SetRandomRotation();
 		}
+		protected virtual void OnStart() { }
 		protected sealed override void OnExitFromWorld()
 		{
 		}
@@ -47,7 +48,7 @@ namespace MyGame
 		protected abstract void OnRealize();
 
 		private const float DELTA_FORCE = 200;
-		private const float DELTA_ROTATION = 6;
+		private const float DELTA_ROTATION = 100;
 
 		private void SetExplosionForce()
 		{
