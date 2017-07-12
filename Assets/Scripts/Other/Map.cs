@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FluffyUnderware.Curvy;
-using MyGame.Hero;
 using MyGame.Factory;
 using MyGame.Enemies;
+using MyGame.Spawns;
+using Malee;
 
 namespace MyGame
 {
@@ -16,12 +17,15 @@ namespace MyGame
 		public Transform groundObjects { get { return m_groundObjects; } }
 		public Transform skyObjects { get { return m_skyObjects; } }
 		public float time { get; private set; }
+		public float offset { get; private set; }
+		public bool isTimeEnd { get { return m_finalTime <= time; } }
 		public bool isReached
 		{
 			get
 			{
-				return m_isMapEnd &&
-				tempSkySpawns.Count == 0;
+				return isTimeEnd &&
+				m_tmpSkySpawns.Count == 0 &&
+				m_tmpGroundSpawns.Count == 0;
 			}
 		}
 		public bool isMoveing { get; private set; }
@@ -31,32 +35,36 @@ namespace MyGame
 		}
 		public void Play()
 		{
-			tempSkySpawns = new List<FlySpawn>(m_flySpawns);
-			SpawnAllGroundUnits();
 		}
 
 		[SerializeField]
-		private float m_endTime;
+		private float m_finalTime;
 		[SerializeField]
 		private Transform m_groundObjects;
 		[SerializeField]
 		private Transform m_skyObjects;
 		[SerializeField]
 		private Transform m_ground;
-		[SerializeField]
-		private List<FlySpawn> m_flySpawns;
-		[SerializeField]
-		private List<GroundSpawn> m_groundSpawns;
+		[SerializeField][Reorderable]
+		private SkySpawnList m_skySpawns;
+		[SerializeField][Reorderable]
+		private GroundSpawnList m_groundSpawns;
 
-		private List<FlySpawn> tempSkySpawns { get; set; }
+		private List<FlySpawn> m_tmpSkySpawns;
+		private List<GroundSpawn> m_tmpGroundSpawns;
 
-		private bool m_isMapEnd = false;
+		private float groundPosition { get { return GROUND_SPAWN_MARGIN + offset; } }
 
 		private const float MOVE_SPEED = 1.6f;
+		private const float GROUND_SPAWN_MARGIN = 30;
 
 		private void Awake()
 		{
 			time = 0;
+			offset = 0;
+
+			m_tmpSkySpawns = new List<FlySpawn>(m_skySpawns);
+			m_tmpGroundSpawns = new List<GroundSpawn>(m_groundSpawns);
 		}
 		private void FixedUpdate()
 		{
@@ -66,28 +74,33 @@ namespace MyGame
 			}
 
 			MoveGround();
-			SpawnFlyInits();
+			CheckSkyUnits();
+			CheckGroundUnits();
 		}
 		private void MoveGround()
 		{
-			if (time >= m_endTime)
+			if (time >= m_finalTime)
 			{
-				m_isMapEnd = true;
 				return;
 			}
 
 			float movement = MOVE_SPEED * Time.fixedDeltaTime;
 			m_ground.transform.Translate(new Vector3(0, 0, -movement));
-			time += Time.fixedDeltaTime;
-		}
-		private void SpawnFlyInits()
-		{
-			FlySpawn spawn = tempSkySpawns.Find(x => x.time <= time);
-			if (spawn == null)
-			{
-				return;
-			}
 
+			time += Time.fixedDeltaTime;
+			offset += movement;
+		}
+		private void CheckSkyUnits()
+		{
+			List<FlySpawn> ready = m_tmpSkySpawns.FindAll(x => x.time <= time);
+			if (ready != null) ready.ForEach(spawn =>
+			{
+				m_tmpSkySpawns.Remove(spawn);
+				SpawnSkyUnit(spawn);
+			});
+		}
+		private void SpawnSkyUnit(FlySpawn spawn)
+		{
 			CurvySpline road = factory.GetRoad(spawn.road);
 
 			for (int i = 0; i < spawn.count; i++)
@@ -99,16 +112,25 @@ namespace MyGame
 				enemy.roadController.InitialPosition = spawnPosition;
 				enemy.roadController.Speed = spawn.speed;
 			}
-			tempSkySpawns.Remove(spawn);
 		}
-		private void SpawnAllGroundUnits()
+
+		private void CheckGroundUnits()
 		{
-			m_groundSpawns.ForEach(spawn => {
-				Enemy enemy = factory.GetEnemy(spawn.enemy);
-				enemy.transform.SetParent(m_groundObjects);
-				enemy.position = spawn.position;
+			List<GroundSpawn> ready = m_tmpGroundSpawns.FindAll(x =>
+				x.position.z <= groundPosition);
+			if (ready != null) ready.ForEach(spawn =>
+			{
+				m_tmpGroundSpawns.Remove(spawn);
+				SpawnGroundUnit(spawn);
 			});
 		}
+		private void SpawnGroundUnit(GroundSpawn spawn)
+		{
+			Enemy newEnemy = factory.GetEnemy(spawn.enemy);
+			newEnemy.position = spawn.position - new Vector3(0, 0, offset);
+			newEnemy.MoveToGround();
+		}
+
 		private float GetSplineOffset(UnitType type)
 		{
 			switch (type)

@@ -419,10 +419,10 @@ namespace MyGame
 	{
 		public static Color GetShipBulletColor(float modsPart)
 		{
-			float part = 1 - modsPart;
-			Color color = new Color(255, 255 * part, 255 * part);
-			return color;
+			return new Color(1, 1 - modsPart, 1 - modsPart, SHIP_BULLET_TAIL_A);
 		}
+
+		private const float SHIP_BULLET_TAIL_A = 0.8f;
 	}
 
 	public delegate void PointDelegate(Vector3 touchPositiion);

@@ -12,6 +12,7 @@ namespace MyGame
 		ROCKET_COPTER,
 		TARGET_TURRET,
 		ANGLE_TURRET,
+		BOSS,
 	}
 
 	[System.Serializable]

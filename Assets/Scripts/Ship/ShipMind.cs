@@ -87,7 +87,7 @@ namespace MyGame.Hero
 		{
 			get
 			{
-				return world.player.modifications / Player.MODIFICATION_COUNT;
+				return (float)world.player.modifications / Player.MODIFICATION_COUNT;
 			}
 		}
 		private Vector3 shootDirection
@@ -115,8 +115,6 @@ namespace MyGame.Hero
 			}
 
 			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.PLAYER_BULLET);
-			bullet.trailRenderer.startColor = GameplayUI.GetShipBulletColor(modsPart);
-			bullet.trailRenderer.endColor = GameplayUI.GetShipBulletColor(modsPart);
 			m_properties.gunData.direction = shootDirection;
 			bullet.Shoot(m_properties.gunData, m_bulletSpawn.position);
 			m_gunTimer = 0;
