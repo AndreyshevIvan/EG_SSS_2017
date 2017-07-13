@@ -10,43 +10,81 @@ namespace MyGame
 	{
 		public void SetTarget(RocketData newData, Vector3 position)
 		{
+			if (!newData.target)
+			{
+				ClearAndExit();
+			}
+
 			m_data = newData;
 			position.y = GameWorld.FLY_HEIGHT;
 			this.position = position;
-			transform.rotation = Quaternion.LookRotation(direction);
+			transform.rotation = necessaryRotation;
 			touchDemage = m_data.demage;
 		}
 
 		protected override void OnDemageTaked()
 		{
-			Exit();
+			ClearAndExit();
 		}
-		protected override void SmartPlayingUpdate()
+		protected override void PlayingUpdate()
 		{
-			if (!target || m_timer > m_data.diactivateTime)
+			if (!target || m_data.deltaAngle < angleToTarget)
 			{
-				Exit();
+				ClearAndExit();
 			}
 
-			Quaternion lookRotation = Quaternion.LookRotation(direction);
-			rotation = Quaternion.Slerp(rotation, lookRotation, rotationSpeed);
-			position += transform.forward * m_data.speed * Time.fixedDeltaTime;
-			m_timer += Time.fixedDeltaTime;
+			rotation = rotationAfterStep;
+			position += movement;
+		}
+		protected override void OnEndGameplay()
+		{
+			ClearAndExit();
 		}
 
+		[SerializeField]
+		private ParticleSystem m_tail;
 		private RocketData m_data;
-		private float m_timer = 0;
 
-		private Transform target { get { return m_data.target; } }
-		private Vector3 direction { get { return target.position - position; } }
+		private Transform target
+		{
+			get { return m_data.target; }
+		}
+		private Vector3 direction
+		{
+			get { return target.position - position; }
+		}
+		private Vector3 movement
+		{
+			get { return transform.forward * m_data.speed * Time.fixedDeltaTime; }
+		}
+		private Quaternion necessaryRotation
+		{
+			get { return Quaternion.LookRotation(direction); }
+		}
 		private Quaternion rotation
 		{
 			get { return transform.rotation; }
 			set { transform.rotation = value; }
 		}
-		private float rotationSpeed
+		private Quaternion rotationAfterStep
+		{
+			get { return Quaternion.Slerp(rotation, necessaryRotation, stepRotation); }
+		}
+		private float stepRotation
 		{
 			get { return m_data.rotationSpeed * Time.fixedDeltaTime; }
+		}
+		private float angleToTarget
+		{
+			get { return Quaternion.Angle(rotation, necessaryRotation); }
+		}
+
+		private void ClearAndExit()
+		{
+			m_tail.transform.SetParent(world.ground);
+			ParticleSystem.MainModule module = m_tail.main;
+			module.loop = false;
+			Exit();
 		}
 	}
 
@@ -56,7 +94,8 @@ namespace MyGame
 		public float diactivateTime;
 		public float speed;
 		public int demage;
+		public int retargetCount;
 		public float rotationSpeed;
-		public float criticalAngle;
+		public float deltaAngle;
 	}
 }

@@ -1897,20 +1897,20 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 0.45
+    m_Strength: 1
     m_Bias: 0
     m_NormalBias: 0
     m_NearPlane: 0.1
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8192
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 0
@@ -2037,7 +2037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da27aff00407cb428786135e1448c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_finalTime: 120
+  m_finalTime: 122
   m_groundObjects: {fileID: 4967626015242824}
   m_skyObjects: {fileID: 4304714994984520}
   m_ground: {fileID: 4496978326847128}
@@ -2045,7 +2045,7 @@ MonoBehaviour:
     array:
     - road: 8
       enemy: 0
-      time: 0
+      time: 1
       speed: 8
       count: 6
     - road: 9
@@ -2053,11 +2053,6 @@ MonoBehaviour:
       time: 4
       speed: 8
       count: 6
-    - road: 3
-      enemy: 1
-      time: 10
-      speed: 4
-      count: 3
     - road: 9
       enemy: 0
       time: 14
@@ -2071,13 +2066,8 @@ MonoBehaviour:
     - road: 8
       enemy: 0
       time: 25
-      speed: 6
-      count: 10
-    - road: 3
-      enemy: 1
-      time: 30
-      speed: 4
-      count: 3
+      speed: 8
+      count: 8
     - road: 4
       enemy: 1
       time: 30
@@ -2113,11 +2103,21 @@ MonoBehaviour:
       time: 64
       speed: 10
       count: 6
-    - road: 0
+    - road: 1
       enemy: 0
       time: 70
       speed: 8
       count: 10
+    - road: 2
+      enemy: 0
+      time: 73
+      speed: 8
+      count: 10
+    - road: 3
+      enemy: 1
+      time: 76
+      speed: 4
+      count: 4
     - road: 8
       enemy: 0
       time: 86
@@ -2130,34 +2130,49 @@ MonoBehaviour:
       count: 10
     - road: 3
       enemy: 1
-      time: 90
-      speed: 3
-      count: 4
-    - road: 5
-      enemy: 1
-      time: 96
-      speed: 6
+      time: 94
+      speed: 5
       count: 3
-    - road: 6
+    - road: 4
       enemy: 1
-      time: 96
-      speed: 6
+      time: 94
+      speed: 5
       count: 3
-    - road: 0
+    - road: 9
       enemy: 0
-      time: 106
+      time: 96
       speed: 8
-      count: 8
+      count: 9
+    - road: 8
+      enemy: 0
+      time: 96
+      speed: 8
+      count: 9
     - road: 1
       enemy: 0
-      time: 116
-      speed: 8
+      time: 102
+      speed: 10
       count: 8
     - road: 2
       enemy: 0
-      time: 120
-      speed: 8
+      time: 106
+      speed: 10
       count: 8
+    - road: 5
+      enemy: 0
+      time: 114
+      speed: 10
+      count: 7
+    - road: 6
+      enemy: 0
+      time: 117
+      speed: 10
+      count: 7
+    - road: 7
+      enemy: 0
+      time: 120
+      speed: 10
+      count: 7
   m_groundSpawns:
     array:
     - position: {x: 9, y: 0, z: 46}

@@ -149,6 +149,10 @@ namespace MyGame
 		private IGameplay gameplay { get; set; }
 		private UITouch lastTouch { get; set; }
 		private BoundingBox box { get; set; }
+		private Vector3 shipScreenPosition
+		{
+			get { return m_camera.WorldToScreenPoint(player.shipPosition); }
+		}
 
 		private const float TOUCH_OFFSET_Y = 0.04f;
 		private const float CAMERA_MAX_OFFSET = 2;
@@ -202,7 +206,7 @@ namespace MyGame
 		}
 		private void UpdatePreStartInterface()
 		{
-			Vector3 areaPosition = m_camera.WorldToScreenPoint(player.shipPosition);
+			Vector3 areaPosition = shipScreenPosition;
 			areaPosition.y += Screen.height * AREA_POS_FACTOR;
 			m_shipArea.transform.position = areaPosition;
 		}
@@ -417,12 +421,12 @@ namespace MyGame
 
 	public partial class GameplayUI : MonoBehaviour, IPlayerBar, UIContainer
 	{
-		public static Color GetShipBulletColor(float modsPart)
+		public static void SetShipBulletColor(float modsPart, TrailRenderer tail)
 		{
-			return new Color(1, 1 - modsPart, 1 - modsPart, SHIP_BULLET_TAIL_A);
+			tail.startColor = new Color(1, 1 - modsPart, 1 - modsPart);
 		}
 
-		private const float SHIP_BULLET_TAIL_A = 0.8f;
+		private const float BULLET_TAIL_FIRST_KEY_TIME = 0.25f;
 	}
 
 	public delegate void PointDelegate(Vector3 touchPositiion);

@@ -29,7 +29,7 @@ namespace MyGame.Enemies
 				return;
 			}
 
-			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.TARGET_TURRET);
+			Bullet bullet = factory.GetAmmo(AmmoType.TARGET_TURRET) as Bullet;
 			Vector3 direction = Vector3.Normalize(world.shipPosition - spawnPos);
 			m_bulletData.direction = direction;
 			bullet.Shoot(m_bulletData, spawnPos);

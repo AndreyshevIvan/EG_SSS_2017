@@ -6,7 +6,9 @@ using UnityEngine.SceneManagement;
 using MyGame.Hero;
 using MyGame.Factory;
 using FluffyUnderware.Curvy;
+using FluffyUnderware.Curvy.Controllers;
 using MyGame.GameUtils;
+
 
 namespace MyGame
 {

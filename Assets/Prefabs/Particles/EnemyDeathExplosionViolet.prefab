@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 199707754144802126}
   - component: {fileID: 114406648173063954}
   m_Layer: 0
-  m_Name: EnemyVioletExplosion
+  m_Name: EnemyDeathExplosionViolet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

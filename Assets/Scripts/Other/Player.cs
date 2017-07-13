@@ -23,15 +23,11 @@ namespace MyGame
 		public bool isWin { get; set; }
 		public bool isDemaged { get { return m_isDemaged; } }
 		public bool isLossEnemy { get { return m_isLossEnemy; } }
-		public bool isAllowedModify { get { return modifications < MODIFICATION_COUNT; } }
-		public byte modifications { get { return m_modifications; } }
 
 		public int stars { get { return m_stars; } }
 		public int points { get { return m_points; } }
 		public float bombProcess { get { return m_ship.mind.bombProcess; } }
 		public float laserProcess { get { return m_ship.mind.laserProcess; } }
-
-		public const int MODIFICATION_COUNT = 12;
 
 		public void AddPoints(int pointsCount)
 		{
@@ -44,14 +40,13 @@ namespace MyGame
 		}
 		public void Modify()
 		{
-			if (!isAllowedModify || !m_ship)
+			if (!m_ship)
 			{
 				return;
 			}
 
-			m_modifications++;
 			m_ship.mind.ModificateByOne();
-			m_bar.modifications = modifications;
+			m_bar.modifications = m_ship.mind.mods;
 		}
 		public bool Laser()
 		{
@@ -105,7 +100,6 @@ namespace MyGame
 
 		private int m_points;
 		private int m_stars;
-		private byte m_modifications = 0;
 		private bool m_isDemaged = false;
 		private bool m_isLossEnemy = false;
 

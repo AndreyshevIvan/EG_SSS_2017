@@ -70,7 +70,7 @@ namespace MyGame.Enemies
 			{
 				bonuses.Add(BonusCount.Create(BonusType.HEALTH, 1));
 			}
-			if (world.player.isAllowedModify && Utils.IsHappen(AMMO_PROBABILITY))
+			if (Utils.IsHappen(AMMO_PROBABILITY))
 			{
 				bonuses.Add(BonusCount.Create(BonusType.AMMO_UP, 1));
 			}
@@ -88,8 +88,8 @@ namespace MyGame.Enemies
 		private float m_timer = 0;
 		private EventDelegate m_tactic;
 
-		private float HEALTH_PROBABLILITY = 0.14f;
-		private float AMMO_PROBABILITY = 0.2f;
+		private float HEALTH_PROBABLILITY = 0.1f;
+		private float AMMO_PROBABILITY = 0.175f;
 
 		private void TryShoot()
 		{

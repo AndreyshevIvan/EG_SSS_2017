@@ -136,7 +136,7 @@ namespace MyGame
 		private Ship m_ship;
 		private Camera m_camera;
 		private bool m_lastModeType = false;
-		private bool m_isDismantle = true;
+		private bool m_isDismantle = false;
 		private float m_deltaScale = 1 - SLOW_TIMESCALE;
 		private float m_targetTimeScale = 1;
 		[SerializeField]

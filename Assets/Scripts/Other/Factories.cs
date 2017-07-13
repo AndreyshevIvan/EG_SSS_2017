@@ -23,7 +23,7 @@ namespace MyGame.Factory
 		public Enemy GetEnemy(UnitType type)
 		{
 			Enemy origin = m_enemies.Find(pair => pair.key == type).value;
-			Enemy enemy = Instantiate(origin, ENEMY_SPAWN, Quaternion.identity);
+			Enemy enemy = Instantiate(origin, INVISIBLE_SPAWN, Quaternion.identity);
 			m_world.Add(enemy);
 			enemy.type = type;
 			return enemy;
@@ -36,7 +36,8 @@ namespace MyGame.Factory
 
 		public Ship GetShip(ShipType type)
 		{
-			Ship ship = Instantiate(m_ships.Find(pair => pair.key == type).value);
+			Ship original = m_ships.Find(pair => pair.key == type).value;
+			Ship ship = Instantiate(original, INVISIBLE_SPAWN, Quaternion.identity);
 			return ship;
 		}
 
@@ -54,9 +55,9 @@ namespace MyGame.Factory
 			return bar;
 		}
 
-		public T GetAmmo<T>(AmmoType type) where T : Body
+		public Body GetAmmo(AmmoType type)
 		{
-			T ammo = Instantiate(m_ammo.Find(pair => pair.key == type).value as T);
+			Body ammo = Instantiate(m_ammo.Find(pair => pair.key == type).value);
 			m_world.Add(ammo);
 			return ammo;
 		}
@@ -79,7 +80,7 @@ namespace MyGame.Factory
 		private WorldContainer m_world;
 		private UIContainer m_interface;
 
-		private Vector3 ENEMY_SPAWN = new Vector3(-1000, -1000, -1000);
+		private Vector3 INVISIBLE_SPAWN = new Vector3(1000, 1000, 1000);
 	}
 
 	public interface IFactory
@@ -92,6 +93,6 @@ namespace MyGame.Factory
 		CurvySpline GetRoad(RoadType type);
 		Bonus GetBonus(BonusType type);
 		UIBar GetBar(BarType type);
-		T GetAmmo<T>(AmmoType type) where T : Body;
+		Body GetAmmo(AmmoType type);
 	}
 }

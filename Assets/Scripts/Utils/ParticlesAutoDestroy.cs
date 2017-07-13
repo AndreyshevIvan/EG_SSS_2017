@@ -6,7 +6,6 @@ namespace MyGame
 {
 	public class ParticlesAutoDestroy : MonoBehaviour
 	{
-
 		private ParticleSystem[] m_particles;
 
 		private void Awake()

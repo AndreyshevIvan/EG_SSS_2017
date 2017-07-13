@@ -22,9 +22,18 @@ namespace MyGame.Hero
 		public float magnetDistance { get { return 5; } }
 		public float bombProcess { get { return m_bombTimer / m_properties.bombColdown; } }
 		public float laserProcess { get { return m_laserTimer / m_properties.laserColdown; } }
+		public int mods { get; protected set; }
+
+		public const int MODIFICATION_COUNT = 12;
 
 		public void ModificateByOne()
 		{
+			if (mods >= MODIFICATION_COUNT)
+			{
+				return;
+			}
+
+			mods++;
 			m_properties.gunColdown -= GUN_COLDOWN_STEP;
 			m_gunScatter += SCATTER_STEP;
 		}
@@ -35,7 +44,7 @@ namespace MyGame.Hero
 				return false;
 			}
 
-			PlayerBomb bomb = world.factory.GetAmmo<PlayerBomb>(AmmoType.PLAYER_BOMB);
+			PlayerBomb bomb = world.factory.GetAmmo(AmmoType.PLAYER_BOMB) as PlayerBomb;
 			bomb.parent = transform;
 			m_bombTimer = 0;
 			return true;
@@ -60,7 +69,13 @@ namespace MyGame.Hero
 		protected override void PlayingUpdate()
 		{
 			if (m_update != null) m_update();
-			ShootByBaseGun();
+
+			if (isGunReady)
+			{
+				ShootByBaseGun();
+				m_gunTimer = 0;
+			}
+
 			UpdateTimers();
 		}
 		protected override void OnExitFromWorld()
@@ -70,7 +85,8 @@ namespace MyGame.Hero
 		[SerializeField]
 		private Transform m_bulletSpawn;
 		private ShipProperties m_properties;
-		EventDelegate m_update;
+		private EventDelegate m_update;
+		private EventDelegate m_shooting;
 		private float m_gunScatter = 0;
 		private float m_gunTimer = 0;
 
@@ -80,44 +96,32 @@ namespace MyGame.Hero
 		private float m_laserShootTimer = 0;
 		private float m_laserDuration = 0;
 
-		private bool isBaseGunReady { get; set; }
+		private Vector3 gunDirection
+		{
+			get { return Vector3.forward + Utils.RndDirBetween(90 - m_gunScatter, 90 + m_gunScatter); }
+		}
+		private bool isGunReady
+		{
+			get { return Utils.UpdateTimer(ref m_gunTimer, m_properties.gunColdown); }
+		}
 		private bool isBombReady { get; set; }
 		private bool isLaserReady { get; set; }
-		private float modsPart
-		{
-			get
-			{
-				return (float)world.player.modifications / Player.MODIFICATION_COUNT;
-			}
-		}
-		private Vector3 shootDirection
-		{
-			get
-			{
-				return Utils.RndDirBetween(90 - m_gunScatter, 90 + m_gunScatter);
-			}
-		}
 
 		private const float SCATTER_STEP = 0.33f;
-		private const float GUN_COLDOWN_STEP = 0.0285f;
+		private const float GUN_COLDOWN_STEP = 0.032f;
 
 		private void UpdateTimers()
 		{
-			isBaseGunReady = Utils.UpdateTimer(ref m_gunTimer, m_properties.gunColdown);
 			isBombReady = Utils.UpdateTimer(ref m_bombTimer, m_properties.bombColdown);
 			isLaserReady = Utils.UpdateTimer(ref m_laserTimer, m_properties.laserColdown);
 		}
-		private void ShootByBaseGun()
-		{
-			if (!isBaseGunReady)
-			{
-				return;
-			}
 
-			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.PLAYER_BULLET);
-			m_properties.gunData.direction = shootDirection;
-			bullet.Shoot(m_properties.gunData, m_bulletSpawn.position);
-			m_gunTimer = 0;
+		private Bullet CreateBullet(AmmoType type, BulletData data, Vector3 direction)
+		{
+			Bullet bullet = factory.GetAmmo(type) as Bullet;
+			data.direction = direction;
+			bullet.Shoot(data, m_bulletSpawn.position);
+			return bullet;
 		}
 		private void LaserShoot()
 		{
@@ -135,17 +139,12 @@ namespace MyGame.Hero
 				return;
 			}
 
-			m_properties.laserData.direction = Utils.RndDirBetween(30, 40);
-			Bullet left = factory.GetAmmo<Bullet>(AmmoType.PLAYER_LASER);
-			left.Shoot(m_properties.laserData, m_bulletSpawn.position);
+			AmmoType type = AmmoType.PLAYER_LASER;
+			BulletData data = m_properties.laserData;
 
-			m_properties.laserData.direction = Utils.RndDirBetween(84, 96);
-			Bullet middle = factory.GetAmmo<Bullet>(AmmoType.PLAYER_LASER);
-			middle.Shoot(m_properties.laserData, m_bulletSpawn.position);
-
-			m_properties.laserData.direction = Utils.RndDirBetween(140, 150);
-			Bullet right = factory.GetAmmo<Bullet>(AmmoType.PLAYER_LASER);
-			right.Shoot(m_properties.laserData, m_bulletSpawn.position);
+			CreateBullet(type, data, Utils.RndDirBetween(30, 40));
+			CreateBullet(type, data, Utils.RndDirBetween(84, 96));
+			CreateBullet(type, data, Utils.RndDirBetween(140, 150));
 
 			m_laserShootTimer = 0;
 		}
@@ -153,18 +152,32 @@ namespace MyGame.Hero
 		{
 			m_properties.gunColdown = 0.48f;
 
-			m_properties.bombColdown = 10;
+			m_properties.bombColdown = 12;
 
-			m_properties.laserColdown = 16;
+			m_properties.laserColdown = 20;
 			m_properties.laserData = new BulletData();
 			m_properties.laserData.speed = 28;
 			m_properties.laserData.demage = 1;
-			m_properties.laserDuration = 3;
+			m_properties.laserDuration = 2;
 			m_properties.laserShootColdown = 0.03f;
 
 			m_properties.gunData = new BulletData();
 			m_properties.gunData.speed = 24;
 			m_properties.gunData.demage = 1;
+		}
+		private void ShootByBaseGun()
+		{
+			Bullet bullet = CreateBullet(AmmoType.PLAYER_BULLET, m_properties.gunData, gunDirection);
+			float modsPart = (float)mods / MODIFICATION_COUNT;
+			GameplayUI.SetShipBulletColor(modsPart, bullet.trailRenderer);
+		}
+
+		private enum Mods
+		{
+			BASIC = 1,
+			DOUBLE,
+			TRIPLE,
+			QUADRO,
 		}
 	}
 }

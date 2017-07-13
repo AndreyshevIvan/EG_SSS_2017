@@ -18,7 +18,7 @@ namespace MyGame.Enemies
 			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 4));
 			isTimerWork = true;
 
-			m_bulletData.demage = 10;
+			m_bulletData.demage = 15;
 			m_bulletData.speed = 6.5f;
 		}
 		protected void Start()
@@ -61,7 +61,7 @@ namespace MyGame.Enemies
 				return;
 			}
 
-			Bullet bullet = factory.GetAmmo<Bullet>(AmmoType.ANGLE_TURRET);
+			Bullet bullet = factory.GetAmmo(AmmoType.ANGLE_TURRET) as Bullet;
 			bullet.Shoot(m_bulletData, position);
 			bullet.MoveToGround();
 			m_shootsCount++;
