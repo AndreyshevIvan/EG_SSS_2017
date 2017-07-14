@@ -16,7 +16,7 @@ namespace MyGame
 		{
 			m_transform = GetComponent<Transform>();
 			target = new Vector3(TARGET_RADIUS, TARGET_RADIUS, TARGET_RADIUS);
-			isImmortal = true;
+			isDemagamble = true;
 			touchDemage = DEMAGE;
 			gameObject.layer = (int)Layer.UNTOUCH;
 		}

@@ -30,7 +30,7 @@ namespace MyGame
 		protected sealed override void OnExitFromWorld()
 		{
 		}
-		protected sealed override void OnTrigger(Collider other)
+		protected void OnTriggerEnter(Collider other)
 		{
 			if (other.gameObject.layer == GameWorld.WORLD_BOX_LAYER)
 			{

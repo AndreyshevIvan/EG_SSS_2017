@@ -20,7 +20,7 @@ namespace MyGame.Enemies
 			m_bulletData.demage = 15;
 			m_bulletData.speed = 6;
 
-			AddTactic(RotateGun);
+			playingUpdate += RotateGun;
 		}
 		protected override void Shoot()
 		{

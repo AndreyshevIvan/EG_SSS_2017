@@ -62,7 +62,7 @@ namespace MyGame
 		private float m_prePauseTimeScale;
 
 		private const float SHIP_PRE_START_SPEED = 4;
-		private const float SHIP_START_SPEED = 6;
+		private const float SHIP_START_SPEED = 11;
 		public const float ENDING_WAITING_TIME = 3;
 
 		private void Awake()

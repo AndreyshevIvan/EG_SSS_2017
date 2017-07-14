@@ -25,11 +25,8 @@ namespace MyGame.Enemies
 
 			InitProperties();
 
-			if (healthBar)
-			{
-				healthBar.SetValue(health);
-				toDestroy.Add(healthBar.gameObject);
-			}
+			playingUpdate += Shooting;
+			if (healthBar) healthBar.SetValue(health);
 			if (roadController) roadController.OnEndReached.AddListener(T =>
 			{
 				if (!gameplay.isGameEnd) world.player.LossEnemy();
@@ -38,11 +35,6 @@ namespace MyGame.Enemies
 		}
 		protected abstract void InitProperties();
 
-		protected sealed override void PlayingUpdate()
-		{
-			if (m_tactic != null) m_tactic();
-			TryShoot();
-		}
 		protected abstract void Shoot();
 		protected void ExtraReady()
 		{
@@ -76,22 +68,12 @@ namespace MyGame.Enemies
 			}
 		}
 
-		protected void AddTactic(EventDelegate tactic)
-		{
-			m_tactic += tactic;
-		}
-		protected void RemoveTactic(EventDelegate tactic)
-		{
-			if (m_tactic != null) m_tactic -= tactic;
-		}
-
 		private float m_timer = 0;
-		private EventDelegate m_tactic;
 
 		private float HEALTH_PROBABLILITY = 0.1f;
 		private float AMMO_PROBABILITY = 0.175f;
 
-		private void TryShoot()
+		private void Shooting()
 		{
 			if (isTimerWork && Utils.UpdateTimer(ref m_timer, coldown))
 			{

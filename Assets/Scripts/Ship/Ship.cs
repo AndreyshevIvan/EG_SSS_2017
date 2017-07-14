@@ -45,7 +45,7 @@ namespace MyGame.Hero
 			healthBar.SetValue(health);
 			toDestroy.Add(healthBar.gameObject);
 			touchDemage = int.MaxValue;
-			m_isEraseOnDeath = false;
+			isEraseOnDeath = false;
 			distmantleAllowed = true;
 		}
 
@@ -66,11 +66,11 @@ namespace MyGame.Hero
 				m_startEndAnimation = true;
 				m_animator.enabled = true;
 				m_animator.Play(ROTATION_CLIP);
-				AddExtraListener(EndingAnimation);
+				extraUpdate += EndingAnimation;
 			});
 			Utils.DoAfterTime(this, ENDING_ANIM_DURATION, () =>
 			{
-				EraseExtraListener(EndingAnimation);
+				extraUpdate -= EndingAnimation;
 				m_animator.SetTrigger(ROTATION_TRIGGER);
 			});
 		}
@@ -93,7 +93,7 @@ namespace MyGame.Hero
 			world.player.BeDemaged();
 			healthBar.Fade(1, PlayerHealthBar.HP_BAR_FADE_DUR);
 		}
-		protected override void OnHealEnd()
+		protected override void OnChangeHealth(ref int valueToAdd)
 		{
 			if (isFull) healthBar.Fade(0, PlayerHealthBar.HP_BAR_FADE_DUR);
 		}

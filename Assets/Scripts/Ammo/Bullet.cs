@@ -23,17 +23,20 @@ namespace MyGame
 		protected override void OnInitEnd()
 		{
 			trailRenderer = GetComponent<TrailRenderer>();
+			afterStartUpdate += Move;
 			MoveToSky();
 		}
 		protected override void OnDemageTaked()
 		{
 		}
-		protected override void SmartPlayingUpdate()
+
+
+		private BulletData data { get; set; }
+
+		private void Move()
 		{
 			position += direction * Time.fixedDeltaTime * data.speed;
 		}
-
-		private BulletData data { get; set; }
 	}
 
 	public struct BulletData

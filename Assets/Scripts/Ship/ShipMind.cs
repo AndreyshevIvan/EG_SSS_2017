@@ -107,8 +107,8 @@ namespace MyGame.Hero
 		private bool isBombReady { get; set; }
 		private bool isLaserReady { get; set; }
 
-		private const float SCATTER_STEP = 0.33f;
-		private const float GUN_COLDOWN_STEP = 0.032f;
+		private const float SCATTER_STEP = 0.34f;
+		private const float GUN_COLDOWN_STEP = 0.035f;
 
 		private void UpdateTimers()
 		{

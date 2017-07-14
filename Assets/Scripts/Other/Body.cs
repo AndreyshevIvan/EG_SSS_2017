@@ -11,63 +11,76 @@ namespace MyGame
 	{
 		public int health { get; protected set; }
 		public float healthPart { get { return (float)health / (float)maxHealth; } }
-		public bool isLive { get { return isImmortal || health > 0; } }
-		public bool isImmortal { get; protected set; }
+		public bool isLive { get { return !isDemagamble || health > 0; } }
+		public bool isDemagamble { get; protected set; }
 		public bool isFull { get { return health == maxHealth; } }
 		public int touchDemage { get; protected set; }
+		protected bool isEraseOnDeath { get; set; }
 
-		public virtual void Heal(int healCount)
+		public virtual void ChangeHealth(int valueToAdd)
 		{
-			if (healCount == 0)
+			if (valueToAdd == 0)
 			{
 				return;
 			}
 
-			health = health + healCount;
+			OnChangeHealth(ref valueToAdd);
+			health = health + valueToAdd;
 			health = Mathf.Clamp(health, 0, maxHealth);
 			if (healthBar) healthBar.SetValue(health);
-			OnHealEnd();
 		}
 
-		protected bool m_isEraseOnDeath = true;
 
 		protected UIBar healthBar { get; set; }
 		protected int maxHealth { get; set; }
 
-		protected sealed override void OnTrigger(Collider other)
+		new protected void Awake()
 		{
-			if (!IsCanBeDemaged())
+			base.Awake();
+			afterStartUpdate += UpdateBarPosition;
+			isEraseOnDeath = true;
+			isDemagamble = true;
+		}
+
+		protected void OnTriggerEnter(Collider other)
+		{
+			Debug.Log("Collide");
+			OnColliderEnter(other);
+
+			Body otherBody = Utils.GetOther<Body>(other);
+			if (otherBody) OnCollideWithBody(otherBody);
+		}
+		protected virtual void OnColliderEnter(Collider other) { }
+		protected virtual void OnChangeHealth(ref int valueToAdd) { }
+		protected virtual void DoAfterDemaged() { }
+		protected virtual void OnDemageTaked() { }
+		protected virtual void OnDeath() { }
+
+
+		private void UpdateBarPosition()
+		{
+			if (!healthBar)
 			{
 				return;
 			}
 
-			Body otherBody = Utils.GetOther<Body>(other);
-			if (!otherBody) return;
+			healthBar.position = position;
+		}
+		private void OnCollideWithBody(Body other)
+		{
+			if (!isDemagamble) return;
 
-			DoBeforeDemaged();
-			Heal(-1 * otherBody.touchDemage);
-			otherBody.OnDemageTaked();
+			ChangeHealth(-1 * other.touchDemage);
+			other.OnDemageTaked();
 			DoAfterDemaged();
 
-			if (!isLive && m_isEraseOnDeath)
+			if (!isLive && isEraseOnDeath)
 			{
 				OnDeath();
 				world.Remove(this);
 			}
 
 			if (healthBar) healthBar.SetValue(health);
-		}
-		protected virtual bool IsCanBeDemaged() { return !isImmortal; }
-		protected virtual void DoBeforeDemaged() { }
-		protected virtual void DoAfterDemaged() { }
-		protected virtual void OnDemageTaked() { }
-		protected virtual void OnDeath() { }
-
-		protected virtual void OnHealEnd() { }
-
-		protected sealed override void UpdateBars()
-		{
-			if (healthBar) healthBar.position = position;
 		}
 	}
 }

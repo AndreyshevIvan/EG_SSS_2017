@@ -73,7 +73,7 @@ namespace MyGame
 				return;
 			}
 
-			m_ship.Heal(healthCount);
+			m_ship.ChangeHealth(healthCount);
 		}
 		public void KillEnemy(UnitType type)
 		{

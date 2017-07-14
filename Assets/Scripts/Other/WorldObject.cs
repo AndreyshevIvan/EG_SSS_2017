@@ -52,19 +52,29 @@ namespace MyGame
 
 			if (gameplay.isPaused)
 			{
-				OnPauseEvents();
+				OnPause();
 			}
 			else if (gameplay.isPlaying)
 			{
-				OnPlayingEvents();
-				currentEvent = onPlaying;
-				return;
+				OnPlaying();
+				currentEvent = () =>
+				{
+					if (playingUpdate != null) playingUpdate();
+					if (afterStartUpdate != null) afterStartUpdate();
+					PlayingUpdate();
+					SmartPlayingUpdate();
+				};
 			}
 			else if (gameplay.isGameEnd)
 			{
-				OnEndGameplayEvents();
-				currentEvent = onGameEnd;
-				return;
+				OnEndGameplay();
+				currentEvent = () =>
+				{
+					if (endUpdate != null) endUpdate();
+					if (afterStartUpdate != null) afterStartUpdate();
+					AfterMatchUpdate();
+					SmartPlayingUpdate();
+				};
 			}
 		}
 
@@ -91,8 +101,12 @@ namespace MyGame
 		protected IGameWorld world { get; private set; }
 		protected IFactory factory { get { return world.factory; } }
 		protected Rigidbody physicsBody { get; private set; }
-		protected List<ParticleSystem> particles { get; set; }
+		protected List<ParticleSystem> particles { get; private set; }
 		protected List<GameObject> toDestroy { get; private set; }
+		protected EventDelegate extraUpdate { get; set; }
+		protected EventDelegate afterStartUpdate { get; set; }
+		protected EventDelegate playingUpdate { get; set; }
+		protected EventDelegate endUpdate { get; set; }
 
 		protected void Awake()
 		{
@@ -106,14 +120,6 @@ namespace MyGame
 			openAllowed = false;
 			distmantleAllowed = false;
 
-			onPlaying += PlayingUpdate;
-			onPlaying += UpdateBars;
-			onPlaying += SmartPlayingUpdate;
-
-			onGameEnd += AfterMatchUpdate;
-			onGameEnd += UpdateBars;
-			onGameEnd += SmartPlayingUpdate;
-
 			OnAwakeEnd();
 		}
 		protected virtual void OnAwakeEnd() { }
@@ -121,29 +127,9 @@ namespace MyGame
 
 		protected virtual void OnChangeGameplay() { }
 
-		private void OnPlayingEvents()
-		{
-			OnPlaying();
-		}
 		protected virtual void OnPlaying() { }
-
-		private void OnEndGameplayEvents()
-		{
-			OnEndGameplay();
-		}
 		protected virtual void OnEndGameplay() { }
-
-		private void OnPauseEvents()
-		{
-			OnPause();
-		}
 		protected virtual void OnPause() { }
-
-		protected void OnTriggerEnter(Collider other)
-		{
-			OnTrigger(other);
-		}
-		protected virtual void OnTrigger(Collider other) { }
 
 		protected void FixedUpdate()
 		{
@@ -152,22 +138,12 @@ namespace MyGame
 				return;
 			}
 
-			if (m_extraUpdate != null) m_extraUpdate();
+			if (extraUpdate != null) extraUpdate();
 			if (currentEvent != null) currentEvent();
 		}
 		protected virtual void PlayingUpdate() { }
 		protected virtual void SmartPlayingUpdate() { }
 		protected virtual void AfterMatchUpdate() { }
-		protected virtual void UpdateBars() { }
-
-		protected void AddExtraListener(EventDelegate listener)
-		{
-			m_extraUpdate += listener;
-		}
-		protected void EraseExtraListener(EventDelegate listener)
-		{
-			if (m_extraUpdate != null) m_extraUpdate -= listener;
-		}
 
 		protected virtual void OnExitFromWorld() { }
 		protected void UpdatePositionOnField()
@@ -198,11 +174,8 @@ namespace MyGame
 		[SerializeField]
 		private ParticleSystem m_explosion;
 		private bool m_isStartExit = false;
-		private EventDelegate m_extraUpdate;
 
 		private EventDelegate currentEvent { get; set; }
-		private EventDelegate onPlaying { get; set; }
-		private EventDelegate onGameEnd { get; set; }
 
 		private IEnumerator SetSpline(CurvySpline spline, float position)
 		{

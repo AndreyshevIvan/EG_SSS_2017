@@ -40,8 +40,7 @@ namespace MyGame.Enemies
 
 			m_shootsTimer = 0;
 			m_shootsCount = 0;
-			RemoveTactic(Shooting);
-			AddTactic(Shooting);
+			playingUpdate += ShootByGun;
 		}
 
 		[SerializeField]
@@ -54,7 +53,7 @@ namespace MyGame.Enemies
 		private const float FIRE_PAUSE = 0.215f;
 		private const float FIRE_POSITION = 25;
 
-		private void Shooting()
+		private void ShootByGun()
 		{
 			if (!Utils.UpdateTimer(ref m_shootsTimer, FIRE_PAUSE))
 			{
@@ -67,7 +66,7 @@ namespace MyGame.Enemies
 			m_shootsCount++;
 			m_shootsTimer = 0;
 
-			if (m_shootsCount == SHOOTS_COUNT) RemoveTactic(Shooting);
+			if (m_shootsCount == SHOOTS_COUNT) playingUpdate -= ShootByGun;
 		}
 	}
 }

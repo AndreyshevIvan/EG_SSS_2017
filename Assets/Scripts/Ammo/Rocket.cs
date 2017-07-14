@@ -28,7 +28,7 @@ namespace MyGame
 		}
 		protected override void PlayingUpdate()
 		{
-			if (!target || m_data.deltaAngle < angleToTarget)
+			if (!m_data.target || m_data.deltaAngle < angleToTarget)
 			{
 				ClearAndExit();
 			}
@@ -45,13 +45,9 @@ namespace MyGame
 		private ParticleSystem m_tail;
 		private RocketData m_data;
 
-		private Transform target
-		{
-			get { return m_data.target; }
-		}
 		private Vector3 direction
 		{
-			get { return target.position - position; }
+			get { return m_data.target.position - position; }
 		}
 		private Vector3 movement
 		{
