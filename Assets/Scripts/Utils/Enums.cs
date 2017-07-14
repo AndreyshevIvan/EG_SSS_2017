@@ -9,6 +9,7 @@ namespace MyGame
 	public enum UnitType
 	{
 		BASE_ENEMY,
+		HARD_BASE_ENEMY,
 		ROCKET_COPTER,
 		TARGET_TURRET,
 		ANGLE_TURRET,
@@ -19,8 +20,6 @@ namespace MyGame
 	public enum ShipType
 	{
 		STANDART,
-		TANK,
-		DEMAGER,
 	}
 
 	[System.Serializable]
@@ -44,7 +43,10 @@ namespace MyGame
 	{
 		STAR,
 		HEALTH,
-		AMMO_UP,
+		MODIFICATION,
+		TRIPLE_GUN,
+		SQUARE_GUN,
+		RANDOM_GUN,
 	}
 
 	[System.Serializable]
@@ -65,12 +67,15 @@ namespace MyGame
 	[System.Serializable]
 	public enum AmmoType
 	{
-		PLAYER_BULLET,
+		// Enemy
 		TARGET_TURRET,
 		ANGLE_TURRET,
 		COPTER_ROCKET,
+
+		// Player
 		PLAYER_BOMB,
-		PLAYER_LASER,
+		PLAYER_ROCKET,
+		PLAYER_BULLET,
 	}
 
 	[System.Serializable]
@@ -92,7 +97,9 @@ namespace MyGame
 	{
 		UNTOUCH = 0,
 		PLAYER_BULLET = 8,
+		PLAYER = 9,
 		FLY_ENEMY = 10,
 		GROUND_ENEMY = 15,
+		WORLD_BOX = 31,
 	}
 }

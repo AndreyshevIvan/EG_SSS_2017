@@ -64,7 +64,7 @@ namespace MyGame.Enemies
 			}
 			if (Utils.IsHappen(AMMO_PROBABILITY))
 			{
-				bonuses.Add(BonusCount.Create(BonusType.AMMO_UP, 1));
+				bonuses.Add(BonusCount.Create(BonusType.MODIFICATION, 1));
 			}
 		}
 

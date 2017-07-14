@@ -12,10 +12,10 @@ namespace MyGame
 		public int health { get; protected set; }
 		public float healthPart { get { return (float)health / (float)maxHealth; } }
 		public bool isLive { get { return !isDemagamble || health > 0; } }
-		public bool isDemagamble { get; protected set; }
+		public bool isDemagamble { get; set; }
 		public bool isFull { get { return health == maxHealth; } }
 		public int touchDemage { get; protected set; }
-		protected bool isEraseOnDeath { get; set; }
+		public bool isEraseOnDeath { get; set; }
 
 		public virtual void ChangeHealth(int valueToAdd)
 		{
@@ -30,8 +30,15 @@ namespace MyGame
 			if (healthBar) healthBar.SetValue(health);
 		}
 
-
-		protected UIBar healthBar { get; set; }
+		protected UIBar healthBar
+		{
+			get { return m_healthBar; }
+			set
+			{
+				toDestroy.Add(value.gameObject);
+				m_healthBar = value;
+			}
+		}
 		protected int maxHealth { get; set; }
 
 		new protected void Awake()
@@ -44,7 +51,6 @@ namespace MyGame
 
 		protected void OnTriggerEnter(Collider other)
 		{
-			Debug.Log("Collide");
 			OnColliderEnter(other);
 
 			Body otherBody = Utils.GetOther<Body>(other);
@@ -56,6 +62,7 @@ namespace MyGame
 		protected virtual void OnDemageTaked() { }
 		protected virtual void OnDeath() { }
 
+		private UIBar m_healthBar;
 
 		private void UpdateBarPosition()
 		{

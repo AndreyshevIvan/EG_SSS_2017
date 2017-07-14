@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using MyGame.Hero;
-using MyGame.Factory;
+using GameFactory;
 using FluffyUnderware.Curvy;
 using FluffyUnderware.Curvy.Controllers;
 using MyGame.GameUtils;
@@ -51,15 +51,14 @@ namespace MyGame
 		[SerializeField]
 		private Factories m_factory;
 		private ShipProperties m_shipProperties = new ShipProperties();
-		private Updater m_updater;
 
 		private bool m_isMapStart;
 		private bool m_isPaused;
 		private bool m_isGameEnd;
 		private bool m_isWin;
 		private bool m_isPlaying;
-
 		private float m_prePauseTimeScale;
+		private EventDelegate m_update;
 
 		private const float SHIP_PRE_START_SPEED = 4;
 		private const float SHIP_START_SPEED = 11;
@@ -67,7 +66,6 @@ namespace MyGame
 
 		private void Awake()
 		{
-			m_updater = GetComponent<Updater>();
 			QualitySettings.vSyncCount = 0;
 
 			isMapStart = false;
@@ -125,7 +123,7 @@ namespace MyGame
 			m_interface.startTouchEvents += () =>
 			{
 				ship.roadController.Spline = null;
-				m_updater.Add(MoveShipToStart, StartGame, UpdType.FIXED);
+				m_update += MoveShipToStart;
 			};
 		}
 		private void InitPlayer()
@@ -134,6 +132,11 @@ namespace MyGame
 		}
 
 		private void FixedUpdate()
+		{
+			if (m_update != null) m_update();
+			WorkWithGameplay();
+		}
+		private void WorkWithGameplay()
 		{
 			if (!CheckUpdateChanges() || !isGameEnd)
 			{
@@ -212,12 +215,16 @@ namespace MyGame
 		{
 			if (ship) ship.MoveTo(targetPosition);
 		}
-		private bool MoveShipToStart()
+		private void MoveShipToStart()
 		{
 			Vector3 target = new Vector3(0, GameWorld.FLY_HEIGHT, 0);
 			float movement = SHIP_START_SPEED * Time.fixedDeltaTime;
 			ship.position = Vector3.MoveTowards(ship.position, target, movement);
-			return ship.position == target;
+			if (ship.position == target)
+			{
+				StartGame();
+				m_update -= MoveShipToStart;
+			}
 		}
 	}
 

@@ -17,26 +17,23 @@ namespace MyGame
 			position.y = GameWorld.FLY_HEIGHT;
 			this.position = position;
 			data.direction.y = 0;
-			direction = data.direction;
+			direction = Vector3.Normalize(data.direction);
 		}
 
 		protected override void OnInitEnd()
 		{
 			trailRenderer = GetComponent<TrailRenderer>();
-			afterStartUpdate += Move;
 			MoveToSky();
 		}
 		protected override void OnDemageTaked()
 		{
 		}
-
-
-		private BulletData data { get; set; }
-
-		private void Move()
+		protected override void SmartPlayingUpdate()
 		{
 			position += direction * Time.fixedDeltaTime * data.speed;
 		}
+
+		private BulletData data { get; set; }
 	}
 
 	public struct BulletData

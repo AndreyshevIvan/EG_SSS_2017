@@ -6,6 +6,7 @@ using MyGame.Hero;
 using MyGame.Enemies;
 using System;
 using Malee;
+using MyGame;
 
 namespace MyGame
 {
@@ -34,6 +35,72 @@ namespace MyGame
 		public float zMax;
 	}
 
+	[System.Serializable]
+	public class Pair<TKey, TValue>
+	{
+		public static Pair<TKey, TValue> Create(TKey key, TValue value)
+		{
+			Pair<TKey, TValue> newPair = new Pair<TKey, TValue>();
+			newPair.key = key;
+			newPair.value = value;
+			return newPair;
+		}
+
+		[SerializeField]
+		public TKey key;
+		[SerializeField]
+		public TValue value;
+	}
+
+	[System.Serializable]
+	public class ReordarableList<T> : ReorderableArray<T>
+	{
+		public T Find(Predicate<T> match)
+		{
+			for (int i = 0; i < Length; i++)
+			{
+				if (match(this[i])) return this[i];
+			}
+
+			return default(T);
+		}
+		public List<T> FindAll(Predicate<T> match)
+		{
+			List<T> result = new List<T>();
+			for (int i = 0; i < Length; i++)
+			{
+				if (match(this[i])) result.Add(this[i]);
+			}
+			return result;
+		}
+	}
+}
+
+namespace GameFactory
+{
+	[System.Serializable]
+	public class MapPair : Pair<MapType, Map> { }
+	[System.Serializable]
+	public class EnemiesPair : Pair<UnitType, Enemy> { }
+	[System.Serializable]
+	public class BonusPair : Pair<BonusType, Bonus> { }
+	[System.Serializable]
+	public class SplinePair : Pair<RoadType, CurvySpline> { }
+	[System.Serializable]
+	public class ShipPair : Pair<ShipType, Ship> { }
+	[System.Serializable]
+	public class BarsPair : Pair<BarType, UIBar> { }
+	[System.Serializable]
+	public class AmmoPair : Pair<AmmoType, Body> { }
+
+	[System.Serializable]
+	public class BonusesFactoryList : ReordarableList<BonusPair>
+	{
+	}
+}
+
+namespace GameSpawns
+{
 	[System.Serializable]
 	public class FlySpawn
 	{
@@ -68,48 +135,12 @@ namespace MyGame
 	}
 
 	[System.Serializable]
-	public class Pair<TKey, TValue>
-	{
-		public static Pair<TKey, TValue> Create(TKey key, TValue value)
-		{
-			Pair<TKey, TValue> newPair = new Pair<TKey, TValue>();
-			newPair.key = key;
-			newPair.value = value;
-			return newPair;
-		}
-
-		[SerializeField]
-		public TKey key;
-		[SerializeField]
-		public TValue value;
-	}
-}
-namespace MyGame.Factory
-{
-	[System.Serializable]
-	public class MapPair : Pair<MapType, Map> { }
-	[System.Serializable]
-	public class EnemiesPair : Pair<UnitType, Enemy> { }
-	[System.Serializable]
-	public class BonusPair : Pair<BonusType, Bonus> { }
-	[System.Serializable]
-	public class SplinePair : Pair<RoadType, CurvySpline> { }
-	[System.Serializable]
-	public class ShipPair : Pair<ShipType, Ship> { }
-	[System.Serializable]
-	public class BarsPair : Pair<BarType, UIBar> { }
-	[System.Serializable]
-	public class AmmoPair : Pair<AmmoType, Body> { }
-}
-namespace MyGame.Spawns
-{
-	[System.Serializable]
-	public class SkySpawnList : ReorderableArray<FlySpawn>
+	public class SkySpawnList : ReordarableList<FlySpawn>
 	{
 	}
 
 	[System.Serializable]
-	public class GroundSpawnList : ReorderableArray<GroundSpawn>
+	public class GroundSpawnList : ReordarableList<GroundSpawn>
 	{
 	}
 }

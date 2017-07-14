@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy.Controllers;
 using MyGame.GameUtils;
-using MyGame.Factory;
+using GameFactory;
 using FluffyUnderware.Curvy;
 
 namespace MyGame

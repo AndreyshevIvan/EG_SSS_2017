@@ -5,8 +5,16 @@ using MyGame.GameUtils;
 
 namespace MyGame
 {
-	public abstract class Bonus : WorldObject
+	public class Bonus : WorldObject
 	{
+		public BonusType type
+		{
+			set
+			{
+				m_type = value;
+				InitRealization();
+			}
+		}
 		public bool explosionStart { get; set; }
 		public bool rotateOnStart { get; set; }
 		public bool isMagnetic { get; protected set; }
@@ -17,36 +25,33 @@ namespace MyGame
 			rotateOnStart = true;
 			isMagnetic = false;
 		}
-		protected void Start()
+		protected override void OnInitEnd()
 		{
-			OnStart();
 			exitAllowed = true;
-			world.SubscribeToMove(this);
+			MoveToGround();
 
 			if (explosionStart) SetExplosionForce();
 			if (rotateOnStart) SetRandomRotation();
 		}
-		protected virtual void OnStart() { }
-		protected sealed override void OnExitFromWorld()
-		{
-		}
+
 		protected void OnTriggerEnter(Collider other)
 		{
-			if (other.gameObject.layer == GameWorld.WORLD_BOX_LAYER)
+			if (other.gameObject.layer == (int)Layer.PLAYER)
 			{
-				return;
+				if (realization != null) realization();
+				Exit();
 			}
-
-			OnRealize();
-			Exit();
 		}
-		protected sealed override void PlayingUpdate()
+		protected sealed override void SmartPlayingUpdate()
 		{
 			if (isMagnetic) world.MoveToShip(this);
 			UpdatePositionOnField();
 		}
-		protected abstract void OnRealize();
 
+		private BonusType m_type;
+		private EventDelegate realization;
+
+		private const int HEAL_COUNT = 50;
 		private const float DELTA_FORCE = 200;
 		private const float DELTA_ROTATION = 100;
 
@@ -59,6 +64,38 @@ namespace MyGame
 		{
 			Vector3 rotation = Utils.RandomVect(-DELTA_ROTATION, DELTA_ROTATION);
 			physicsBody.AddTorque(rotation);
+		}
+
+		private void InitRealization()
+		{
+			realization = () => {;};
+
+			switch (m_type)
+			{
+				case BonusType.HEALTH:
+					InitHealth();
+					break;
+
+				case BonusType.MODIFICATION:
+					InitModification();
+					break;
+
+				case BonusType.STAR:
+					InitStar();
+					break;
+			}
+		}
+		private void InitHealth()
+		{
+			realization = () => world.player.Heal(HEAL_COUNT);
+		}
+		private void InitModification()
+		{
+			realization = () => world.player.Modify();
+		}
+		private void InitStar()
+		{
+			realization = () => world.player.AddStars(1);
 		}
 	}
 }

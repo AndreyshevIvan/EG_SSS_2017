@@ -21,19 +21,22 @@ namespace MyGame.Hero
 		public float magnetFactor { get { return 1; } }
 		public float magnetDistance { get { return 5; } }
 		public float bombProcess { get { return m_bombTimer / m_properties.bombColdown; } }
-		public float laserProcess { get { return m_laserTimer / m_properties.laserColdown; } }
-		public int mods { get; protected set; }
+		public float shieldProcess { get { return m_shieldTimer / m_properties.shieldColdown; } }
+		public float shieldFactor { get { return SHIELD_DEMAGE_FACTOR; } }
+		public float modsPart { get { return (float)modsCount / MODIFICATION_COUNT; } }
+		public int modsCount { get; protected set; }
+		public bool isShieldActive { get; private set; }
 
 		public const int MODIFICATION_COUNT = 12;
 
 		public void ModificateByOne()
 		{
-			if (mods >= MODIFICATION_COUNT)
+			if (modsCount >= MODIFICATION_COUNT)
 			{
 				return;
 			}
 
-			mods++;
+			modsCount++;
 			m_properties.gunColdown -= GUN_COLDOWN_STEP;
 			m_gunScatter += SCATTER_STEP;
 		}
@@ -49,32 +52,25 @@ namespace MyGame.Hero
 			m_bombTimer = 0;
 			return true;
 		}
-		public bool Laser()
+		public bool Shield()
 		{
-			if (!isLaserReady)
+			if (!isShieldReady || isShieldActive)
 			{
 				return false;
 			}
 
-			m_laserDuration = 0;
-			m_laserTimer = 0;
-			if (m_update != null) m_update -= LaserShoot;
-			m_update += LaserShoot;
+			SetShield(true);
 			return true;
 		}
 
 		protected override void OnInitEnd()
 		{
+			m_shield.gameObject.SetActive(false);
 		}
 		protected override void PlayingUpdate()
 		{
-			if (m_update != null) m_update();
-
-			if (isGunReady)
-			{
-				ShootByBaseGun();
-				m_gunTimer = 0;
-			}
+			ShootByBaseGun();
+			ShootByRockets();
 
 			UpdateTimers();
 		}
@@ -83,93 +79,124 @@ namespace MyGame.Hero
 		}
 
 		[SerializeField]
-		private Transform m_bulletSpawn;
+		private Transform m_gunSpawn;
+		[SerializeField]
+		private GameObject m_shield;
+		[SerializeField]
+		private Transform m_leftRocketSpawn;
+		[SerializeField]
+		private Transform m_rightRocketSpawn;
 		private ShipProperties m_properties;
-		private EventDelegate m_update;
-		private EventDelegate m_shooting;
 		private float m_gunScatter = 0;
 		private float m_gunTimer = 0;
 
+		private float m_rocketTimer = 0;
+
 		private float m_bombTimer = 0;
 
-		private float m_laserTimer = 0;
-		private float m_laserShootTimer = 0;
-		private float m_laserDuration = 0;
+		private float m_shieldTimer = 0;
+		private float m_shieldDuration = 0;
 
 		private Vector3 gunDirection
 		{
-			get { return Vector3.forward + Utils.RndDirBetween(90 - m_gunScatter, 90 + m_gunScatter); }
+			get { return Utils.RndDirBetween(90 - m_gunScatter, 90 + m_gunScatter); }
 		}
 		private bool isGunReady
 		{
 			get { return Utils.UpdateTimer(ref m_gunTimer, m_properties.gunColdown); }
 		}
-		private bool isBombReady { get; set; }
-		private bool isLaserReady { get; set; }
-
-		private const float SCATTER_STEP = 0.34f;
-		private const float GUN_COLDOWN_STEP = 0.035f;
-
-		private void UpdateTimers()
+		private bool isRocketsReady
 		{
-			isBombReady = Utils.UpdateTimer(ref m_bombTimer, m_properties.bombColdown);
-			isLaserReady = Utils.UpdateTimer(ref m_laserTimer, m_properties.laserColdown);
+			get { return Utils.UpdateTimer(ref m_rocketTimer, m_properties.rocketColdown); }
+		}
+		private bool isBombReady
+		{
+			get { return m_bombTimer >= m_properties.bombColdown; }
+		}
+		private bool isShieldReady
+		{
+			get { return m_shieldTimer >= m_properties.shieldColdown; }
 		}
 
-		private Bullet CreateBullet(AmmoType type, BulletData data, Vector3 direction)
+		private const float SCATTER_STEP = 0.35f;
+		private const float GUN_COLDOWN_STEP = 0.04f;
+		private const float SHIELD_DEMAGE_FACTOR = 0.5f;
+		private const string SHIELD_OPEN_ANIM = "OpenShield";
+		private const string SHIELD_CLOSE_ANIM = "CloseShield";
+
+		private void UpdateTimers()	
+		{
+			Utils.UpdateTimer(ref m_bombTimer, m_properties.bombColdown);
+			Utils.UpdateTimer(ref m_shieldTimer, m_properties.shieldColdown);
+		}
+
+		private Bullet CreateBullet(AmmoType type, BulletData data, Transform spawn)
 		{
 			Bullet bullet = factory.GetAmmo(type) as Bullet;
-			data.direction = direction;
-			bullet.Shoot(data, m_bulletSpawn.position);
+			bullet.Shoot(data, spawn.position);
 			return bullet;
-		}
-		private void LaserShoot()
-		{
-			if (m_laserDuration >= m_properties.laserDuration)
-			{
-				if (m_update != null) m_update -= LaserShoot;
-				return;
-			}
-
-			float shootColdown = m_properties.laserShootColdown;
-			m_laserDuration += Time.fixedDeltaTime;
-
-			if (!Utils.UpdateTimer(ref m_laserShootTimer, shootColdown))
-			{
-				return;
-			}
-
-			AmmoType type = AmmoType.PLAYER_LASER;
-			BulletData data = m_properties.laserData;
-
-			CreateBullet(type, data, Utils.RndDirBetween(30, 40));
-			CreateBullet(type, data, Utils.RndDirBetween(84, 96));
-			CreateBullet(type, data, Utils.RndDirBetween(140, 150));
-
-			m_laserShootTimer = 0;
 		}
 		private void SetNewProperties()
 		{
-			m_properties.gunColdown = 0.48f;
-
 			m_properties.bombColdown = 12;
 
-			m_properties.laserColdown = 20;
-			m_properties.laserData = new BulletData();
-			m_properties.laserData.speed = 28;
-			m_properties.laserData.demage = 1;
-			m_properties.laserDuration = 2;
-			m_properties.laserShootColdown = 0.03f;
+			m_properties.shieldColdown = 2;
+			m_properties.shieldDuration = 4;
 
+			m_properties.gunColdown = 0.48f;
 			m_properties.gunData = new BulletData();
-			m_properties.gunData.speed = 24;
+			m_properties.gunData.speed = 30;
 			m_properties.gunData.demage = 1;
+
+			m_properties.rocketColdown = 2;
+			m_properties.rocketData = new BulletData();
+			m_properties.rocketData.speed = 40;
+			m_properties.rocketData.demage = int.MaxValue;
 		}
 		private void ShootByBaseGun()
 		{
-			Bullet bullet = CreateBullet(AmmoType.PLAYER_BULLET, m_properties.gunData, gunDirection);
-			float modsPart = (float)mods / MODIFICATION_COUNT;
+			if (!isGunReady)
+			{
+				return;
+			}
+
+			m_properties.gunData.direction = gunDirection;
+			AmmoType type = AmmoType.PLAYER_BULLET;
+			Bullet bullet = CreateBullet(type, m_properties.gunData, m_gunSpawn);
 			GameplayUI.SetShipBulletColor(modsPart, bullet.trailRenderer);
+			m_gunTimer = 0;
+		}
+		private void ShootByRockets()
+		{
+			if (!isRocketsReady)
+			{
+				return;
+			}
+
+			m_properties.rocketData.direction = Vector3.forward;
+			AmmoType type = AmmoType.PLAYER_ROCKET;
+			BulletData data = m_properties.rocketData;
+			Bullet left = CreateBullet(type, data, m_leftRocketSpawn);
+			Bullet right = CreateBullet(type, data, m_rightRocketSpawn);
+			left.isDemagamble = false;
+			right.isDemagamble = false;
+			m_rocketTimer = 0;
+		}
+		private void SetShield(bool isOpen)
+		{
+			isShieldActive = isOpen;
+
+			if (!isOpen)
+			{
+				m_shield.gameObject.SetActive(false);
+				//world.ship.animator.Play(SHIELD_CLOSE_ANIM, 1);
+				return;
+			}
+
+			m_shield.gameObject.SetActive(true);
+			//world.ship.animator.Play(SHIELD_OPEN_ANIM, 1);
+			Utils.DoAfterTime(this, m_properties.shieldDuration, () => SetShield(false));
+			m_shieldTimer = 0;
 		}
 
 		private enum Mods

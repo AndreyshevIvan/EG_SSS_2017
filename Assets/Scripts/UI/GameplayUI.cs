@@ -96,7 +96,7 @@ namespace MyGame
 		}
 		public void Laser()
 		{
-			if (player.Laser())
+			if (player.Shield())
 			{
 				lastTouch = UITouch.SPELL;
 				SetSlowMode(false);
@@ -162,7 +162,7 @@ namespace MyGame
 		private const float AREA_SIZE_FACTOR = 0.35f;
 		private const float AREA_POS_FACTOR = 0.02f;
 
-		private const float MAX_CURTAIN_TRANSPARENCY = 0.8f;
+		private const float MAX_CURTAIN_TRANSPARENCY = 0.5f;
 		private const float BARS_FADING_DURATION = 1.2f;
 
 		private const string AREA_EXIT_TRIGGER = "AreaExit";
@@ -248,7 +248,7 @@ namespace MyGame
 			float curtainAlpha = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
 			m_curtain.CrossFadeAlpha(curtainAlpha, SLOWMO_OPEN_DUR, true);
 
-			float buttonsAlpha = (isModeOn) ? MAX_CURTAIN_TRANSPARENCY : 0;
+			float buttonsAlpha = (isModeOn) ? 1 : 0;
 			Utils.FadeList(m_slowButtonsGraphic, buttonsAlpha, SLOWMO_OPEN_DUR);
 
 			if (isModeOn)
@@ -429,10 +429,9 @@ namespace MyGame
 		private const float BULLET_TAIL_FIRST_KEY_TIME = 0.25f;
 	}
 
-	public delegate void PointDelegate(Vector3 touchPositiion);
-	public delegate void BoolEventDelegate(bool isStartOrEnd);
+	public delegate void PointDelegate(Vector3 point);
+	public delegate void BoolEventDelegate(bool isTrue);
 	public delegate void EventDelegate();
-	public delegate bool ResultEvent();
 
 	public interface IPlayerBar
 	{

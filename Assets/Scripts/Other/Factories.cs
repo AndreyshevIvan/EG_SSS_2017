@@ -3,8 +3,10 @@ using UnityEngine;
 using FluffyUnderware.Curvy;
 using MyGame.Hero;
 using MyGame.Enemies;
+using MyGame;
+using Malee;
 
-namespace MyGame.Factory
+namespace GameFactory
 {
 	public class Factories : MonoBehaviour, IFactory
 	{
@@ -43,7 +45,8 @@ namespace MyGame.Factory
 
 		public Bonus GetBonus(BonusType type)
 		{
-			Bonus bonus = Instantiate(m_bonuses.Find(pair => pair.key == type).value);
+			Bonus bonus = Instantiate(m_bonuses. Find(pair => pair.key == type).value);
+			bonus.type = type;
 			m_world.Add(bonus);
 			return bonus;
 		}
@@ -70,8 +73,8 @@ namespace MyGame.Factory
 		private List<SplinePair> m_roads;
 		[SerializeField]
 		private List<ShipPair> m_ships;
-		[SerializeField]
-		private List<BonusPair> m_bonuses;
+		[SerializeField][Reorderable]
+		private BonusesFactoryList m_bonuses;
 		[SerializeField]
 		private List<BarsPair> m_bars;
 		[SerializeField]

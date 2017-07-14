@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FluffyUnderware.Curvy;
-using MyGame.Factory;
 using MyGame.Enemies;
-using MyGame.Spawns;
+using GameSpawns;
+using GameFactory;
 using Malee;
 
 namespace MyGame

@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy;
 using MyGame.Hero;
-using MyGame.Factory;
+using GameFactory;
 using MyGame.Enemies;
 using MyGame.GameUtils;
 
@@ -45,7 +45,6 @@ namespace MyGame
 
 		public const float FLY_HEIGHT = 4;
 		public const float SPAWN_OFFSET = 1.2f;
-		public const int WORLD_BOX_LAYER = 31;
 
 		public void Init(IGameWorld gameWorld)
 		{
@@ -85,10 +84,6 @@ namespace MyGame
 				m_deltaScale = Mathf.Abs(m_targetTimeScale - Time.timeScale);
 				m_lastModeType = isModeOn;
 			}
-		}
-		public void SubscribeToMove(WorldObject body)
-		{
-			body.transform.SetParent(map.groundObjects);
 		}
 		public void MoveToShip(WorldObject body, bool useShipMagnetic = true)
 		{
@@ -270,7 +265,6 @@ namespace MyGame
 		Vector3 GetNearestEnemy(Vector3 point);
 
 		void CreateExplosion(ParticleSystem explosion, Vector3 position);
-		void SubscribeToMove(WorldObject body);
 		void MoveToShip(WorldObject body, bool useShipMagnetic = true);
 	}
 

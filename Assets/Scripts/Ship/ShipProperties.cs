@@ -12,23 +12,17 @@ namespace MyGame
 		public BulletData gunData;
 		public float gunColdown;
 
+		public BulletData rocketData;
 		public float rocketColdown;
 
 		public float bombColdown;
 
-		public BulletData laserData;
-		public float laserColdown;
-		public float laserDuration;
-		public float laserShootColdown;
+		public float shieldColdown;
+		public float shieldDuration;
 
 		public int health;
 		public int rocketsDemage;
 		public float magnetDistance;
 		public float magnetFactor;
-
-		private byte m_healthLvl;
-		private byte m_baseGunLvl;
-		private byte m_rocketsLvl;
-		private byte m_magnetLvl;
 	}
 }
