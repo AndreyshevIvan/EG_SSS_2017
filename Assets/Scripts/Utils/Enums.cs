@@ -9,7 +9,7 @@ namespace MyGame
 	public enum UnitType
 	{
 		BASE_ENEMY,
-		HARD_BASE_ENEMY,
+		BASE_ENEMY_HARD,
 		ROCKET_COPTER,
 		TARGET_TURRET,
 		ANGLE_TURRET,

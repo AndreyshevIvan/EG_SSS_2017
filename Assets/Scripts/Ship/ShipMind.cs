@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame.Hero
 {
@@ -118,7 +118,7 @@ namespace MyGame.Hero
 			get { return m_shieldTimer >= m_properties.shieldColdown; }
 		}
 
-		private const float SCATTER_STEP = 0.35f;
+		private const float SCATTER_STEP = 0.5f;
 		private const float GUN_COLDOWN_STEP = 0.04f;
 		private const float SHIELD_DEMAGE_FACTOR = 0.5f;
 		private const string SHIELD_OPEN_ANIM = "OpenShield";
@@ -138,7 +138,7 @@ namespace MyGame.Hero
 		}
 		private void SetNewProperties()
 		{
-			m_properties.bombColdown = 12;
+			m_properties.bombColdown = 1;
 
 			m_properties.shieldColdown = 2;
 			m_properties.shieldDuration = 4;

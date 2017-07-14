@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54779199361020902}
   - component: {fileID: 96163726104321626}
   m_Layer: 8
-  m_Name: PlayerLaserBullet
+  m_Name: PlayerRocketBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,17 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using MyGame.GameUtils;
+using GameUtils;
 using MyGame.Hero;
 
 namespace MyGame
 {
-	public class ModificationBar : UIBar
+	public class ModificationBar : UIBar<int>
 	{
-		public GameObject m_plank;
-		public Color m_inactive;
-		public Color m_active;
-
 		protected override void OnAwakeEnd()
 		{
 			CreateNewPlanks();
@@ -24,14 +20,21 @@ namespace MyGame
 			m_planks.ForEach(plank =>
 			{
 				plank.color = m_inactive;
+				int plankIndex = m_planks.IndexOf(plank);
 
-				if (m_planks.IndexOf(plank) < value)
+				if (plankIndex < value)
 				{
-					plank.color = m_active;
+					plank.color = GetPlankColor(plankIndex);
 				}
 			});
 		}
 
+		[SerializeField]
+		public GameObject m_plank;
+		[SerializeField]
+		private Gradient m_gradient;
+		[SerializeField]
+		public Color m_inactive;
 		private List<Image> m_planks = new List<Image>();
 
 		private void CreateNewPlanks()
@@ -47,6 +50,12 @@ namespace MyGame
 				m_planks.Add(image);
 				image.color = m_inactive;
 			});
+		}
+		private Color GetPlankColor(int plankIndex)
+		{
+			int maxIndex = m_planks.Count - 1;
+			float colorTime = (float)plankIndex / maxIndex;
+			return m_gradient.Evaluate(colorTime);
 		}
 	}
 }

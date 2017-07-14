@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame.Enemies
 {
@@ -14,7 +14,7 @@ namespace MyGame.Enemies
 			health = maxHealth = 7;
 			coldown = 2.25f;
 			points = 120;
-			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
+			healthBar = world.factory.GetEnemyHealthBar();
 			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 4));
 			isTimerWork = true;
 

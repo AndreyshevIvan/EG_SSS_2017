@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame
 {
@@ -23,7 +23,7 @@ namespace MyGame
 		{
 			explosionStart = true;
 			rotateOnStart = true;
-			isMagnetic = false;
+			isMagnetic = true;
 		}
 		protected override void OnInitEnd()
 		{

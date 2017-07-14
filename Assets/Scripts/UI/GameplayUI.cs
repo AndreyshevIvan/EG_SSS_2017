@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.EventSystems;
 using MyGame.Hero;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame
 {
@@ -103,12 +103,12 @@ namespace MyGame
 			}
 		}
 
-		public void Add(UIBar bar)
+		public void Add<T>(UIBar<T> bar)
 		{
 			bar.transform.SetParent(m_barsParent);
 			bar.controller = this;
 		}
-		public void Erase(UIBar bar)
+		public void Erase<T>(UIBar<T> bar)
 		{
 		}
 		public void Cleanup()
@@ -440,7 +440,7 @@ namespace MyGame
 	}
 	public interface UIContainer
 	{
-		void Add(UIBar bar);
-		void Erase(UIBar bar);
+		void Add<T>(UIBar<T> bar);
+		void Erase<T>(UIBar<T> bar);
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame
 {

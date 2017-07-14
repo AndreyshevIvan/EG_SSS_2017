@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MyGame;
 
-namespace MyGame.GameUtils
+namespace GameUtils
 {
 	public struct Utils
 	{

@@ -13,7 +13,7 @@ namespace MyGame.Enemies
 			health = maxHealth = 5;
 			coldown = 2.4f;
 			points = 120;
-			healthBar = world.factory.GetBar(BarType.ENEMY_HEALTH);
+			healthBar = world.factory.GetEnemyHealthBar();
 			bonuses.Add(Pair<BonusType, int>.Create(BonusType.STAR, 3));
 			isTimerWork = true;
 

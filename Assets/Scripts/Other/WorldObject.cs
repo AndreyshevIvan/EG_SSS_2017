@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using FluffyUnderware.Curvy.Controllers;
-using MyGame.GameUtils;
+using GameUtils;
 using GameFactory;
 using FluffyUnderware.Curvy;
 

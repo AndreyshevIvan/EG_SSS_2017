@@ -51,9 +51,18 @@ namespace GameFactory
 			return bonus;
 		}
 
-		public UIBar GetBar(BarType type)
+		public HealthBar GetPlayerHealthBar()
 		{
-			UIBar bar = Instantiate(m_bars.Find(pair => pair.key == type).value);
+			HealthBarPair pair = m_healthBars.Find(x => x.key == BarType.PLAYER_HEALTH);
+			HealthBar bar = Instantiate(pair.value);
+			m_interface.Add(bar);
+			return bar;
+		}
+
+		public HealthBar GetEnemyHealthBar()
+		{
+			HealthBarPair pair = m_healthBars.Find(x => x.key == BarType.ENEMY_HEALTH);
+			HealthBar bar = Instantiate(pair.value);
 			m_interface.Add(bar);
 			return bar;
 		}
@@ -67,18 +76,18 @@ namespace GameFactory
 
 		[SerializeField]
 		private List<MapPair> m_maps;
-		[SerializeField]
-		private List<EnemiesPair> m_enemies;
+		[SerializeField][Reorderable]
+		private EnemiesFactoryList m_enemies;
 		[SerializeField]
 		private List<SplinePair> m_roads;
 		[SerializeField]
 		private List<ShipPair> m_ships;
 		[SerializeField][Reorderable]
 		private BonusesFactoryList m_bonuses;
-		[SerializeField]
-		private List<BarsPair> m_bars;
-		[SerializeField]
-		private List<AmmoPair> m_ammo;
+		[SerializeField][Reorderable]
+		private HealthBarsList m_healthBars;
+		[SerializeField][Reorderable]
+		private AmmoFactoryList m_ammo;
 
 		private WorldContainer m_world;
 		private UIContainer m_interface;
@@ -95,7 +104,32 @@ namespace GameFactory
 		Ship GetShip(ShipType type);
 		CurvySpline GetRoad(RoadType type);
 		Bonus GetBonus(BonusType type);
-		UIBar GetBar(BarType type);
+		HealthBar GetPlayerHealthBar();
+		HealthBar GetEnemyHealthBar();
 		Body GetAmmo(AmmoType type);
 	}
+
+	[System.Serializable]
+	public class MapPair : Pair<MapType, Map> { }
+	[System.Serializable]
+	public class EnemiesPair : Pair<UnitType, Enemy> { }
+	[System.Serializable]
+	public class BonusPair : Pair<BonusType, Bonus> { }
+	[System.Serializable]
+	public class SplinePair : Pair<RoadType, CurvySpline> { }
+	[System.Serializable]
+	public class ShipPair : Pair<ShipType, Ship> { }
+	[System.Serializable]
+	public class AmmoPair : Pair<AmmoType, Body> { }
+	[System.Serializable]
+	public class HealthBarPair : Pair<BarType, HealthBar> { }
+
+	[System.Serializable]
+	public class BonusesFactoryList : ReordarableList<BonusPair> { }
+	[System.Serializable]
+	public class EnemiesFactoryList : ReordarableList<EnemiesPair> { }
+	[System.Serializable]
+	public class AmmoFactoryList : ReordarableList<AmmoPair> { }
+	[System.Serializable]
+	public class HealthBarsList : ReordarableList<HealthBarPair> { }
 }

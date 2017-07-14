@@ -76,29 +76,6 @@ namespace MyGame
 	}
 }
 
-namespace GameFactory
-{
-	[System.Serializable]
-	public class MapPair : Pair<MapType, Map> { }
-	[System.Serializable]
-	public class EnemiesPair : Pair<UnitType, Enemy> { }
-	[System.Serializable]
-	public class BonusPair : Pair<BonusType, Bonus> { }
-	[System.Serializable]
-	public class SplinePair : Pair<RoadType, CurvySpline> { }
-	[System.Serializable]
-	public class ShipPair : Pair<ShipType, Ship> { }
-	[System.Serializable]
-	public class BarsPair : Pair<BarType, UIBar> { }
-	[System.Serializable]
-	public class AmmoPair : Pair<AmmoType, Body> { }
-
-	[System.Serializable]
-	public class BonusesFactoryList : ReordarableList<BonusPair>
-	{
-	}
-}
-
 namespace GameSpawns
 {
 	[System.Serializable]

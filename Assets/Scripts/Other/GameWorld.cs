@@ -7,7 +7,7 @@ using FluffyUnderware.Curvy;
 using MyGame.Hero;
 using GameFactory;
 using MyGame.Enemies;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame
 {

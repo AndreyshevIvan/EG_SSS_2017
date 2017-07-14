@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame.Hero
 {
@@ -42,7 +42,7 @@ namespace MyGame.Hero
 		}
 		protected override void OnInitEnd()
 		{
-			healthBar = world.factory.GetBar(BarType.PLAYER_HEALTH);
+			healthBar = world.factory.GetPlayerHealthBar();
 			healthBar.SetValue(health);
 			touchDemage = int.MaxValue;
 			isEraseOnDeath = false;

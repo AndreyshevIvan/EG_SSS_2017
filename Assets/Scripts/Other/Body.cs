@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame
 {
@@ -30,7 +30,7 @@ namespace MyGame
 			if (healthBar) healthBar.SetValue(health);
 		}
 
-		protected UIBar healthBar
+		protected HealthBar healthBar
 		{
 			get { return m_healthBar; }
 			set
@@ -62,7 +62,7 @@ namespace MyGame
 		protected virtual void OnDemageTaked() { }
 		protected virtual void OnDeath() { }
 
-		private UIBar m_healthBar;
+		private HealthBar m_healthBar;
 
 		private void UpdateBarPosition()
 		{

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame.Enemies
 {
-	using BonusCount = Pair<BonusType, int>;
+	using BonusPair = Pair<BonusType, int>;
 
 	public abstract class Enemy : Body
 	{
@@ -60,18 +60,18 @@ namespace MyGame.Enemies
 
 			if (Utils.IsHappen(HEALTH_PROBABLILITY))
 			{
-				bonuses.Add(BonusCount.Create(BonusType.HEALTH, 1));
+				bonuses.Add(BonusPair.Create(BonusType.HEALTH, 1));
 			}
-			if (Utils.IsHappen(AMMO_PROBABILITY))
+			if (Utils.IsHappen(MODIFICATION_PROBABILITY))
 			{
-				bonuses.Add(BonusCount.Create(BonusType.MODIFICATION, 1));
+				bonuses.Add(BonusPair.Create(BonusType.MODIFICATION, 1));
 			}
 		}
 
 		private float m_timer = 0;
 
 		private float HEALTH_PROBABLILITY = 0.1f;
-		private float AMMO_PROBABILITY = 0.175f;
+		private float MODIFICATION_PROBABILITY = 1;
 
 		private void Shooting()
 		{

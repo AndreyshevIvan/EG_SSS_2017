@@ -7,14 +7,14 @@ using UnityEngine.UI;
 
 namespace MyGame
 {
-	public class SpellBar : UIBar
+	public class SpellBar : UIBar<float>
 	{
 		protected override void OnAwakeEnd()
 		{
 		}
 		protected override void OnSetNewValue()
 		{
-			m_progress.fillAmount = (float)value / MAX_PERCENTS;
+			m_progress.fillAmount = value / MAX_PERCENTS;
 			m_animator.SetBool(m_readyTrigger, isReady);
 		}
 

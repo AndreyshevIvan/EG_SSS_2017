@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 54499519070121654}
   - component: {fileID: 114409831981066414}
   m_Layer: 8
-  m_Name: ExplosionSpell
+  m_Name: PlayerBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
-using MyGame.GameUtils;
+using GameUtils;
 
 namespace MyGame
 {
-	public class EnemyHealthBar : UIBar
+	public class EnemyHealthBar : HealthBar
 	{
 		protected override void OnAwakeEnd()
 		{

@@ -172,7 +172,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 824102778
+  randomSeed: 308132867
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -520,7 +520,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 90
+    maxNumParticles: 50
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -574,7 +574,7 @@ ParticleSystem:
     boxY: 1
     boxZ: 1
     radius:
-      value: 0.5
+      value: 1
       mode: 0
       spread: 0
       speed:
@@ -3248,7 +3248,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1879116672796906}
   serializedVersion: 5
   lengthInSec: 1
-  simulationSpeed: 1
+  simulationSpeed: 0.75
   looping: 0
   prewarm: 0
   playOnAwake: 1
@@ -3297,7 +3297,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: -1570239777
+  randomSeed: -1391105063
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3645,7 +3645,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 50
+    maxNumParticles: 70
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -3692,14 +3692,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 4
     enabled: 1
-    type: 1
+    type: 0
     angle: 25
     length: 5
     boxX: 1
     boxY: 1
     boxZ: 1
     radius:
-      value: 0.66
+      value: 1
       mode: 0
       spread: 0
       speed:
@@ -6392,7 +6392,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 904312103
+  randomSeed: 2139439893
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -6740,7 +6740,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 60
+    maxNumParticles: 50
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -6794,7 +6794,7 @@ ParticleSystem:
     boxY: 1
     boxZ: 1
     radius:
-      value: 0.61
+      value: 1
       mode: 0
       spread: 0
       speed:

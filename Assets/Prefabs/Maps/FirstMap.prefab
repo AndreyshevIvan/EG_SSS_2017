@@ -2176,11 +2176,11 @@ MonoBehaviour:
   m_groundSpawns:
     array:
     - position: {x: 9, y: 0, z: 46}
-      enemy: 2
+      enemy: 3
     - position: {x: 5, y: 0, z: 56}
-      enemy: 2
+      enemy: 3
     - position: {x: 1, y: 0, z: 66}
-      enemy: 2
+      enemy: 3
     - position: {x: -6, y: -1, z: 77}
       enemy: 3
     - position: {x: 6, y: 0, z: 77}
@@ -2190,11 +2190,11 @@ MonoBehaviour:
     - position: {x: 6, y: 0, z: 84}
       enemy: 3
     - position: {x: -6, y: 0, z: 105}
-      enemy: 2
+      enemy: 4
     - position: {x: 0, y: 0, z: 105}
-      enemy: 2
+      enemy: 4
     - position: {x: 6, y: 0, z: 105}
-      enemy: 2
+      enemy: 4
     - position: {x: -9, y: 0, z: 120}
       enemy: 3
     - position: {x: 9, y: 0, z: 128}
@@ -2208,17 +2208,17 @@ MonoBehaviour:
     - position: {x: 9, y: 0, z: 144}
       enemy: 3
     - position: {x: -6, y: 0, z: 175}
-      enemy: 2
+      enemy: 4
     - position: {x: 6, y: 0, z: 175}
-      enemy: 2
+      enemy: 4
     - position: {x: -2, y: 0, z: 185}
-      enemy: 2
+      enemy: 4
     - position: {x: 2, y: 0, z: 185}
-      enemy: 2
+      enemy: 4
     - position: {x: -5, y: 0, z: 185}
-      enemy: 2
+      enemy: 4
     - position: {x: 5, y: 0, z: 185}
-      enemy: 2
+      enemy: 4
     - position: {x: 6, y: 0, z: 190}
       enemy: 3
     - position: {x: 6, y: 0, z: 190}
@@ -2230,6 +2230,6 @@ MonoBehaviour:
     - position: {x: -6, y: 0, z: 200}
       enemy: 3
     - position: {x: 0, y: 0, z: 200}
-      enemy: 2
+      enemy: 4
     - position: {x: 6, y: 0, z: 200}
-      enemy: 3
+      enemy: 4

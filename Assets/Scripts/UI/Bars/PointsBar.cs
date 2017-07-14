@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace MyGame
 {
-	public class PointsBar : UIBar
+	public class PointsBar : UIBar<int>
 	{
 		protected override void OnAwakeEnd()
 		{

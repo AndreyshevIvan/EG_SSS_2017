@@ -7,8 +7,7 @@ using MyGame.Hero;
 using GameFactory;
 using FluffyUnderware.Curvy;
 using FluffyUnderware.Curvy.Controllers;
-using MyGame.GameUtils;
-
+using GameUtils;
 
 namespace MyGame
 {
